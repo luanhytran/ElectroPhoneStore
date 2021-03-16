@@ -1,4 +1,5 @@
 ﻿using eShopSolution.Application.Catalog.Products.Dtos;
+using eShopSolution.Application.Catalog.Products.Dtos.Manage;
 using eShopSolution.Application.Dtos;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace eShopSolution.Application.Catalog.Products
 {
+    // Interface này tạo các phương thức để quản lý sản phẩm
     public interface IManageProductService
     {
         // trả về kiểu int là trả về mã SP ta vừa tạo
@@ -20,11 +22,15 @@ namespace eShopSolution.Application.Catalog.Products
         // để xóa thì ta chỉ cần truyền vào 1 product id
         Task<int> Delete(int productId);
 
-        Task<List<ProductViewModel>> GetAll();
+        Task<bool> UpdatePrice(int productId, decimal newPrice);
+
+        Task<bool> UpdateStock(int productId, int addedQuantity);
+
+        Task AddViewCount(int productId);
 
         // dùng để tìm kiếm
         // return một List ProductViewModel
-        Task<PagedViewModel<ProductViewModel>> GetAllPaging(string keyword, int pageIndex,int pageSize);
+        Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request);
 
     }
 }
