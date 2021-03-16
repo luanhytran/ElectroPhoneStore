@@ -16,9 +16,12 @@ namespace eShopSolution.Data.Configurations
 
             builder.Property(x => x.Id).UseIdentityColumn();
 
-
+            // xác định khóa ngoại
+            // một sản phẩm có thể xuất hiên trong nhiều cart
             builder.HasOne(x => x.Product).WithMany(x => x.Carts).HasForeignKey(x => x.ProductId);
 
+            // một appuser thì có nhiều cart
+            builder.HasOne(x => x.AppUser).WithMany(x => x.Carts).HasForeignKey(x => x.UserId);
         }
     }
 }

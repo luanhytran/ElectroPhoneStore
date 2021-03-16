@@ -24,5 +24,9 @@ namespace eShopSolution.Data.Entities
         public OrderStatus Status { set; get; }
 
         public List<OrderDetail> OrderDetails { get; set; }
+
+
+        // có property Guid UserId cho nên có khóa ngoại AppUser
+        public AppUser AppUser { get; set; }
     }
 }
