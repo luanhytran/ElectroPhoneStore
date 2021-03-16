@@ -18,5 +18,7 @@ namespace eShopSolution.Data.Entities
         public Status Status { get; set; }
 
         public List<ProductInCategory> ProductInCategories { get; set; }
+
+        public List<CategoryTranslation> CategoryTranslations { get; set; }
     }
 }
