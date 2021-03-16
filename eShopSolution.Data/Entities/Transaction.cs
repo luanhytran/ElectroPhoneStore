@@ -24,5 +24,10 @@ namespace eShopSolution.Data.Entities
         public TransactionStatus Status { set; get; }
 
         public string Provider { set; get; }
+
+        public Guid UserId { get; set; }
+
+        // có property Guid UserId cho nên có khóa ngoại AppUser
+        public AppUser AppUser { get; set; }
     }
 }
