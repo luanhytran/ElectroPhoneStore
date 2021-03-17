@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace eShopSolution.ViewModels.Catalog.Products.Manage
+namespace eShopSolution.ViewModels.Catalog.Products
 {
     // thường ta chỉ update các property trong translation
     public class ProductUpdateRequest

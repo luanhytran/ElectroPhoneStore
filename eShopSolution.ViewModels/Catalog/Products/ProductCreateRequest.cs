@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace eShopSolution.ViewModels.Catalog.Products.Manage
+namespace eShopSolution.ViewModels.Catalog.Products
 {
     // create thì không cần id, vì khi create sql sẽ tự động generate id tăng dần
     public class ProductCreateRequest
