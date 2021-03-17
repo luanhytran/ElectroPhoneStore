@@ -1,4 +1,7 @@
-# ASP .Net Core 3.1 
+# Danh sách thành viên
+- Trần Luân Hy / Scrum master / Dev
+- Lê Quốc Anh / Dev
+- Hoàng Trần An Thiên / Dev
 # Technologies
 - ASP .Net Core 3.1
 - Entity Framework Core 3.1
