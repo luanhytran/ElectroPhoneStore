@@ -1,7 +1,7 @@
 ## Team member
-- Trần Luân Hy scrum master/ dev
-- Hoàng Trần An Thiên dev
-- Lê Quốc Anh dev
+- Trần Luân Hy : scrum master/ dev
+- Hoàng Trần An Thiên : dev
+- Lê Quốc Anh : dev
 ## Technologies
 - ASP.NET Core 3.1
 - Entity Framework Core 3.1
