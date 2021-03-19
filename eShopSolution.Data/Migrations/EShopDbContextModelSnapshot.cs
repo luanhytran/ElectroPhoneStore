@@ -172,7 +172,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            LanguageId = "vi-vn",
+                            LanguageId = "vi-VN",
                             Name = "Áo nam",
                             SeoAlias = "ao-nam",
                             SeoDescription = "Sản phẩm áo thời trang nam",
@@ -182,17 +182,17 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 2,
                             CategoryId = 1,
-                            LanguageId = "en-US",
+                            LanguageId = "en-EN",
                             Name = "Men Shirt",
                             SeoAlias = "men-shirt",
-                            SeoDescription = "The shirt product for men",
-                            SeoTitle = "The shirt product for men"
+                            SeoDescription = "The shirt products for men",
+                            SeoTitle = "The shirt products for men"
                         },
                         new
                         {
                             Id = 3,
                             CategoryId = 2,
-                            LanguageId = "vi-vn",
+                            LanguageId = "vi-VN",
                             Name = "Áo nữ",
                             SeoAlias = "ao-nu",
                             SeoDescription = "Sản phẩm áo thời trang nữ",
@@ -202,11 +202,11 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 4,
                             CategoryId = 2,
-                            LanguageId = "en-US",
+                            LanguageId = "en-EN",
                             Name = "Women Shirt",
                             SeoAlias = "women-shirt",
-                            SeoDescription = "The shirt product for women",
-                            SeoTitle = "The shirt product for women"
+                            SeoDescription = "The shirt products for women",
+                            SeoTitle = "The shirt products for women"
                         });
                 });
 
@@ -268,17 +268,17 @@ namespace eShopSolution.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "vi-vn",
+                            Id = "vi-VN",
                             IsDefault = true,
                             Name = "Tiếng Việt"
                         },
                         new
                         {
-                            Id = "en-US",
+                            Id = "en-EN",
                             IsDefault = false,
                             Name = "English"
                         });
-                });
+        });
 
             modelBuilder.Entity("eShopSolution.Data.Entities.Order", b =>
                 {
@@ -454,25 +454,26 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Details = "Áo sơ mi nam trắng",
-                            LanguageId = "vi-vn",
-                            Name = "Áo sơ mi nam trắng",
+                            Description = "Áo sơ mi nam trắng Việt Tiến",
+                            Details = "Áo sơ mi nam trắng Việt Tiến",
+                            LanguageId = "vi-VN",
+                            Name = "Áo sơ mi nam trắng Việt Tiến",
                             ProductId = 1,
-                            SeoAlias = "ao-so-mi",
-                            SeoDescription = "Áo sơ mi nam trắng",
-                            SeoTitle = "Áo sơ mi nam trắng"
+                            SeoAlias = "ao-so-mi-nam-trang-viet-tien",
+                            SeoDescription = "Áo sơ mi nam trắng Việt Tiến",
+                            SeoTitle = "Áo sơ mi nam trắng Việt Tiến"
                         },
                         new
                         {
                             Id = 2,
-                            Description = "",
-                            Details = "Men T-Shirt",
-                            LanguageId = "en-US",
-                            Name = "Men T-Shirt",
+                            Description = "Viet Tien Men T-Shirt",
+                            Details = "Viet Tien Men T-Shirt",
+                            LanguageId = "en-EN",
+                            Name = "Viet Tien Men T-Shirt",
                             ProductId = 1,
-                            SeoAlias = "Men T-Shirt",
-                            SeoDescription = "Men T-Shirt",
-                            SeoTitle = "Men T-Shirt"
+                            SeoAlias = "viet-tien-men-t-shirt",
+                            SeoDescription = "Viet Tien Men T-Shirt",
+                            SeoTitle = "Viet Tien Men T-Shirt"
                         });
                 });
 

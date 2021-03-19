@@ -35,7 +35,7 @@ namespace eShopSolution.Data.Migrations
                 columns: new[] { "Id", "IsDefault", "Name" },
                 values: new object[,]
                 {
-                    { "vi-vn", true, "Tiếng Việt" },
+                    { "vi-VN", true, "Tiếng Việt" },
                     { "en-US", false, "English" }
                 });
 
@@ -49,8 +49,8 @@ namespace eShopSolution.Data.Migrations
                 columns: new[] { "Id", "CategoryId", "LanguageId", "Name", "SeoAlias", "SeoDescription", "SeoTitle" },
                 values: new object[,]
                 {
-                    { 1, 1, "vi-vn", "Áo nam", "ao-nam", "Sản phẩm áo thời trang nam", "Sản phẩm áo thời trang nam" },
-                    { 3, 2, "vi-vn", "Áo nữ", "ao-nu", "Sản phẩm áo thời trang nữ", "Sản phẩm áo thời trang nữ" },
+                    { 1, 1, "vi-VN", "Áo nam", "ao-nam", "Sản phẩm áo thời trang nam", "Sản phẩm áo thời trang nam" },
+                    { 3, 2, "vi-VN", "Áo nữ", "ao-nu", "Sản phẩm áo thời trang nữ", "Sản phẩm áo thời trang nữ" },
                     { 2, 1, "en-US", "Men Shirt", "men-shirt", "The shirt product for men", "The shirt product for men" },
                     { 4, 2, "en-US", "Women Shirt", "women-shirt", "The shirt product for women", "The shirt product for women" }
                 });
@@ -65,8 +65,8 @@ namespace eShopSolution.Data.Migrations
                 columns: new[] { "Id", "Description", "Details", "LanguageId", "Name", "ProductId", "SeoAlias", "SeoDescription", "SeoTitle" },
                 values: new object[,]
                 {
-                    { 1, null, "Áo sơ mi nam trắng", "vi-vn", "Áo sơ mi nam trắng", 1, "ao-so-mi", "Áo sơ mi nam trắng", "Áo sơ mi nam trắng" },
-                    { 2, "", "Men T-Shirt", "en-US", "Men T-Shirt", 1, "Men T-Shirt", "Men T-Shirt", "Men T-Shirt" }
+                    { 1, "Áo sơ mi nam trắng Việt Tiến", "Áo sơ mi nam trắng Việt Tiến", "vi-VN", "Áo sơ mi nam trắng Việt Tiến", 1, "ao-so-mi", "Áo sơ mi nam trắng Việt Tiến", "Áo sơ mi nam trắng Việt Tiến" },
+                    { 2, "Viet Tien Men T-Shirt", "Men T-Shirt", "en-US", "Men T-Shirt", 1, "Men T-Shirt", "Men T-Shirt", "Men T-Shirt" }
                 });
         }
 
