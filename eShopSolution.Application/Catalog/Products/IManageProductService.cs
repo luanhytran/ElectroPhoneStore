@@ -1,4 +1,5 @@
-﻿using eShopSolution.ViewModels.Catalog.Products;
+﻿using eShopSolution.ViewModels.Catalog.ProductImages;
+using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -15,7 +16,7 @@ namespace eShopSolution.Application.Catalog.Products
         // tham số không phải lúc nào cũng truyền vào 1 Product view model, nhiều khi sẽ bị thừa
         Task<int> Create(ProductCreateRequest request);
 
-        // Create và Update truyền 1 Dtos vào phương thức 
+        // Create và Update truyền 1 Dtos vào phương thức
         // Dtos là Data transfer object ( giống view model truyền cho 1 view )
         Task<int> Update(ProductUpdateRequest request);
 
@@ -32,12 +33,17 @@ namespace eShopSolution.Application.Catalog.Products
         // return một List ProductViewModel
         Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request);
 
-        Task<int> AddImages(int productId, List<IFormFile> files);
+        // Lấy product id để thêm hình cho một product cụ thể
+        Task<int> AddImage(int productId, ProductImageCreateRequest request);
 
-        Task<int> RemoveImages(int imageId);
+        // Có product id vì cần biết id product để xóa hình của product đó
+        Task<int> RemoveImage(int imageId);
 
-        Task<int> UpdateImages(int imageId, string caption, bool isDefault);
+        // Có product id tương tự lý do của phương thức remove image
+        Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request);
 
-        Task<List<ProductImageViewModel>> GetListImage(int productId);
+        Task<ProductImageViewModel> GetImageById(int imageId);
+
+        Task<List<ProductImageViewModel>> GetListImages(int productId);
     }
 }

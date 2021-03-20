@@ -8,4 +8,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Catalog\ProductImages\" />
+  </ItemGroup>
+
 </Project>
