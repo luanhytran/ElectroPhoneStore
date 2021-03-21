@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolution.WebApp", "eShopSolution.WebApp\eShopSolution.WebApp.csproj", "{B3DD9B83-FF04-47FB-A39D-9FD98EE4E685}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Item", "Solution Item", "{1965EE2A-F6D2-4841-984D-DA3A5251CB84}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.Solution Item", "0.Solution Item", "{1965EE2A-F6D2-4841-984D-DA3A5251CB84}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
