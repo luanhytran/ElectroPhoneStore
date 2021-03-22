@@ -57,6 +57,7 @@ namespace eShopSolutionBackendApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger eShop Solution", Version = "v1" });
 
+                // Mỗi khi gọi swagger sẽ truyền vào một header tên Bearer này
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
@@ -68,6 +69,8 @@ namespace eShopSolutionBackendApi
                     Scheme = "Bearer"
                 });
 
+                // Định nghĩa bảo mật để khi chạy swagger ta phải đăng nhập để lấy token
+                //Token đó dùng để Authorize mở khóa các chức năg HTTP
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
                     {
@@ -96,6 +99,9 @@ namespace eShopSolutionBackendApi
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
+
+            // Mỗi khi nhận được token thì sẽ giải mã validate những thuộc tính dưới đây
+            // Nó sẽ tự giải mã và validate, nếu không đúng thì sẽ trả về lỗi 401
             .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
