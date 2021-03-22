@@ -4,6 +4,9 @@ using eShopSolution.Application.System.Users;
 using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
 using eShopSolution.Utilities.Constants;
+using eShopSolution.ViewModels.System.Users;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -51,7 +54,16 @@ namespace eShopSolutionBackendApi
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
             services.AddTransient<IUserService, UserService>();
 
-            services.AddControllers();
+            //fluent validator
+            // ta có hai cách register validator
+            // 1. register lẻ từng cái view model như vậy
+            //services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
+            //services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();
+
+            // 2. đăng ký 1 lúc hết tất cả, sẽ tự động nhận diện các lớp kế thừa AbstractValidator
+            // đăng kí tất cả những validator mà cùng assembly ( dll ) với LoginRequestValidator
+            services.AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
             services.AddSwaggerGen(c =>
             {
