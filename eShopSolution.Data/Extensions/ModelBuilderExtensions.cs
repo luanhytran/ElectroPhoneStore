@@ -32,21 +32,20 @@ namespace eShopSolution.Data.Extentions
                   SortOrder = 1,
                   Status = Status.Active,
               },
-             
+
               new Category()
               {
-                  Id=2,
+                  Id = 2,
                   IsShowOnHome = true,
                   ParentId = null,
                   SortOrder = 2,
                   Status = Status.Active,
-                  
               }
               );
 
-            modelBuilder.Entity<CategoryTranslation>().HasData( 
-                  new CategoryTranslation() { Id = 1, CategoryId=1, Name = "Áo nam", LanguageId="vi-VN", SeoAlias="ao-nam",SeoDescription="Sản phẩm áo thời trang nam",SeoTitle= "Sản phẩm áo thời trang nam" },
-                  new CategoryTranslation() { Id = 2, CategoryId = 1, Name = "Men Shirt", LanguageId="en-US", SeoAlias="men-shirt",SeoDescription="The shirt product for men",SeoTitle= "The shirt product for men" },
+            modelBuilder.Entity<CategoryTranslation>().HasData(
+                  new CategoryTranslation() { Id = 1, CategoryId = 1, Name = "Áo nam", LanguageId = "vi-VN", SeoAlias = "ao-nam", SeoDescription = "Sản phẩm áo thời trang nam", SeoTitle = "Sản phẩm áo thời trang nam" },
+                  new CategoryTranslation() { Id = 2, CategoryId = 1, Name = "Men Shirt", LanguageId = "en-US", SeoAlias = "men-shirt", SeoDescription = "The shirt product for men", SeoTitle = "The shirt product for men" },
                   new CategoryTranslation() { Id = 3, CategoryId = 2, Name = "Áo nữ", LanguageId = "vi-VN", SeoAlias = "ao-nu", SeoDescription = "Sản phẩm áo thời trang nữ", SeoTitle = "Sản phẩm áo thời trang nữ" },
                   new CategoryTranslation() { Id = 4, CategoryId = 2, Name = "Women Shirt", LanguageId = "en-US", SeoAlias = "women-shirt", SeoDescription = "The shirt product for women", SeoTitle = "The shirt product for women" }
               );
@@ -54,12 +53,12 @@ namespace eShopSolution.Data.Extentions
             modelBuilder.Entity<Product>().HasData(
              new Product()
              {
-                 Id=1,
-                 DateCreated=DateTime.Now,
-                 OriginalPrice=100000,
-                 Price=200000,
-                 Stock=0,
-                 ViewCount=0,
+                 Id = 1,
+                 DateCreated = DateTime.Now,
+                 OriginalPrice = 100000,
+                 Price = 200000,
+                 Stock = 0,
+                 ViewCount = 0,
              });
             modelBuilder.Entity<ProductTranslation>().HasData(
                   new ProductTranslation()
@@ -107,9 +106,9 @@ namespace eShopSolution.Data.Extentions
             {
                 Id = adminId,
                 UserName = "admin",
-                NormalizedUserName = "admin",
+                NormalizedUserName = "ADMIN",
                 Email = "hytranluan@gmail.com",
-                NormalizedEmail = "hytranluan@gmail.com",
+                NormalizedEmail = "HYTRANLUAN@GMAIL.COM",
                 EmailConfirmed = true,
                 PasswordHash = hasher.HashPassword(null, "Abcd1234$"),
                 SecurityStamp = string.Empty,

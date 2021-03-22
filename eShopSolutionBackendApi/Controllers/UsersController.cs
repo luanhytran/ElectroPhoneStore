@@ -20,7 +20,9 @@ namespace eShopSolutionBackendApi.Controllers
         {
             _userService = userService;
         }
+
         [HttpPost("authenticate")]
+        // Cho phép người lạ truy cập
         [AllowAnonymous]
         public async Task<IActionResult> Authenticate([FromForm] LoginRequest request)
         {
@@ -32,10 +34,11 @@ namespace eShopSolutionBackendApi.Controllers
             {
                 return BadRequest("User name or Password is incorrect");
             }
-            return Ok(new { token=resultToken});
+            return Ok(new { token = resultToken });
         }
 
         [HttpPost("register")]
+        // Cho phép người lạ truy cập
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromForm] RegisterRequest request)
         {
@@ -49,6 +52,5 @@ namespace eShopSolutionBackendApi.Controllers
             }
             return Ok();
         }
-
     }
 }
