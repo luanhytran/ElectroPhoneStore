@@ -1,3 +1,6 @@
+using eShopSolution.AdminApp.Services;
+using eShopSolution.ViewModels.System.Users;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -23,7 +26,20 @@ namespace eShopSolution.AdminApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddHttpClient();
+
+            services.AddControllersWithViews()
+                                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
+            services.AddTransient<IUserApiClient, UserApiClient>();
+            IMvcBuilder builder = services.AddRazorPages();
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            #if DEBUG
+                        if (environment == Environments.Development)
+            {
+                builder.AddRazorRuntimeCompilation();
+            }
+            #endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
