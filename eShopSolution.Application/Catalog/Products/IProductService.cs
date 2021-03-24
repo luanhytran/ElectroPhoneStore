@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace eShopSolution.Application.Catalog.Products
 {
     // Interface này tạo các phương thức để quản lý sản phẩm
-    public interface IManageProductService
+    public interface IProductService
     {
         // trả về kiểu int là trả về mã SP ta vừa tạo
         // tham số không phải lúc nào cũng truyền vào 1 Product view model, nhiều khi sẽ bị thừa
@@ -47,5 +47,7 @@ namespace eShopSolution.Application.Catalog.Products
         Task<ProductImageViewModel> GetImageById(int imageId);
 
         Task<List<ProductImageViewModel>> GetListImages(int productId);
+
+        Task<PagedResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
     }
 }

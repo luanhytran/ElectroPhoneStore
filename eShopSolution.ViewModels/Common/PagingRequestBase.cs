@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eShopSolution.ViewModels.Common
 {
-    public class PagingRequestBase
+    public class PagingRequestBase : RequestBase
     {
         // lấy trang số bao nhiêu
         public int PageIndex { get; set; }
