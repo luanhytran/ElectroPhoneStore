@@ -31,10 +31,11 @@ namespace eShopSolution.Application.System.Users
         // Phương thức Login
         public async Task<string> Authencate(LoginRequest request)
         {
+            // Trả về 1 object AppUser
             var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null) return null;
 
-            // Tham số cuối là bool : true thì kích hoạt isPersistent ( chức năng login fail nhiều lần thì lock )
+            // Tham số cuối là bool : true thì kích hoạt isPersistent ( khi đã login, thì khi tắt project run lại vẫn ko bị logout )
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
             if (!result.Succeeded)
             {
@@ -50,11 +51,11 @@ namespace eShopSolution.Application.System.Users
             };
 
             // Sau khi có được claim thì ta cần mã hóa nó
-            // Tokens key và issuer truy cập được thông qua DI 1 Iconfig
+            // Tokens key và issuer nằm ở appsettings.json và truy cập được thông qua DI 1 Iconfig
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            // Cần cài JWT
+            // 1 SecurityToken ( cần cài jwt ) 
             var token = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
                 claims,

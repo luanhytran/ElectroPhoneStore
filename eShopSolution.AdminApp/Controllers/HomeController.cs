@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace eShopSolution.AdminApp.Controllers
 {
+    // Authorize: Sẽ chuyển sang trang User/Login ( định nghĩa trong startup bằng serivces.AddAuthorization )
+    // Sau đó phải đăng nhập rồi mới được dùng mấy trang này
     [Authorize]
     public class HomeController : Controller
     {
@@ -22,6 +24,7 @@ namespace eShopSolution.AdminApp.Controllers
 
         public IActionResult Index()
         {
+            // lấy user name đăng nhập
             var user = User.Identity.Name;
             return View();
         }

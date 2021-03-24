@@ -24,10 +24,13 @@ namespace eShopSolutionBackendApi.Controllers
         [HttpPost("authenticate")]
         // Cho phép người lạ truy cập
         [AllowAnonymous]
+        // dùng FromBody thì mới lấy Json được còn FromForm thì không
         public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            // Truyền token vào hàm Authencate của UserService để mã hóa token
             var resultToken = await _userService.Authencate(request);
 
             if (string.IsNullOrEmpty(resultToken))

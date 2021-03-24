@@ -25,6 +25,8 @@ namespace eShopSolution.AdminApp.Services
 
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:5001");
+
+            // truyền qua bên hàm Authenticate của BackendAPI
             var response = await client.PostAsync("/api/users/authenticate", httpContent);
             var token = await response.Content.ReadAsStringAsync();
             return token;
