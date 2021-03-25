@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace eShopSolution.AdminApp.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private readonly IUserApiClient _userApiClient;
 
@@ -32,7 +32,7 @@ namespace eShopSolution.AdminApp.Controllers
 
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
         {
-            
+
             var sessions = HttpContext.Session.GetString("Token");
 
             var request = new GetUserPagingRequest()
@@ -49,44 +49,25 @@ namespace eShopSolution.AdminApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Login()
+        public IActionResult Create()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<IActionResult> Create(RegisterRequest request)
         {
-            if(!ModelState.IsValid)
-            {
-                return View(ModelState);
-            }
+            if (!ModelState.IsValid)
+                return View();
 
-            /* Khi đăng nhập thành công thì chúng ta sẽ giả mã token này ra có những claim gì */
+            var result = await _userApiClient.RegisterUser(request);
+            if (result)
+                return RedirectToAction("Index");
 
-            // Nhận 1 token được mã hóa
-            var token = await _userApiClient.Authenticate(request);
-
-            
-            // Giải mã token đã mã hóa và lấy token, lấy cả các claim đã định nghĩa trong UserService
-            // khi debug sẽ thấy nhận được gì  ( có nhận được cả issuer )
-            var userPrincipal = this.ValidateToken(token);
-
-            // tập properties của cookie
-            var authProperties = new AuthenticationProperties
-            {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                IsPersistent = false
-            };
-            HttpContext.Session.SetString("Token", token);
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                userPrincipal,
-                authProperties);
-
-            return RedirectToAction("Index","Home");
+            return View(request);
         }
+
+       
 
         [HttpPost]
         public async Task<IActionResult> Logout()
@@ -100,26 +81,6 @@ namespace eShopSolution.AdminApp.Controllers
         }
 
 
-        // Hàm giải mã token ( chứa thông tin về đăng nhập )
-        private ClaimsPrincipal ValidateToken(string jwtToken)
-        {
-            IdentityModelEventSource.ShowPII = true;
-
-            SecurityToken validatedToken;
-            TokenValidationParameters validationParameters = new TokenValidationParameters();
-
-            validationParameters.ValidateLifetime = true;
-
-            validationParameters.ValidAudience = _configuration["Tokens:Issuer"];
-            validationParameters.ValidIssuer = _configuration["Tokens:Issuer"];
-            validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
-
-
-            // Giải mã thông tin claim mà ta đã gắn cho token ấy ( định nghĩa claim trong UserService.cs )
-            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
-
-            // trả về một principal có token đã giải mã
-            return principal;
-        }
+        
     }
 }
