@@ -1,15 +1,11 @@
-﻿using eShopSolution.Application.Catalog.Products;
+﻿using System;
+using System.Threading.Tasks;
 using eShopSolution.Application.System.Users;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace eShopSolutionBackendApi.Controllers
+namespace eShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -24,7 +20,6 @@ namespace eShopSolutionBackendApi.Controllers
         }
 
         [HttpPost("authenticate")]
-        // Cho phép người lạ truy cập
         [AllowAnonymous]
         /* Dùng FromBody thì mới lấy Json đã serialize bên UserApiClien truyền vô được
         còn FromForm thì không */
@@ -34,14 +29,13 @@ namespace eShopSolutionBackendApi.Controllers
                 return BadRequest(ModelState);
 
             // Truyền request vào hàm Authencate của UserService bên Domain và trả về một JWT
-            var resultToken = await _userService.Authenticate(request);
+            var result = await _userService.Authencate(request);
 
-            if (string.IsNullOrEmpty(resultToken))
+            if (string.IsNullOrEmpty(result.ResultObj))
             {
-                return BadRequest("User name or Password is incorrect");
+                return BadRequest(result);
             }
-        
-            return Ok(resultToken);
+            return Ok(result);
         }
 
         [HttpPost]
@@ -53,11 +47,26 @@ namespace eShopSolutionBackendApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _userService.Register(request);
-            if (!result)
+            if (!result.IsSuccessed)
             {
-                return BadRequest("Register is unsucceessful.");
+                return BadRequest(result);
             }
-            return Ok();
+            return Ok(result);
+        }
+
+        //PUT: http://localhost/api/users/id
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.Update(id, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
         // Đường dẫn ví dụ của GetAllPaging
@@ -65,8 +74,15 @@ namespace eShopSolutionBackendApi.Controllers
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
         {
-            var product = await _userService.GetUserPaging(request);
-            return Ok(product);
+            var products = await _userService.GetUsersPaging(request);
+            return Ok(products);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var user = await _userService.GetById(id);
+            return Ok(user);
         }
     }
 }
