@@ -1,15 +1,11 @@
-﻿using eShopSolution.Application.Catalog.Products;
+﻿using System;
+using System.Threading.Tasks;
 using eShopSolution.Application.System.Users;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace eShopSolutionBackendApi.Controllers
+namespace eShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -24,27 +20,22 @@ namespace eShopSolutionBackendApi.Controllers
         }
 
         [HttpPost("authenticate")]
-        // Cho phép người lạ truy cập
         [AllowAnonymous]
-        // dùng FromBody thì mới lấy Json được còn FromForm thì không
         public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // Truyền token vào hàm Authencate của UserService để mã hóa token
-            var resultToken = await _userService.Authenticate(request);
+            var result = await _userService.Authencate(request);
 
-            if (string.IsNullOrEmpty(resultToken))
+            if (string.IsNullOrEmpty(result.ResultObj))
             {
-                return BadRequest("User name or Password is incorrect");
+                return BadRequest(result);
             }
-        
-            return Ok(resultToken);
+            return Ok(result);
         }
 
         [HttpPost]
-        // Cho phép người lạ truy cập
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
@@ -52,20 +43,41 @@ namespace eShopSolutionBackendApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _userService.Register(request);
-            if (!result)
+            if (!result.IsSuccessed)
             {
-                return BadRequest("Register is unsucceessful.");
+                return BadRequest(result);
             }
-            return Ok();
+            return Ok(result);
         }
 
-        // Đường dẫn ví dụ của GetAllPaging
-        // http://localhost/api/users/paging?pageIndex=1&pageSize=10&Keyword='Hy'
+        //PUT: http://localhost/api/users/id
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.Update(id, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        //http://localhost/api/users/paging?pageIndex=1&pageSize=10&keyword=
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
         {
-            var product = await _userService.GetUserPaging(request);
-            return Ok(product);
+            var products = await _userService.GetUsersPaging(request);
+            return Ok(products);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var user = await _userService.GetById(id);
+            return Ok(user);
         }
     }
 }

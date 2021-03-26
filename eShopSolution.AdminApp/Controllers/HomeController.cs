@@ -12,8 +12,7 @@ namespace eShopSolution.AdminApp.Controllers
 {
     // Authorize: Sẽ chuyển sang trang User/Login ( định nghĩa trong startup bằng serivces.AddAuthorization )
     // Sau đó phải đăng nhập rồi mới được dùng mấy trang này
-    [Authorize]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 

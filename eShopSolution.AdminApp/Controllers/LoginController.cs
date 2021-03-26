@@ -48,12 +48,12 @@ namespace eShopSolution.AdminApp.Controllers
             /* Khi đăng nhập thành công thì chúng ta sẽ giả mã token này ra có những claim gì */
 
             // Nhận 1 token được mã hóa
-            var token = await _userApiClient.Authenticate(request);
+            var result = await _userApiClient.Authenticate(request);
 
 
             // Giải mã token đã mã hóa và lấy token, lấy cả các claim đã định nghĩa trong UserService
             // khi debug sẽ thấy nhận được gì  ( có nhận được cả issuer )
-            var userPrincipal = this.ValidateToken(token);
+            var userPrincipal = this.ValidateToken(result.ResultObj);
 
             // tập properties của cookie
             var authProperties = new AuthenticationProperties
@@ -61,7 +61,7 @@ namespace eShopSolution.AdminApp.Controllers
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                 IsPersistent = false
             };
-            HttpContext.Session.SetString("Token", token);
+            HttpContext.Session.SetString("Token", result.ResultObj);
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 userPrincipal,
