@@ -32,7 +32,7 @@
                         <a class="dropdown-item" href="/Profile/Index">@User.Identity.Name</a>
                         <a class="dropdown-item" href="#">Activity Log</a>
                         <div class="dropdown-divider"></div>
-                        <form method="post" asp-controller="User" asp-action="Logout">
+                        <form method="get" asp-controller="Login" asp-action="Index">
                             <button type="submit" class="dropdown-item" value="Logout">Đăng xuất</button>
                         </form>
                     </div>
@@ -45,7 +45,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Hệ thống quản trị</div>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Trang chủ
                             </a>
