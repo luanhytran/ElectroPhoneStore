@@ -68,6 +68,9 @@
                     </tbody>
                 </table>
             </div>
+            @*truyền Model PagedResult vào vì hàm InvokeAsync của class PagerViewComponent nhận 1 
+                tham số object PagedResult*@
+            @await Component.InvokeAsync("Pager",Model) 
         </div>
     </div>
 </div>

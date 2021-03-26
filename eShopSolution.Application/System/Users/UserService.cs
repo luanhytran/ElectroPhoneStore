@@ -72,12 +72,13 @@ namespace eShopSolution.Application.System.Users
             }
             var userVm = new UserViewModel()
             {
+                UserName = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 FirstName = user.FirstName,
+                LastName = user.LastName,
                 Dob = user.Dob,
-                Id = user.Id,
-                LastName = user.LastName
+                Id = user.Id
             };
             return new ApiSuccessResult<UserViewModel>(userVm);
         }
@@ -109,7 +110,9 @@ namespace eShopSolution.Application.System.Users
             //4. Select and projection
             var pagedResult = new PagedResult<UserViewModel>()
             {
-                TotalRecord = totalRow,
+                TotalRecords = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
                 Items = data
             };
             return new ApiSuccessResult<PagedResult<UserViewModel>>(pagedResult);
