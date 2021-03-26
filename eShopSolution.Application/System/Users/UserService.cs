@@ -34,17 +34,19 @@ namespace eShopSolution.Application.System.Users
         // Phương thức Login
         public async Task<string> Authenticate(LoginRequest request)
         {
-            // Trả về 1 object AppUser
+            // Tìm xem tên user có tồn tại hay không
             var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null) return null;
 
-            // Tham số cuối là bool : true thì kích hoạt isPersistent ( khi đã login, thì khi tắt project run lại vẫn ko bị logout )
+            // Trả về một SignInResult, tham số cuối là IsPersistent kiểu bool
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
             if (!result.Succeeded)
             {
                 return null;
             }
             var role = await _userManager.GetRolesAsync(user);
+
+
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email,user.Email),

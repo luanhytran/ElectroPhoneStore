@@ -65,7 +65,7 @@ namespace eShopSolution.AdminApp.Controllers
 
             /* Khi đăng nhập thành công thì chúng ta sẽ giả mã token này ra có những claim gì */
 
-            // Nhận 1 token được mã hóa
+            // Nhận 1 JWT được giả mã 
             var token = await _userApiClient.Authenticate(request);
 
             
@@ -110,15 +110,16 @@ namespace eShopSolution.AdminApp.Controllers
 
             validationParameters.ValidateLifetime = true;
 
+            // lấy các tham số token issuer và key trong appsettings ra để validate
             validationParameters.ValidAudience = _configuration["Tokens:Issuer"];
             validationParameters.ValidIssuer = _configuration["Tokens:Issuer"];
             validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
 
 
-            // Giải mã thông tin claim mà ta đã gắn cho token ấy ( định nghĩa claim trong UserService.cs )
+            // tiến hành truyền các tham số đã lấy ra ở trên để validate với jwt ( vốn cũng có 3 thông tin trên để validate )
             ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
 
-            // trả về một principal có token đã giải mã
+            // trả về một principal có token đã dược validate
             return principal;
         }
     }

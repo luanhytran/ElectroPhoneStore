@@ -26,13 +26,14 @@ namespace eShopSolutionBackendApi.Controllers
         [HttpPost("authenticate")]
         // Cho phép người lạ truy cập
         [AllowAnonymous]
-        // dùng FromBody thì mới lấy Json được còn FromForm thì không
+        /* Dùng FromBody thì mới lấy Json đã serialize bên UserApiClien truyền vô được
+        còn FromForm thì không */
         public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // Truyền token vào hàm Authencate của UserService để mã hóa token
+            // Truyền request vào hàm Authencate của UserService bên Domain và trả về một JWT
             var resultToken = await _userService.Authenticate(request);
 
             if (string.IsNullOrEmpty(resultToken))

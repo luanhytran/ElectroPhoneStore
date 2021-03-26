@@ -28,12 +28,16 @@ namespace eShopSolution.AdminApp.Services
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
+            /* Tạo một client có base address là backend api và truyền vào hàm authenticate 
+             của backend api một httpcnotent vừa tạo ở trên sau đó sẽ trả về response một
+            */
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:5001");
 
-            // truyền qua bên hàm Authenticate của BackendAPI
+            // Nhận 1 JWT
             var response = await client.PostAsync("/api/users/authenticate", httpContent);
             var token = await response.Content.ReadAsStringAsync();
+
             return token;
         }
 
