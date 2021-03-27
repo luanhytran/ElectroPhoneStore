@@ -50,6 +50,12 @@ namespace eShopSolution.AdminApp.Controllers
             // Nhận 1 token được mã hóa
             var result = await _userApiClient.Authenticate(request);
 
+            if(result.ResultObj == null)
+            {
+                // Hiển thị thông báo Tài khoản không tồn tại
+                ModelState.AddModelError("", result.Message);
+                return View();
+            }
 
             // Giải mã token đã mã hóa và lấy token, lấy cả các claim đã định nghĩa trong UserService
             // khi debug sẽ thấy nhận được gì  ( có nhận được cả issuer )
