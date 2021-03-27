@@ -69,8 +69,8 @@ namespace eShopSolution.AdminApp.Controllers
             {
                 TempData["result"] = "Thêm mới người dùng thành công";
                 return RedirectToAction("Index");
-            }
 
+            }
             ModelState.AddModelError("", result.Message);
             return View(request);
         }

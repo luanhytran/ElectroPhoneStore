@@ -21,11 +21,14 @@ namespace eShopSolution.BackendApi.Controllers
 
         [HttpPost("authenticate")]
         [AllowAnonymous]
+        /* Dùng FromBody thì mới lấy Json đã serialize bên UserApiClien truyền vô được
+        còn FromForm thì không */
         public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            // Truyền request vào hàm Authencate của UserService bên Domain và trả về một JWT
             var result = await _userService.Authencate(request);
 
             if (string.IsNullOrEmpty(result.ResultObj))
@@ -36,6 +39,7 @@ namespace eShopSolution.BackendApi.Controllers
         }
 
         [HttpPost]
+        // Cho phép người lạ truy cập
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
@@ -65,7 +69,8 @@ namespace eShopSolution.BackendApi.Controllers
             return Ok(result);
         }
 
-        //http://localhost/api/users/paging?pageIndex=1&pageSize=10&keyword=
+        // Đường dẫn ví dụ của GetAllPaging
+        // http://localhost/api/users/paging?pageIndex=1&pageSize=10&Keyword='Hy'
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
         {

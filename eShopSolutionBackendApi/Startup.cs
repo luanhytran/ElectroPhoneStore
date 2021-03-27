@@ -68,7 +68,7 @@ namespace eShopSolutionBackendApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger eShop Solution", Version = "v1" });
 
-                // Mỗi khi gọi swagger sẽ truyền vào một header tên Bearer này
+                // Mỗi khi gọi swagger sẽ truyền vào một header tên Bearer để authentication này
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
