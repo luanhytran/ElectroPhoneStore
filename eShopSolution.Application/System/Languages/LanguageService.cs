@@ -30,14 +30,14 @@ namespace eShopSolution.Application.System.Languages
             _context = context;
         }
 
-        public async Task<ApiResult<List<LanguageVm>>> GetAll()
+        public async Task<ApiResult<List<LanguageViewModel>>> GetAll()
         {
-            var languages = await _context.Languages.Select(x => new LanguageVm()
+            var languages = await _context.Languages.Select(x => new LanguageViewModel()
             {
                 Id = x.Id,
                 Name = x.Name
             }).ToListAsync();
-            return new ApiSuccessResult<List<LanguageVm>>(languages);
+            return new ApiSuccessResult<List<LanguageViewModel>>(languages);
         }
     }
 }

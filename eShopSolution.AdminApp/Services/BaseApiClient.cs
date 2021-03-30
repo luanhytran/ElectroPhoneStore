@@ -15,6 +15,8 @@ namespace eShopSolution.AdminApp.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
+
+        // Provides access to the current HttpContext, if one is available.
         private readonly IHttpContextAccessor _httpContextAccessor;
         protected BaseApiClient(IHttpClientFactory httpClientFactory,
                    IHttpContextAccessor httpContextAccessor,
@@ -31,11 +33,18 @@ namespace eShopSolution.AdminApp.Services
                 .HttpContext
                 .Session
                 .GetString(SystemConstants.AppSettings.Token);
+
             var client = _httpClientFactory.CreateClient();
+
             client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+
+            //Represents authentication information
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
             var response = await client.GetAsync(url);
+
             var body = await response.Content.ReadAsStringAsync();
+
             if (response.IsSuccessStatusCode)
             {
                 TResponse myDeserializeObjList = (TResponse)JsonConvert.DeserializeObject(body, typeof(TResponse));
