@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eShopSolution.ViewModels.System.Languages
 {
-    public class LanguageVm
+    public class LanguageViewModel
     {
         public string Id { get; set; }
 

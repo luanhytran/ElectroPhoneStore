@@ -24,12 +24,11 @@ namespace eShopSolutionBackendApi.Controllers
             _productService = productService;
         }
 
-        //biến trong alias phải trùng với tên trong routing ( parameter của phương thức )
-        //http://localhost:port/product?pageIndex=1&pageSize=10&CategoryIds=1
-        [HttpGet("{languageId}")]
-        public async Task<IActionResult> GetAllPaging(string languageId, [FromQuery] GetPublicProductPagingRequest request)
+        // Lấy ra tất cả sản phẩm hoặc lấy ra theo keyword,số trang... trong query string
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductPagingRequest request)
         {
-            var product = await _productService.GetAllByCategoryId(languageId, request);
+            var product = await _productService.GetAllPaging(request);
             return Ok(product);
         }
 

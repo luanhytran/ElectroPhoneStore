@@ -20,9 +20,9 @@ namespace eShopSolution.AdminApp.Services
            : base (httpClientFactory, httpContextAccessor, configuration)
         {
         }
-        public async Task<ApiResult<List<LanguageVm>>> GetAll()
+        public async Task<ApiResult<List<LanguageViewModel>>> GetAll()
         {
-            return await GetAsync<ApiResult<List<LanguageVm>>>("/api/languages");
+            return await GetAsync<ApiResult<List<LanguageViewModel>>>("/api/languages");
         }
     }
 }
