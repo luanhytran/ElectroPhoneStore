@@ -11,5 +11,7 @@ namespace eShopSolution.AdminApp.Services
     {
         // Tìm kiếm sản phẩm bằng keyword và category id
         Task<PagedResult<ProductViewModel>> GetPagings(GetManageProductPagingRequest request);
+
+        Task<bool> CreateProduct(ProductCreateRequest request);
     }
 }
