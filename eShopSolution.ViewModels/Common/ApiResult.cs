@@ -10,6 +10,7 @@ namespace eShopSolution.ViewModels.Common
 
         public string Message { get; set; }
 
+        // Chứa các value/data mà tra muốn response về
         public T ResultObj { get; set; }
     }
 }

@@ -144,13 +144,17 @@ namespace eShopSolution.Application.System.Users
         public async Task<ApiResult<bool>> Register(RegisterRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
+
+            // Kiểm tra tài khoản đã tồn tại chưa
             if (user != null)
             {
                 return new ApiErrorResult<bool>("Tài khoản đã tồn tại");
             }
+
+            // Kiểm tra email đã tồn tại chưa
             if (await _userManager.FindByEmailAsync(request.Email) != null)
             {
-                return new ApiErrorResult<bool>("Emai đã tồn tại");
+                return new ApiErrorResult<bool>("Email đã tồn tại");
             }
 
             user = new AppUser()
@@ -202,7 +206,7 @@ namespace eShopSolution.Application.System.Users
         {
             if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
             {
-                return new ApiErrorResult<bool>("Emai đã tồn tại");
+                return new ApiErrorResult<bool>("Email đã tồn tại");
             }
             var user = await _userManager.FindByIdAsync(id.ToString());
             user.Dob = request.Dob;
