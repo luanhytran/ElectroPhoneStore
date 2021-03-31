@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 
 namespace eShopSolution.AdminApp.Controllers
 {
+    // Không kế thừa BaseController vì khi log in thì không cần kiểm tra có token hay không
     public class LoginController : Controller
     {
         private readonly IUserApiClient _userApiClient;
