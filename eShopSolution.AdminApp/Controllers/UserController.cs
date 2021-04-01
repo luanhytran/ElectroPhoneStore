@@ -170,7 +170,8 @@ namespace eShopSolution.AdminApp.Controllers
             {
                 TempData["result"] = "Cập nhật quyền thành công";
                 return RedirectToAction("Index");
-            }
+            }  
+             
 
             ModelState.AddModelError("", result.Message);
             var roleAssignRequest = await GetRoleAssignRequest(request.Id);
@@ -178,6 +179,7 @@ namespace eShopSolution.AdminApp.Controllers
             return View(roleAssignRequest);
         }
 
+        // Dùng cho Http Get trang gán quyền Hiện ra tẩt cả role + role user đã chọn
         private async Task<RoleAssignRequest> GetRoleAssignRequest(Guid id)
         {
             var userObj = await _userApiClient.GetById(id);

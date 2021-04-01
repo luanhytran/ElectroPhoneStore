@@ -17,6 +17,8 @@ namespace eShopSolution.AdminApp.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
+
+        // Dùng để truy cập lấy token
         private readonly IHttpContextAccessor _httpContextAccessor;
         public RoleApiClient(IHttpClientFactory httpClientFactory,
                    IHttpContextAccessor httpContextAccessor,
