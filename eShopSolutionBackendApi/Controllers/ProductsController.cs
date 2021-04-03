@@ -172,5 +172,19 @@ namespace eShopSolutionBackendApi.Controllers
             // trả về http code 200, tương ứng với Ok Object Result
             return Ok();
         }
+
+        [HttpPut("{id}/categories")]
+        public async Task<IActionResult> RoleAssign(int id, [FromBody] CategoryAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _productService.CategoryAssign(id, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
     }
 }
