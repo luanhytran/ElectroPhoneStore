@@ -3,27 +3,28 @@ using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace eShopSolution.AdminApp.Services
 {
-    // Chỉ kế thừa được 1 class nhưng implement được nhiều interface
     public class ProductApiClient : BaseApiClient, IProductApiClient
     {
-
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-        // Dùng chung các properties với base class nên không cần khai báo
+
         public ProductApiClient(IHttpClientFactory httpClientFactory,
                    IHttpContextAccessor httpContextAccessor,
-                    IConfiguration configuration) : base(httpClientFactory, httpContextAccessor,  configuration)
+                    IConfiguration configuration)
+            : base(httpClientFactory, httpContextAccessor, configuration)
         {
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
@@ -74,11 +75,36 @@ namespace eShopSolution.AdminApp.Services
 
         public async Task<PagedResult<ProductViewModel>> GetPagings(GetManageProductPagingRequest request)
         {
-            // Lấy tất cả sản phẩm ra: gọi đến hàm GetAllPaging trong project BackendApi
             var data = await GetAsync<PagedResult<ProductViewModel>>(
                 $"/api/products/paging?pageIndex={request.PageIndex}" +
-                $"&pageSize={request.PageSize}" + 
+                $"&pageSize={request.PageSize}" +
                 $"&keyword={request.Keyword}&languageId={request.LanguageId}&categoryId={request.CategoryId}");
+
+            return data;
+        }
+
+        public async Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync($"/api/products/{id}/categories", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+
+        public async Task<ProductViewModel> GetById(int id, string languageId)
+        {
+            var data = await GetAsync<ProductViewModel>($"/api/products/{id}/{languageId}");
 
             return data;
         }
