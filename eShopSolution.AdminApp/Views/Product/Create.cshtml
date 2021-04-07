@@ -70,7 +70,7 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Details" class="control-label"></label>
-                        <textarea id="txt_details" Details" rows="35" class="form-control"></textarea>
+                        <textarea id="txt_details" asp-for="Details" rows="35" class="form-control"></textarea>
                         <span asp-validation-for="Details" class="text-danger"></span>
                     </div>
                     <div class="form-group">
