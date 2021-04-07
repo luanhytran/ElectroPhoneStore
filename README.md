@@ -12,5 +12,5 @@
 - Git client
 - Visual Studio 2019
 - SQL Server 2019
-
+<img src="https://github.com/luanhytran/web-ban-dien-thoai-cnpmnc/blob/master/image/image-20210407094237121.png">
 
