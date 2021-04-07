@@ -134,7 +134,7 @@ namespace eShopSolution.Application.Catalog.Products
                         join c in _context.Categories on pic.CategoryId equals c.Id into picc
                         from c in picc.DefaultIfEmpty()
                         where pt.LanguageId == request.LanguageId
-                        select new { p, pt, pic};
+                        select new { p, pt, pic };
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
                 query = query.Where(x => x.pt.Name.Contains(request.Keyword));
@@ -216,6 +216,7 @@ namespace eShopSolution.Application.Catalog.Products
             var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId
             && x.LanguageId == languageId);
 
+            // Lấy danh mục của sản phẩm
             var categories = await (from c in _context.Categories
                                     join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
                                     join pic in _context.ProductInCategories on c.Id equals pic.CategoryId
@@ -339,7 +340,6 @@ namespace eShopSolution.Application.Catalog.Products
             return viewModel;
         }
 
-
         public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
         {
             //1. Select join
@@ -386,7 +386,6 @@ namespace eShopSolution.Application.Catalog.Products
             };
             return pagedResult;
         }
-
 
         public async Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request)
         {

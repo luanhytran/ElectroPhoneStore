@@ -112,7 +112,10 @@ namespace eShopSolution.AdminApp.Controllers
         {
             var languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageId);
 
+            // Lấy ra danh sách category của sản phẩm này
             var productObj = await _productApiClient.GetById(id, languageId);
+
+            // Lấy ra danh sách các category theo ngôn ngữ
             var categories = await _categoryApiClient.GetAll(languageId);
             var categoryAssignRequest = new CategoryAssignRequest();
             foreach (var role in categories)
