@@ -6,19 +6,26 @@
 }
 @section Scripts{
     <script src="https://cdn.ckeditor.com/ckeditor5/27.0.0/classic/ckeditor.js"></script>
-<script>
-    ClassicEditor
-        .create(document.querySelector('#txt_details'), {
-            // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
-        })
-        .then(editor => {
-            window.editor = editor;
-        })
-        .catch(err => {
-            console.error(err.stack);
-        });
-</script>
- }
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#txt_details'), {
+                // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
+            })
+            .then(editor => {
+                window.editor = editor;
+            })
+            .catch(err => {
+                console.error(err.stack);
+            });
+    </script>
+}
+
+<style>
+    .validation-summary-valid span {
+        display: none;
+    }
+</style>
+
 <div class="container-fluid">
     <h1 class="mt-4">Tạo mới người dùng</h1>
     <ol class="breadcrumb mb-4">
@@ -34,6 +41,7 @@
             <div class="col-md-8">
                 <form asp-action="Create" enctype="multipart/form-data" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+               
                     <div class="form-group">
                         <label asp-for="Name" class="control-label"></label>
                         <input asp-for="Name" class="form-control" />

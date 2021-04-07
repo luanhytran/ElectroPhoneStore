@@ -10,11 +10,14 @@ namespace eShopSolution.ViewModels.Catalog.Products
     public class ProductCreateRequest
     {
         public decimal Price { get; set; }
+
         public decimal OriginalPrice { set; get; }
+
         public int Stock { set; get; }
 
         [Required(ErrorMessage = "Bạn phải nhập tên sản phẩm")]
         public string Name { get; set; }
+
         public string Description { set; get; }
         public string Details { set; get; }
         public string SeoDescription { set; get; }
