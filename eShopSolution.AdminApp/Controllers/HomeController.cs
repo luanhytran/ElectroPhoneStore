@@ -35,7 +35,6 @@ namespace eShopSolution.AdminApp.Controllers
             return View();
         }
 
-
         // Trang error
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

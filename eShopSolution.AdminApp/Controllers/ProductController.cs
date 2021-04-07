@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using eShopSolution.AdminApp.Models;
 using eShopSolution.AdminApp.Services;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.Catalog.Products;
@@ -60,6 +61,8 @@ namespace eShopSolution.AdminApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            ViewBag.CurrentLanguage = HttpContext.Session
+                .GetString(SystemConstants.AppSettings.DefaultLanguageId);
             return View();
         }
 
