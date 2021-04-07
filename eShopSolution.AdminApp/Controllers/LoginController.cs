@@ -69,8 +69,13 @@ namespace eShopSolution.AdminApp.Controllers
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                 IsPersistent = false
             };
+
+            // Set key defaultlanguageId trong session lấy value trong appsettings.json
             HttpContext.Session.SetString(SystemConstants.AppSettings.DefaultLanguageId, _configuration[SystemConstants.AppSettings.DefaultLanguageId]);
+            
+            // Set key token trong session bằng token nhận được khi authenticate
             HttpContext.Session.SetString(SystemConstants.AppSettings.Token, result.ResultObj);
+
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 userPrincipal,
