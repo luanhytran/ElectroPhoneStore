@@ -47,9 +47,9 @@ namespace eShopSolution.Application.Catalog.Products
                         Name = request.Name,
                         Description = request.Description,
                         Details = request.Details,
-                        SeoDescription = request.SeoDescription,
-                        SeoTitle = request.SeoTitle,
-                        SeoAlias = request.SeoAlias,
+                        SeoDescription = request.SeoDescription ?? " ",
+                        SeoTitle = request.SeoTitle ?? " ",
+                        SeoAlias = request.SeoAlias ?? " ",
                         LanguageId = request.LanguageId
                     }
                 }

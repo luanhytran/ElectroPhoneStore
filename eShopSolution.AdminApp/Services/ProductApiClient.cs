@@ -40,6 +40,13 @@ namespace eShopSolution.AdminApp.Services
 
             var languageId = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageId);
 
+            // vì là text area nên ta set nếu không nhập thì trống, tại đây được
+            var description = request.Description ?? " ";
+            var details = request.Details ?? " ";
+            var seoDescription = request.SeoDescription ?? " ";
+            var seoAlias = request.SeoAlias ?? " ";
+            var seoTitle = request.SeoTitle ?? " ";
+
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
@@ -61,12 +68,12 @@ namespace eShopSolution.AdminApp.Services
             requestContent.Add(new StringContent(request.OriginalPrice.ToString()), "originalPrice");
             requestContent.Add(new StringContent(request.Stock.ToString()), "stock");
             requestContent.Add(new StringContent(request.Name.ToString()), "name");
-            requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            requestContent.Add(new StringContent(description), "description");
 
-            requestContent.Add(new StringContent(request.Details.ToString()), "details");
-            requestContent.Add(new StringContent(request.SeoDescription.ToString()), "seoDescription");
-            requestContent.Add(new StringContent(request.SeoTitle.ToString()), "seoTitle");
-            requestContent.Add(new StringContent(request.SeoAlias.ToString()), "seoAlias");
+            requestContent.Add(new StringContent(details), "details");
+            requestContent.Add(new StringContent(seoDescription), "seoDescription");
+            requestContent.Add(new StringContent(seoTitle), "seoTitle");
+            requestContent.Add(new StringContent(seoAlias), "seoAlias");
             requestContent.Add(new StringContent(languageId), "languageId");
 
             var response = await client.PostAsync($"/api/products/", requestContent);
