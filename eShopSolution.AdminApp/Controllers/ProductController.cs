@@ -85,6 +85,13 @@ namespace eShopSolution.AdminApp.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Details(int id, string languageId)
+        {
+            var result = await _productApiClient.GetById(id, languageId);
+            return View(result);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> CategoryAssign(int id)
         {
             var roleAssignRequest = await GetCategoryAssignRequest(id);
