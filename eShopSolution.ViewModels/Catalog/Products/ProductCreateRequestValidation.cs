@@ -10,16 +10,16 @@ namespace eShopSolution.ViewModels.Catalog.Products
         public ProductCreateRequestValidation()
         {
             RuleFor(x => x.Price)
-                .LessThan(0).WithMessage("Giá tiền phải lớn hơn 0")
-                .GreaterThan(100000000).WithMessage("Giá tiền phải nhỏ hơn 100.000.000");
+                .LessThan(100000000).WithMessage("Giá tiền phải nhỏ hơn 100.000.000")
+                .GreaterThanOrEqualTo(0).WithMessage("Giá tiền phải lớn hơn 0");
 
             RuleFor(x => x.OriginalPrice)
-                .LessThan(0).WithMessage("Giá gốc phải lớn hơn 0")
-                .GreaterThan(100000000).WithMessage("Giá gốc phải nhỏ hơn 100.000.000");
+                .LessThan(100000000).WithMessage("Giá gốc phải lớn hơn 0")
+                .GreaterThanOrEqualTo(0).WithMessage("Giá gốc phải nhỏ hơn 100.000.000");
 
             RuleFor(x => x.Stock)
-                .LessThan(0).WithMessage("Só lượng phải lớn hơn 0")
-                .GreaterThan(10000).WithMessage("Số lượng phải nhỏ hơn 10.000");
+                .LessThan(10000).WithMessage("Só lượng phải lớn hơn 0")
+                .GreaterThanOrEqualTo(0).WithMessage("Số lượng phải nhỏ hơn 10.000");
 
             RuleFor(x => x.Name).NotEmpty().WithMessage("Tên sản phẩm không được để trống")
                .MaximumLength(200).WithMessage("Tên không được quá 200 ký tự");
