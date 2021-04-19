@@ -14,4 +14,8 @@
     <Folder Include="wwwroot\themes\less\oregional\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\eShopSolution.ApiIntegration\eShopSolution.ApiIntegration.csproj" />
+  </ItemGroup>
+
 </Project>
