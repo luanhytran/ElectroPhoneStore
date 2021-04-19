@@ -1,5 +1,4 @@
-﻿using eShopSolution.ViewModels.Common;
-using eShopSolution.ViewModels.System.Languages;
+﻿using eShopSolution.ViewModels.Catalog.Categories;
 using eShopSolution.ViewModels.Utilities.Slides;
 using System;
 using System.Collections.Generic;
@@ -8,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace eShopSolution.ApiIntegration
 {
-    public interface ILanguageApiClient
+    public interface ISlideApiClient
     {
-        Task<ApiResult<List<SlideViewModel>>> GetAll();
+        Task<List<SlideViewModel>> GetAll();
     }
 }
