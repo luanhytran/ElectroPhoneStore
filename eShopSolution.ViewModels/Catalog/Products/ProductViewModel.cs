@@ -19,6 +19,9 @@ namespace eShopSolution.ViewModels.Catalog.Products
         public string SeoTitle { set; get; }
         public string SeoAlias { get; set; }
         public string LanguageId { set; get; }
+        public bool? IsFeature { get; set; }
+
+        public string ThumbnailImage { get; set; }
 
         // Danh sách danh mục của sản phẩm, new ra để nó rỗng luôn chứ không bị null
         public List<string> Categories { get; set; } = new List<string>();
