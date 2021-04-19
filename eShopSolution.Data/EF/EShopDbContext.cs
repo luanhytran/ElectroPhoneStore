@@ -52,6 +52,8 @@ namespace eShopSolution.Data.EF
 
             modelBuilder.ApplyConfiguration(new ProductImageConfiguration());
 
+            modelBuilder.ApplyConfiguration(new SlideConfiguration());
+
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
 
             // những entity có HasKey là do lúc migrate báo lỗi yêu cầu thêm key
@@ -97,5 +99,6 @@ namespace eShopSolution.Data.EF
         public DbSet<Transaction> Transactions { get; set; }
 
         public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<Slide> Slides { get; set; }
     }
 }

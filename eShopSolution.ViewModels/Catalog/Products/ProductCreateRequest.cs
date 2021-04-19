@@ -40,6 +40,7 @@ namespace eShopSolution.ViewModels.Catalog.Products
         public string LanguageId { set; get; }
 
         [Display(Name = "Hình ảnh")]
+        public bool? IsFeature { get; set; }
         public IFormFile ThumbnailImage { get; set; }
     }
 }

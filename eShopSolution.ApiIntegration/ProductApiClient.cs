@@ -13,7 +13,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eShopSolution.AdminApp.Services
+namespace eShopSolution.ApiIntegration
 {
     public class ProductApiClient : BaseApiClient, IProductApiClient
     {
@@ -113,6 +113,12 @@ namespace eShopSolution.AdminApp.Services
         {
             var data = await GetAsync<ProductViewModel>($"/api/products/{id}/{languageId}");
 
+            return data;
+        }
+
+        public async Task<List<ProductViewModel>> GetFeaturedProducts(string languageId, int take)
+        {
+            var data = await GetListAsync<ProductViewModel>($"/api/products/featured/{languageId}/{take}");
             return data;
         }
     }
