@@ -1,6 +1,7 @@
 ﻿using eShopSolution.Application.Common;
 using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
+using eShopSolution.Utilities.Constants;
 using eShopSolution.Utilities.Exceptions;
 using eShopSolution.ViewModels.Catalog.ProductImages;
 using eShopSolution.ViewModels.Catalog.Products;
@@ -152,16 +153,16 @@ namespace eShopSolution.Application.Catalog.Products
                 .Select(x => new ProductViewModel()
                 {
                     Id = x.p.Id,
-                    Name = x.pt.Name,
+                    Name = x.pt == null ? SystemConstants.ProductConstants.NA : x.pt.Name,
                     DateCreated = x.p.DateCreated,
-                    Description = x.pt.Description,
-                    Details = x.pt.Details,
-                    LanguageId = x.pt.LanguageId,
+                    Description = x.pt == null ? SystemConstants.ProductConstants.NA : x.pt.Description,
+                    Details = x.pt == null ? SystemConstants.ProductConstants.NA : x.pt.Details,
+                    LanguageId = x.pt == null ? SystemConstants.ProductConstants.NA : x.pt.LanguageId,
                     OriginalPrice = x.p.OriginalPrice,
                     Price = x.p.Price,
-                    SeoAlias = x.pt.SeoAlias,
-                    SeoDescription = x.pt.SeoDescription,
-                    SeoTitle = x.pt.SeoTitle,
+                    SeoAlias = x.pt == null ? SystemConstants.ProductConstants.NA : x.pt.SeoAlias,
+                    SeoDescription = x.pt == null ? SystemConstants.ProductConstants.NA : x.pt.SeoDescription,
+                    SeoTitle = x.pt == null ? SystemConstants.ProductConstants.NA : x.pt.SeoTitle,
                     Stock = x.p.Stock,
                     ViewCount = x.p.ViewCount
                 }).ToListAsync();
