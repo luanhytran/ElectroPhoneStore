@@ -10,10 +10,12 @@ namespace eShopSolution.AdminApp.Controllers.Components
     public class NavigationViewComponent : ViewComponent
     {
         private readonly ILanguageApiClient _languageApiClient;
+
         public NavigationViewComponent(ILanguageApiClient languageApiClient)
         {
             _languageApiClient = languageApiClient;
         }
+
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var languages = await _languageApiClient.GetAll();
