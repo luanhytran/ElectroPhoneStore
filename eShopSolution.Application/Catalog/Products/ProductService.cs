@@ -1,6 +1,7 @@
 ﻿using eShopSolution.Application.Common;
 using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
+using eShopSolution.Utilities.Constants;
 using eShopSolution.Utilities.Exceptions;
 using eShopSolution.ViewModels.Catalog.ProductImages;
 using eShopSolution.ViewModels.Catalog.Products;
@@ -30,6 +31,39 @@ namespace eShopSolution.Application.Catalog.Products
 
         public async Task<int> Create(ProductCreateRequest request)
         {
+            var languages = _context.Languages;
+            var translations = new List<ProductTranslation>();
+            foreach (var language in languages)
+            {
+                if (language.Id == request.LanguageId)
+                {
+                    translations.Add(new ProductTranslation()
+                    {
+                        // id tự tăng
+                        // product id ăn theo object Product() ở trên khi ta tạo dạng này
+                        Name = request.Name,
+                        Description = request.Description,
+                        Details = request.Details,
+                        SeoDescription = request.SeoDescription,
+                        SeoTitle = request.SeoTitle,
+                        SeoAlias = request.SeoAlias,
+                        LanguageId = request.LanguageId
+                    });
+                }
+                else
+                {
+                    translations.Add(new ProductTranslation()
+                    {
+                        // id tự tăng
+                        // product id ăn theo object Product() ở trên khi ta tạo dạng này
+                        Name = SystemConstants.ProductConstants.NA,
+                        Description = SystemConstants.ProductConstants.NA,
+                        SeoAlias = SystemConstants.ProductConstants.NA,
+                        LanguageId = language.Id
+                    });
+                }
+            }
+
             var product = new Product()
             {
                 // id tự tăng
@@ -38,21 +72,7 @@ namespace eShopSolution.Application.Catalog.Products
                 Stock = request.Stock,
                 ViewCount = 0,
                 DateCreated = DateTime.Now,
-                ProductTranslations = new List<ProductTranslation>()
-                {
-                    new ProductTranslation()
-                    {
-                        // id tự tăng
-                        // product id ăn theo object Product() ở trên khi ta tạo dạng này
-                        Name = request.Name,
-                        Description = request.Description,
-                        Details = request.Details,
-                        SeoDescription = request.SeoDescription ?? " ",
-                        SeoTitle = request.SeoTitle ?? " ",
-                        SeoAlias = request.SeoAlias ?? " ",
-                        LanguageId = request.LanguageId
-                    }
-                }
+                ProductTranslations = translations
             };
             //Save image
             if (request.ThumbnailImage != null)
@@ -104,12 +124,12 @@ namespace eShopSolution.Application.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> Delete(int productId)
+        public async Task<ApiResult<bool>> Delete(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
             {
-                throw new EShopException($"Cannot find a product: {productId}");
+                return new ApiErrorResult<bool>("Sản phẩm không tồn tại");
             }
 
             var images = _context.ProductImages.Where(i => i.ProductId == productId);
@@ -118,10 +138,9 @@ namespace eShopSolution.Application.Catalog.Products
                 await _storageService.DeleteFileAsync(image.ImagePath);
             }
 
-            _context.Products.Remove(product);
-
-            // trả về số bản ghi delete
-            return await _context.SaveChangesAsync();
+            var result = _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
         }
 
         public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request)

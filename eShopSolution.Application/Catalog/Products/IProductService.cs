@@ -21,7 +21,7 @@ namespace eShopSolution.Application.Catalog.Products
         Task<int> Update(ProductUpdateRequest request);
 
         // để xóa thì ta chỉ cần truyền vào 1 product id
-        Task<int> Delete(int productId);
+        Task<ApiResult<bool>> Delete(int id);
 
         Task<ProductViewModel> GetById(int productId, string languageId);
 

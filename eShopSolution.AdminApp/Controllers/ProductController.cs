@@ -61,8 +61,6 @@ namespace eShopSolution.AdminApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ViewBag.CurrentLanguage = HttpContext.Session
-                .GetString(SystemConstants.AppSettings.DefaultLanguageId);
             return View();
         }
 
@@ -85,11 +83,72 @@ namespace eShopSolution.AdminApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int id, string languageId)
+        public async Task<IActionResult> Edit(int id)
         {
-            var result = await _productApiClient.GetById(id, languageId);
-            return View(result);
+            var languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageId);
+            var product = await _productApiClient.GetById(id, languageId);
+            var editVm = new ProductUpdateRequest()
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Details = product.Details,
+                SeoAlias = product.SeoAlias,
+                SeoDescription = product.SeoDescription,
+                SeoTitle = product.SeoTitle
+            };
+
+            return View(editVm);
         }
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Edit([FromForm] ProductUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View(request);
+
+            var result = await _productApiClient.UpdateProduct(request);
+            if (result)
+            {
+                TempData["result"] = "Cập nhật sản phẩm thành công";
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("", "Cập nhật sản phẩm thất bại");
+            return View(request);
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            return View(new ProductDeleteRequest()
+            {
+                Id = id
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(ProductDeleteRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            var result = await _productApiClient.Delete(request.Id);
+            if (result.IsSuccessed)
+            {
+                TempData["result"] = "Xóa sản phẩm thành công";
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
+
+        //[HttpGet]
+        //public async Task<IActionResult> Details(int id)
+        //{
+        //}
 
         [HttpGet]
         public async Task<IActionResult> CategoryAssign(int id)
