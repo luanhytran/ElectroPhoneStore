@@ -97,16 +97,18 @@ namespace eShopSolutionBackendApi.Controllers
             return Ok();
         }
 
-        [HttpDelete("{productId}")]
-        public async Task<IActionResult> Delete(int productId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var affectedResult = await _productService.Delete(productId);
-            if (affectedResult == 0)
-            {
-                return BadRequest();
-            }
+            //var affectedResult = await _productService.Delete(id);
+            //if (affectedResult == 0)
+            //{
+            //    return BadRequest();
+            //}
 
-            return Ok();
+            //return Ok();
+            var result = await _productService.Delete(id);
+            return Ok(result);
         }
 
         // HttpPatch: update một phần

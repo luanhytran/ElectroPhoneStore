@@ -124,12 +124,12 @@ namespace eShopSolution.Application.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> Delete(int productId)
+        public async Task<ApiResult<bool>> Delete(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
             {
-                throw new EShopException($"Cannot find a product: {productId}");
+                return new ApiErrorResult<bool>("Sản phẩm không tồn tại");
             }
 
             var images = _context.ProductImages.Where(i => i.ProductId == productId);
@@ -138,10 +138,9 @@ namespace eShopSolution.Application.Catalog.Products
                 await _storageService.DeleteFileAsync(image.ImagePath);
             }
 
-            _context.Products.Remove(product);
-
-            // trả về số bản ghi delete
-            return await _context.SaveChangesAsync();
+            var result = _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
         }
 
         public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request)
