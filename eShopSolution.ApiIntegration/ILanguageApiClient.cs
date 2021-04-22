@@ -10,6 +10,6 @@ namespace eShopSolution.ApiIntegration
 {
     public interface ILanguageApiClient
     {
-        Task<ApiResult<List<SlideViewModel>>> GetAll();
+        Task<ApiResult<List<LanguageViewModel>>> GetAll();
     }
 }
