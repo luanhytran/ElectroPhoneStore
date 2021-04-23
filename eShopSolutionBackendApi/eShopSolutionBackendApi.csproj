@@ -20,8 +20,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\user-content\" />
-    <Folder Include="wwwroot\user-content\" />
-    <Folder Include="wwwroot\user-content\" />
   </ItemGroup>
 
 </Project>

@@ -198,5 +198,28 @@ namespace eShopSolution.AdminApp.Controllers
             }
             return categoryAssignRequest;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageId);
+            var product = await _productApiClient.GetById(id, languageId);
+            var detailVm = new ProductViewModel()
+            {
+                Price = product.Price,
+                OriginalPrice = product.Price,
+                Stock = product.Stock,
+                Name = product.Name,
+                Description = product.Description,
+                Details = product.Details,
+                SeoDescription = product.SeoDescription,
+                SeoTitle = product.SeoTitle,
+                SeoAlias = product.SeoAlias,
+                LanguageId = product.LanguageId,
+                ThumbnailImage = product.ThumbnailImage
+            };
+
+            return View(detailVm);
+        }
     }
 }
