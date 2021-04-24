@@ -5,9 +5,9 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Bootshop online Shopping cart</title>
+    <title>@ViewData["Title"]</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
+    <meta name="description" content="@ViewData["Description"]">
     <meta name="author" content="">
     <!--Less styles -->
     <!-- Other Less css file //different less files has different color scheam
@@ -79,7 +79,7 @@
                         <li class=""><a asp-route-culture="@culture" localize-content>Contact</a></li>
                         <li class="">
                             <a href="#login" role="button" data-toggle="modal" style="padding-right:0">
-                            <span class="btn btn-large btn-success"><localize>Login</localize></span>
+                                <span class="btn btn-large btn-success"><localize>Login</localize></span>
                             </a>
                             <div id="login" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false">
                                 <div class="modal-header">
@@ -111,8 +111,7 @@
         </div>
     </div>
     <!-- Header End====================================================================== -->
-    @*Các trang con không bắt buộc có section này, chỉ trang nào yêu cầu mới có*@
-    @RenderSection("slider", required: false);
+    @RenderSection("slider", required: false)
     <div id="mainBody">
         <div class="container">
             <div class="row">
@@ -171,7 +170,7 @@
     <script src="/themes/js/bootshop.js"></script>
     <script src="/themes/js/jquery.lightbox-0.5.js"></script>
 
-    <!-- /themes switcher section ============================================================================================= -->
+    <!-- Themes switcher section ============================================================================================= -->
     <div id="secectionBox">
         <link rel="stylesheet" href="/themes/switch/themeswitch.css" type="text/css" media="screen" />
         <script src="/themes/switch/theamswitcher.js" type="text/javascript" charset="utf-8"></script>
@@ -224,6 +223,6 @@
             </div>
         </div>
     </div>
-    <span id="themesBtn"></span>
+    <span id="/themesBtn"></span>
 </body>
 </html>
