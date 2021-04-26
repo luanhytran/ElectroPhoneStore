@@ -18,6 +18,7 @@ namespace eShopSolution.ApiIntegration
 
         // Provides access to the current HttpContext, if one is available.
         private readonly IHttpContextAccessor _httpContextAccessor;
+
         protected BaseApiClient(IHttpClientFactory httpClientFactory,
                    IHttpContextAccessor httpContextAccessor,
                     IConfiguration configuration)
@@ -53,7 +54,6 @@ namespace eShopSolution.ApiIntegration
             return JsonConvert.DeserializeObject<TResponse>(body);
         }
 
-
         public async Task<List<T>> GetListAsync<T>(string url, bool requiredLogin = false)
         {
             var sessions = _httpContextAccessor
@@ -72,6 +72,26 @@ namespace eShopSolution.ApiIntegration
                 return data;
             }
             throw new Exception(body);
+        }
+
+        // Cần đăng nhập mới dùng được nên bỏ tham số bool requiredLogin = false
+        public async Task<bool> Delete(string url)
+        {
+            // Lấy ra token
+            var sessions = _httpContextAccessor
+               .HttpContext
+               .Session
+               .GetString(SystemConstants.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var response = await client.DeleteAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

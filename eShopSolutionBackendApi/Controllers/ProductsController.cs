@@ -102,15 +102,13 @@ namespace eShopSolutionBackendApi.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
-            //var affectedResult = await _productService.Delete(id);
-            //if (affectedResult == 0)
-            //{
-            //    return BadRequest();
-            //}
+            var affectedResult = await _productService.Delete(id);
+            if (affectedResult == 0)
+            {
+                return BadRequest();
+            }
 
-            //return Ok();
-            var result = await _productService.Delete(id);
-            return Ok(result);
+            return Ok();
         }
 
         // HttpPatch: update một phần

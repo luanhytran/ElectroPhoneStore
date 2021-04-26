@@ -21,6 +21,7 @@ namespace eShopSolution.Application.Catalog.Products
     {
         private readonly EShopDbContext _context;
         private readonly IStorageService _storageService;
+        private const string USER_CONTENT_FOLDER_NAME = "user-content";
 
         // dependency injection, truyền context vào để thao tác CRUD
         public ProductService(EShopDbContext context, IStorageService storageService)
@@ -124,13 +125,10 @@ namespace eShopSolution.Application.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<ApiResult<bool>> Delete(int productId)
+        public async Task<int> Delete(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
-            if (product == null)
-            {
-                return new ApiErrorResult<bool>("Sản phẩm không tồn tại");
-            }
+            if (product == null) throw new EShopException($"Cannot find a product: {productId}");
 
             var images = _context.ProductImages.Where(i => i.ProductId == productId);
             foreach (var image in images)
@@ -138,9 +136,9 @@ namespace eShopSolution.Application.Catalog.Products
                 await _storageService.DeleteFileAsync(image.ImagePath);
             }
 
-            var result = _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<bool>();
+            _context.Products.Remove(product);
+
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request)
@@ -229,7 +227,7 @@ namespace eShopSolution.Application.Catalog.Products
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
-            return fileName;
+            return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
         }
 
         public async Task<ProductViewModel> GetById(int productId, string languageId)
@@ -237,7 +235,6 @@ namespace eShopSolution.Application.Catalog.Products
             var product = await _context.Products.FindAsync(productId);
             var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId
             && x.LanguageId == languageId);
-            var productImg = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == productId);
 
             // Lấy danh mục của sản phẩm
             var categories = await (from c in _context.Categories
@@ -245,6 +242,8 @@ namespace eShopSolution.Application.Catalog.Products
                                     join pic in _context.ProductInCategories on c.Id equals pic.CategoryId
                                     where pic.ProductId == productId && ct.LanguageId == languageId
                                     select ct.Name).ToListAsync();
+
+            var image = await _context.ProductImages.Where(x => x.ProductId == productId && x.IsDefault == true).FirstOrDefaultAsync();
 
             var productViewModel = new ProductViewModel()
             {
@@ -262,7 +261,7 @@ namespace eShopSolution.Application.Catalog.Products
                 Stock = product.Stock,
                 ViewCount = product.ViewCount,
                 Categories = categories,
-                ThumbnailImage = productImg.ImagePath
+                ThumbnailImage = image != null ? image.ImagePath : "no-image.jpg"
             };
             return productViewModel;
         }

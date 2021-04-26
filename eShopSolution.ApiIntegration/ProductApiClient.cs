@@ -40,13 +40,6 @@ namespace eShopSolution.ApiIntegration
 
             var languageId = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageId);
 
-            // vì là text area nên ta set nếu không nhập thì trống, tại đây được
-            var description = request.Description ?? SystemConstants.ProductConstants.NA;
-            var details = request.Details ?? SystemConstants.ProductConstants.NA;
-            var seoDescription = request.SeoDescription ?? SystemConstants.ProductConstants.NA;
-            var seoAlias = request.SeoAlias ?? SystemConstants.ProductConstants.NA;
-            var seoTitle = request.SeoTitle ?? SystemConstants.ProductConstants.NA;
-
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
@@ -67,13 +60,13 @@ namespace eShopSolution.ApiIntegration
             requestContent.Add(new StringContent(request.Price.ToString()), "price");
             requestContent.Add(new StringContent(request.OriginalPrice.ToString()), "originalPrice");
             requestContent.Add(new StringContent(request.Stock.ToString()), "stock");
-            requestContent.Add(new StringContent(request.Name.ToString()), "name");
-            requestContent.Add(new StringContent(description), "description");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Name) ? " " : request.Name.ToString()), "name");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Description) ? " " : request.Name.ToString()), "description");
 
-            requestContent.Add(new StringContent(details), "details");
-            requestContent.Add(new StringContent(seoDescription), "seoDescription");
-            requestContent.Add(new StringContent(seoTitle), "seoTitle");
-            requestContent.Add(new StringContent(seoAlias), "seoAlias");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Details) ? " " : request.Name.ToString()), "details");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.SeoDescription) ? " " : request.Name.ToString()), "seoDescription");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.SeoTitle) ? " " : request.Name.ToString()), "seoTitle");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.SeoAlias) ? " " : request.Name.ToString()), "seoAlias");
             requestContent.Add(new StringContent(languageId), "languageId");
 
             var response = await client.PostAsync($"/api/products/", requestContent);
@@ -88,13 +81,6 @@ namespace eShopSolution.ApiIntegration
                 .GetString(SystemConstants.AppSettings.Token);
 
             var languageId = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageId);
-
-            // vì là text area nên ta set nếu không nhập thì trống, tại đây được
-            var description = request.Description ?? SystemConstants.ProductConstants.NA;
-            var details = request.Details ?? SystemConstants.ProductConstants.NA;
-            var seoDescription = request.SeoDescription ?? SystemConstants.ProductConstants.NA;
-            var seoAlias = request.SeoAlias ?? SystemConstants.ProductConstants.NA;
-            var seoTitle = request.SeoTitle ?? SystemConstants.ProductConstants.NA;
 
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
@@ -113,31 +99,21 @@ namespace eShopSolution.ApiIntegration
                 requestContent.Add(bytes, "thumbnailImage", request.ThumbnailImage.FileName);
             }
 
-            requestContent.Add(new StringContent(request.Name.ToString()), "name");
-            requestContent.Add(new StringContent(description), "description");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Name) ? " " : request.Name.ToString()), "name");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Description) ? " " : request.Name.ToString()), "description");
 
-            requestContent.Add(new StringContent(details), "details");
-            requestContent.Add(new StringContent(seoDescription), "seoDescription");
-            requestContent.Add(new StringContent(seoTitle), "seoTitle");
-            requestContent.Add(new StringContent(seoAlias), "seoAlias");
-            requestContent.Add(new StringContent(languageId), "languageId");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Details) ? " " : request.Name.ToString()), "details");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.SeoDescription) ? " " : request.Name.ToString()), "seoDescription");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.SeoTitle) ? " " : request.Name.ToString()), "seoTitle");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.SeoAlias) ? " " : request.Name.ToString()), "seoAlias");
 
             var response = await client.PutAsync($"/api/products/" + request.Id, requestContent);
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<ApiResult<bool>> Delete(int id)
+        public async Task<bool> DeleteProduct(int id)
         {
-            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
-            var response = await client.DeleteAsync($"/api/products/{id}");
-            var body = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(body);
-
-            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
+            return await Delete($"/api/products/" + id);
         }
 
         public async Task<PagedResult<ProductViewModel>> GetPagings(GetManageProductPagingRequest request)
