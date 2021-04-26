@@ -134,14 +134,14 @@ namespace eShopSolution.AdminApp.Controllers
             if (!ModelState.IsValid)
                 return View();
 
-            var result = await _productApiClient.Delete(request.Id);
-            if (result.IsSuccessed)
+            var result = await _productApiClient.DeleteProduct(request.Id);
+            if (result)
             {
                 TempData["result"] = "Xóa sản phẩm thành công";
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", result.Message);
+            ModelState.AddModelError("", "Xóa không thành công");
             return View(request);
         }
 
