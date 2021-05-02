@@ -1,6 +1,7 @@
 using eShopSolution.ApiIntegration;
 using eShopSolution.WebApp.LocalizationResources;
 using LazZiya.ExpressLocalization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -30,11 +31,13 @@ namespace eShopSolution.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
+
             var cultures = new[]
            {
                 new CultureInfo("en"),
                 new CultureInfo("vi"),
             };
+
             services.AddControllersWithViews()
                 .AddExpressLocalization<ExpressLocalizationResource, ViewLocalizationResource>(ops =>
                 {
@@ -65,14 +68,28 @@ namespace eShopSolution.WebApp
                         o.DefaultRequestCulture = new RequestCulture("vi");
                     };
                 });
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                    options.AccessDeniedPath = "/Account/Forbidden/";
+                });
+
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddTransient<ISlideApiClient, SlideApiClient>();
+
             services.AddTransient<IProductApiClient, ProductApiClient>();
+
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
+
+            services.AddTransient<IUserApiClient, UserApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -90,6 +107,7 @@ namespace eShopSolution.WebApp
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
 
             app.UseRouting();
 
