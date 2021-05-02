@@ -49,6 +49,7 @@ namespace eShopSolution.WebApp.Controllers
                 Description = product.Description,
                 Image = product.ThumbnailImage,
                 Name = product.Name,
+                Price = product.Price,
                 Quantity = quantity
             };
 
@@ -56,7 +57,20 @@ namespace eShopSolution.WebApp.Controllers
 
             HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
 
-            return Ok();
+            return Ok(currentCart);
+        }
+
+        [HttpGet]
+        public IActionResult GetListItems()
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.CartSession);
+
+            List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
+
+            if (session != null)
+                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(HttpContext.Session.GetString(SystemConstants.CartSession));
+
+            return Ok(currentCart);
         }
     }
 }
