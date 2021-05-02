@@ -1,5 +1,6 @@
 ﻿using eShopSolution.ApiIntegration;
 using eShopSolution.Utilities.Constants;
+using eShopSolution.ViewModels.Sales;
 using eShopSolution.WebApp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,55 @@ namespace eShopSolution.WebApp.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Checkout()
+        {
+            return View(GetCheckoutViewModel());
+        }
+
+        [HttpPost]
+        public IActionResult Checkout(CheckoutViewModel request)
+        {
+            var model = GetCheckoutViewModel();
+            var orderDetails = new List<OrderDetailViewModel>();
+            foreach (var item in model.CartItems)
+            {
+                orderDetails.Add(new OrderDetailViewModel()
+                {
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity
+                });
+            }
+            var checkoutRequest = new CheckoutRequest()
+            {
+                Address = request.CheckoutModel.Address,
+                Name = request.CheckoutModel.Name,
+                Email = request.CheckoutModel.Email,
+                PhoneNumber = request.CheckoutModel.PhoneNumber,
+                OrderDetails = orderDetails
+            };
+
+            // TODO: Ađ to API
+            //Sau khi có checkoutRequest thì ta sẽ đẩy vào OrerApiClient để tích hợp với Api và là bài tập tự làm
+
+            TempData["SuccessMsg"] = "Order purchased successful";
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult GetListItems()
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.CartSession);
+
+            List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
+
+            if (session != null)
+                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
+
+            return Ok(currentCart);
+        }
+
         public async Task<IActionResult> AddToCart(int id, string languageId)
         {
             var product = await _productApiClient.GetById(id, languageId);
@@ -34,7 +84,7 @@ namespace eShopSolution.WebApp.Controllers
             List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
 
             if (session != null)
-                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(HttpContext.Session.GetString(SystemConstants.CartSession));
+                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
 
             int quantity = 1;
 
@@ -67,7 +117,7 @@ namespace eShopSolution.WebApp.Controllers
             List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
 
             if (session != null)
-                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(HttpContext.Session.GetString(SystemConstants.CartSession));
+                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
 
             foreach (var item in currentCart)
             {
@@ -87,17 +137,19 @@ namespace eShopSolution.WebApp.Controllers
             return Ok(currentCart);
         }
 
-        [HttpGet]
-        public IActionResult GetListItems()
+        private CheckoutViewModel GetCheckoutViewModel()
         {
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
-
             List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
-
             if (session != null)
-                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(HttpContext.Session.GetString(SystemConstants.CartSession));
+                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
 
-            return Ok(currentCart);
+            var checkoutVm = new CheckoutViewModel()
+            {
+                CartItems = currentCart,
+                CheckoutModel = new CheckoutRequest(),
+            };
+            return checkoutVm;
         }
     }
 }
