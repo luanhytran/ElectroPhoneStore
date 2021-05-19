@@ -7,6 +7,8 @@
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @inject LazZiya.ExpressLocalization.ISharedCultureLocalizer _loc;
 
+
+
 <ul class="breadcrumb">
     <li><a href="/"><localize>Home</localize></a> <span class="divider">/</span></li>
     <li class="active">@Model.Product.Name</li>
@@ -47,9 +49,16 @@
             </div>
         </div>
     </div>
+
     <div class="span6">
         <h3>@Model.Product.Name</h3>
-        <small>@Model.Product.Description</small>
+         @{ 
+             string html = @Model.Product.Description;
+             string removeFirstFigure = html.Remove(0, 22);
+             string removeLastFigure = removeFirstFigure.Remove(removeFirstFigure.Length - 9);
+             string addedTableFormat = removeLastFigure.Insert(6, " class=\"table table-bordered table-striped\"");
+         }
+        @Html.Raw(addedTableFormat)
         <hr class="soft" />
         <form class="form-horizontal qtyFrm">
             <div class="control-group">

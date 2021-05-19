@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eShopSolution.Data.EF;
 
 namespace eShopSolution.Data.Migrations
 {
     [DbContext(typeof(EShopDbContext))]
-    partial class EShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210518183012_Config_Detai_Description_Length")]
+    partial class Config_Detai_Description_Length
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,7 +181,7 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "c7dc9447-ea74-4805-8c4f-27d774ef1e19",
+                            ConcurrencyStamp = "9f4d6c93-9742-4029-a038-17316e5aa5c7",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -256,7 +258,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f8156cd1-25fb-4473-ae24-a238c5818f39",
+                            ConcurrencyStamp = "a01ecfd2-c887-4c26-97c6-78b51788213e",
                             Dob = new DateTime(2000, 10, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hytranluan@gmail.com",
                             EmailConfirmed = true,
@@ -265,7 +267,7 @@ namespace eShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "HYTRANLUAN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOIJbQUXYr7Nyjta6PLY2uqogqaR8dZnRFz308xcELg/pZmuu8LYI0ccUrPTqg/4ew==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELpJXieBnhuRi8lTH67QKwa0uYqZVlXhH41ecQSjghIxMqYWj9yzl2GR+5neLKVuiw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -609,7 +611,7 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2021, 5, 19, 2, 44, 49, 910, DateTimeKind.Local).AddTicks(5331),
+                            DateCreated = new DateTime(2021, 5, 19, 1, 30, 11, 776, DateTimeKind.Local).AddTicks(3996),
                             OriginalPrice = 100000m,
                             Price = 200000m,
                             Stock = 0,
@@ -690,8 +692,8 @@ namespace eShopSolution.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(4000)
-                        .HasColumnType("nvarchar(4000)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Details")
                         .HasMaxLength(4000)

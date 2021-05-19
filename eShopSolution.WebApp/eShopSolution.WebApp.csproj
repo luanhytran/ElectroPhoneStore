@@ -11,6 +11,7 @@
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.6.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
+    <PackageReference Include="westwind.aspnetcore.markdown" Version="3.6.0" />
   </ItemGroup>
 
   <ItemGroup>
