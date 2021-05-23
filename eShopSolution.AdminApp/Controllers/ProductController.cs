@@ -93,9 +93,6 @@ namespace eShopSolution.AdminApp.Controllers
                 Name = product.Name,
                 Description = product.Description,
                 Details = product.Details,
-                SeoAlias = product.SeoAlias,
-                SeoDescription = product.SeoDescription,
-                SeoTitle = product.SeoTitle
             };
 
             return View(editVm);
@@ -207,14 +204,10 @@ namespace eShopSolution.AdminApp.Controllers
             var detailVm = new ProductViewModel()
             {
                 Price = product.Price,
-                OriginalPrice = product.Price,
                 Stock = product.Stock,
                 Name = product.Name,
                 Description = product.Description,
                 Details = product.Details,
-                SeoDescription = product.SeoDescription,
-                SeoTitle = product.SeoTitle,
-                SeoAlias = product.SeoAlias,
                 LanguageId = product.LanguageId,
                 ThumbnailImage = product.ThumbnailImage
             };

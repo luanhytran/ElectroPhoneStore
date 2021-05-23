@@ -44,10 +44,10 @@ namespace eShopSolution.Data.Extentions
               );
 
             modelBuilder.Entity<CategoryTranslation>().HasData(
-                  new CategoryTranslation() { Id = 1, CategoryId = 1, Name = "Áo nam", LanguageId = "vi", SeoAlias = "ao-nam", SeoDescription = "Sản phẩm áo thời trang nam", SeoTitle = "Sản phẩm áo thời trang nam" },
-                  new CategoryTranslation() { Id = 2, CategoryId = 1, Name = "Men Shirt", LanguageId = "en", SeoAlias = "men-shirt", SeoDescription = "The shirt product for men", SeoTitle = "The shirt product for men" },
-                  new CategoryTranslation() { Id = 3, CategoryId = 2, Name = "Áo nữ", LanguageId = "vi", SeoAlias = "ao-nu", SeoDescription = "Sản phẩm áo thời trang nữ", SeoTitle = "Sản phẩm áo thời trang nữ" },
-                  new CategoryTranslation() { Id = 4, CategoryId = 2, Name = "Women Shirt", LanguageId = "en", SeoAlias = "women-shirt", SeoDescription = "The shirt product for women", SeoTitle = "The shirt product for women" }
+                  new CategoryTranslation() { Id = 1, CategoryId = 1, Name = "Áo nam", LanguageId = "vi"},
+                  new CategoryTranslation() { Id = 2, CategoryId = 1, Name = "Men Shirt", LanguageId = "en" },
+                  new CategoryTranslation() { Id = 3, CategoryId = 2, Name = "Áo nữ", LanguageId = "vi"},
+                  new CategoryTranslation() { Id = 4, CategoryId = 2, Name = "Women Shirt", LanguageId = "en" }
               );
 
             modelBuilder.Entity<Product>().HasData(
@@ -55,7 +55,6 @@ namespace eShopSolution.Data.Extentions
              {
                  Id = 1,
                  DateCreated = DateTime.Now,
-                 OriginalPrice = 100000,
                  Price = 200000,
                  Stock = 0,
                  ViewCount = 0,
@@ -67,9 +66,6 @@ namespace eShopSolution.Data.Extentions
                       ProductId = 1,
                       Name = "Áo sơ mi nam trắng Việt Tiến",
                       LanguageId = "vi",
-                      SeoAlias = "ao-so-mi-nam-trang-viet-tien",
-                      SeoDescription = "Áo sơ mi nam trắng Việt Tiến",
-                      SeoTitle = "Áo sơ mi nam trắng Việt Tiến",
                       Details = "Áo sơ mi nam trắng Việt Tiến",
                       Description = "Áo sơ mi nam trắng Việt Tiến"
                   },
@@ -79,9 +75,6 @@ namespace eShopSolution.Data.Extentions
                       ProductId = 1,
                       Name = "Viet Tien Men T-Shirt",
                       LanguageId = "en",
-                      SeoAlias = "viet-tien-men-t-shirt",
-                      SeoDescription = "Viet Tien Men T-Shirt",
-                      SeoTitle = "Viet Tien Men T-Shirt",
                       Details = "Viet Tien Men T-Shirt",
                       Description = "Viet Tien Men T-Shirt"
                   });

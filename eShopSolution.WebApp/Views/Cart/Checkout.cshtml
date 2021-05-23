@@ -7,89 +7,378 @@
     var culture = CultureInfo.CurrentCulture.Name;
 }
 
-<ul class="breadcrumb">
-    <li><a href="index.html">Home</a> <span class="divider">/</span></li>
-    <li class="active"> SHOPPING CART</li>
-</ul>
-<h3>
-    SHOPPING CART [ <small>@Model.CartItems.Count Item(s) </small>]
-    <a href="/" class="btn btn-large pull-right"><i class="icon-arrow-left"></i> Continue Shopping </a>
-</h3>
+<style>
+    button.button {
+        display: inline-block;
+        border: 0;
+        background: #444;
+        padding: 6px 16px;
+        font-size: 12px;
+        border: 1px solid #444;
+        font-weight: 500;
+        text-align: center;
+        white-space: nowrap;
+        color: #fff;
+        font-weight: normal;
+        transition: all 0.3s linear;
+        -moz-transition: all 0.3s linear;
+        -webkit-transition: all 0.3s linear;
+        border-radius: 3px;
+    }
 
-<hr class="soft" />
+        button.button:hover {
+            background: #e83f33;
+            border: 1px solid #e83f33;
+            transition: all 0.3s linear;
+            -moz-transition: all 0.3s linear;
+            -webkit-transition: all 0.3s linear;
+            color: #fff
+        }
 
-@if (TempData["SuccessMsg"] != null)
-{
-    <span class="alert alert-success">@TempData["SuccessMsg"]</span>
-}
-else
-{
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Description</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.CartItems)
-            {
-                <tr>
-                    <td> <img width="60" src="@(Configuration["BaseAddress"] + @item.Image)" alt="" /></td>
-                    <td>@item.Quantity</td>
-                    <td>@item.Price</td>
-                    <td>@item.Quantity * @item.Price</td>
-                </tr>
+        button span {
+        text-transform: uppercase;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        }
+
+/******************************************
+33. Checkout page
+******************************************/
+
+    .checkout-page {
+        margin-top: 12px;
+    }
+
+        .checkout-page ul {
+            padding: 0px;
+            margin: auto;
+        }
+
+        .checkout-page li {
+            list-style: none;
+        }
+
+        .checkout-page h4.checkout-sep {
+            text-transform: capitalize;
+            font-size: 15px;
+            border-bottom: 1px #e8e8e8 solid;
+            line-height: normal;
+            padding: 0 0 12px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+            .checkout-page h4.checkout-sep.last {
+                border: none;
+                padding-bottom: 0px;
+                margin-bottom: 0px;
             }
 
-            <tr>
-                <td colspan="4" style="text-align:right"><strong>TOTAL =</strong></td>
-                <td class="label label-important" style="display:block"> <strong> @Model.CartItems.Sum(x => x.Quantity * x.Price).ToString("N0") </strong></td>
-            </tr>
-        </tbody>
-    </table>
+        .checkout-page .box-border {
+            margin-bottom: 15px;
+        }
 
-    <table class="table table-bordered">
-        <tr><th>ESTIMATE YOUR SHIPPING </th></tr>
-        <tr>
-            <td>
-                <form class="form-horizontal" action="/@culture/Cart/Checkout" method="post">
-                    <div class="control-group">
-                        <label class="control-label" for="inputCountry">Name </label>
-                        <div class="controls">
-                            <input type="text" id="inputCountry" asp-for="CheckoutModel.Name" placeholder="Name">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="inputCountry">Address </label>
-                        <div class="controls">
-                            <input type="text" id="inputCountry" asp-for="CheckoutModel.Address" placeholder="Address">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="inputCountry">Email </label>
-                        <div class="controls">
-                            <input type="text" id="inputCountry" asp-for="CheckoutModel.Email" placeholder="Email">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="inputCountry">PhoneNumber </label>
-                        <div class="controls">
-                            <input type="text" id="inputCountry" asp-for="CheckoutModel.PhoneNumber" placeholder="PhoneNumber">
-                        </div>
-                    </div>
+            .checkout-page .box-border h4 {
+                font-weight: 600;
+                font-size: 14px;
+            }
 
-                    <div class="control-group">
-                        <div class="controls">
-                            <button type="submit" class="btn">Purchase </button>
+            .checkout-page .box-border h5 {
+                font-weight: 600;
+            }
+
+            .checkout-page .box-border .button {
+                margin-top: 15px;
+            }
+
+            .checkout-page .box-border label {
+                margin-top: 5px;
+                font-size: 12px;
+                font-weight: 600;
+            }
+
+            .checkout-page .box-border p, .checkout-page .box-border h4 {
+                padding-bottom: 5px;
+                margin-top: 5px;
+            }
+
+            .checkout-page .box-border .fa {
+                line-height: inherit;
+            }
+
+            .checkout-page .box-border input[type="radio"] {
+                margin-right: 10px;
+            }
+
+</style>
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a href="/">Home</a></li>
+                    <li class="active">Checkout</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<section class="main-container col2-right-layout">
+    <div class="main container">
+        <div class="row">
+            <div class="col-main col-sm-9 col-xs-12">
+                <div class="page-title">
+                    <h2>Checkout</h2>
+                </div>
+                <div class="page-content checkout-page">
+
+                    <h4 class="checkout-sep">1. Checkout Method</h4>
+                    <div class="box-border">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h5>Checkout as a Guest or Register</h5>
+                                <p>Register with us for future convenience:</p>
+                                <br>
+                                <h4>Register and save time!</h4>
+                                <p>Register with us for future convenience:</p>
+                                <p><i class="fa fa-check-circle text-primary"></i> Fast and easy check out</p>
+                                <p><i class="fa fa-check-circle text-primary"></i> Easy access to your order history and status</p>
+                                <button class="button" onclick="window.location.href='/vi/Account/Register'"><i class="fa fa-angle-double-right"></i>&nbsp; <span>Continue</span></button>
+                            </div>
+                            <div class="col-sm-6">
+                                <h5>Login</h5>
+                                <p>Already registered? Please log in below:</p>
+                                <button class="button" onclick="window.location.href='/vi/Account/Login'"><i class="icon-login"></i>&nbsp; <span>Login</span></button>
+                            </div>
                         </div>
                     </div>
-                </form>
-            </td>
-        </tr>
-    </table>
-    <a href="/" class="btn btn-large"><i class="icon-arrow-left"></i> Continue Shopping </a>
-}
+                    <h4 class="checkout-sep">2. Shipping Information</h4>
+                    <div class="box-border">
+                        <ul>
+                            <li class="row">
+                                <div class="col-sm-6">
+                                    <label for="first_name_1" class="required">First Name</label>
+                                    <input class="input form-control" type="text" name="" id="first_name_1">
+                                </div>
+                                <!--/ [col] -->
+
+                                <div class="col-sm-6">
+                                    <label for="last_name_1" class="required">Last Name</label>
+                                    <input class="input form-control" type="text" name="" id="last_name_1">
+                                </div>
+                                <!--/ [col] -->
+
+                            </li>
+                            <!--/ .row -->
+
+                            <li class="row">
+                                <div class="col-sm-6">
+                                    <label for="company_name_1">Company Name</label>
+                                    <input class="input form-control" type="text" name="" id="company_name_1">
+                                </div>
+                                <!--/ [col] -->
+
+                                <div class="col-sm-6">
+                                    <label for="email_address_1" class="required">Email Address</label>
+                                    <input class="input form-control" type="text" name="" id="email_address_1">
+                                </div>
+                                <!--/ [col] -->
+
+                            </li>
+                            <!--/ .row -->
+
+                            <li class="row">
+                                <div class="col-xs-12">
+                                    <label for="address_1" class="required">Address</label>
+                                    <input class="input form-control" type="text" name="" id="address_1">
+                                </div>
+                                <!--/ [col] -->
+
+                            </li>
+                            <!--/ .row -->
+
+                            <li class="row">
+                                <div class="col-sm-6">
+                                    <label for="city_1" class="required">City</label>
+                                    <input class="input form-control" type="text" name="" id="city_1">
+                                </div>
+                                <!--/ [col] -->
+
+                                <div class="col-sm-6">
+                                    <label class="required">State/Province</label>
+                                    <div class="custom_select">
+                                        <select class="input form-control" name="">
+                                            <option value="Alabama">Alabama</option>
+                                            <option value="Illinois">Illinois</option>
+                                            <option value="Kansas">Kansas</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--/ [col] -->
+
+                            </li>
+                            <!--/ .row -->
+
+                            <li class="row">
+                                <div class="col-sm-6">
+                                    <label for="postal_code_1" class="required">Zip/Postal Code</label>
+                                    <input class="input form-control" type="text" name="" id="postal_code_1">
+                                </div>
+                                <!--/ [col] -->
+
+                                <div class="col-sm-6">
+                                    <label class="required">Country</label>
+                                    <div class="custom_select">
+                                        <select class="input form-control" name="">
+                                            <option value="USA">USA</option>
+                                            <option value="Australia">Australia</option>
+                                            <option value="Austria">Austria</option>
+                                            <option value="Argentina">Argentina</option>
+                                            <option value="Canada">Canada</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--/ [col] -->
+
+                            </li>
+                            <!--/ .row -->
+
+                            <li class="row">
+                                <div class="col-sm-6">
+                                    <label for="telephone_1" class="required">Telephone</label>
+                                    <input class="input form-control" type="text" name="" id="telephone_1">
+                                </div>
+                                <!--/ [col] -->
+
+                                <div class="col-sm-6">
+                                    <label for="fax_1">Fax</label>
+                                    <input class="input form-control" type="text" name="" id="fax_1">
+                                </div>
+                                <!--/ [col] -->
+
+                            </li>
+                            <!--/ .row -->
+
+                        </ul>
+                        <button class="button"><i class="fa fa-angle-double-right"></i>&nbsp; <span>Continue</span></button>
+                    </div>
+                    <h4 class="checkout-sep">3. Payment Information</h4>
+                    <div class="box-border" >
+                        <ul>
+                            <li>
+                                <label for="radio_button_5">
+                                    <input type="radio" checked name="radio_4" id="radio_button_5">
+                                    Giao hàng & thanh toán
+                                </label>
+                            </li>
+                            <li>
+                                <label for="radio_button_6">
+                                    <input type="radio" name="radio_4" id="radio_button_6">
+                                    Thanh toán bằng tài khoản Paypal
+                                </label>
+                            </li>
+                        </ul>
+                        <button class="button"><i class="fa fa-angle-double-right"></i>&nbsp; <span>Continue</span></button>
+                    </div>
+                    <h4 class="checkout-sep last">4. Order Review</h4>
+                    <div class="box-border">
+                        <div class="table-responsive">
+                            <table class="table table-bordered cart_summary">
+                                <thead>
+                                    <tr>
+                                        <th class="cart_product">Product</th>
+                                        <th>Description</th>
+                                        <th>Avail.</th>
+                                        <th>Unit price</th>
+                                        <th>Qty</th>
+                                        <th>Total</th>
+                                        <th class="action"><i class="fa fa-trash-o"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.CartItems)
+                                    {
+                                        <tr>
+                                            <td class="cart_product"><a href="#"><img src="images/products/product-1.jpg" alt="Product"></a></td>
+                                            <td class="cart_description">
+                                                <p class="product-name"><a href="#">@item.Name </a></p>
+                                            </td>
+                                            <td class="cart_avail"><span class="label label-success">In stock</span></td>
+                                            <td class="price"><span>@(item.Price.ToString("N0")) <span>&#8363;</span> </span></td>
+                                            <td class="qty"><input class="form-control input-sm" type="text" value="1"></td>
+                                            <td class="price"><span>@((item.Price * item.Quantity).ToString("N0")) <span>&#8363;</span></span></td>
+                                            <td class="action"><a href="#"><i class="fa fa-trash-o"></i></a></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" rowspan="2"></td>
+                                        <td colspan="3">Total products (tax incl.)</td>
+                                        <td colspan="2">$160.88 </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"><strong>Total</strong></td>
+                                        <td colspan="2"><strong>$160.88 </strong></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <button class="button pull-right"><span>Place Order</span></button>
+                    </div>
+                </div>
+            </div>
+            <aside class="right sidebar col-sm-3 col-xs-12">
+                <div class="sidebar-checkout block">
+                    <div class="sidebar-bar-title">
+                        <h3>Your Checkout</h3>
+                    </div>
+                    <div class="block-content">
+                        <dl>
+                            <dt class="complete"> Billing Address <span class="separator">|</span> <a href="#">Change</a> </dt>
+                            <dd class="complete">
+                                <address>
+                                    Deo Jone<br>
+                                    Company Name<br>
+                                    7064 Lorem <br>
+                                    Ipsum <br>
+                                    Vestibulum 0 666/13<br>
+                                    United States<br>
+                                    T: 12345678 <br>
+                                    F: 987654
+                                </address>
+                            </dd>
+                            <dt class="complete"> Shipping Address <span class="separator">|</span> <a href="#">Change</a> </dt>
+                            <dd class="complete">
+                                <address>
+                                    Deo Jone<br>
+                                    Company Name<br>
+                                    7064 Lorem <br>
+                                    Ipsum <br>
+                                    Vestibulum 0 666/13<br>
+                                    United States<br>
+                                    T: 12345678 <br>
+                                    F: 987654
+                                </address>
+                            </dd>
+                            <dt class="complete"> Shipping Method <span class="separator">|</span> <a href="#">Change</a> </dt>
+                            <dd class="complete">
+                                Flat Rate - Fixed <br>
+                                <span class="price">$15.00</span>
+                            </dd>
+                            <dt> Payment Method </dt>
+                        </dl>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>

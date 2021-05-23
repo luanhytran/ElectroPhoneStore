@@ -10,8 +10,6 @@ namespace eShopSolution.Data.Entities
 
         public decimal Price { get; set; }
 
-        public decimal OriginalPrice { get; set; }
-
         public int Stock { get; set; }
 
         public int ViewCount { get; set; }

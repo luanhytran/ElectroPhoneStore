@@ -1,6 +1,6 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using eShopSolution.ViewModels.Common;
+@model IEnumerable<eShopSolution.ViewModels.Catalog.Categories.CategoryViewModel>
+
 @{
     ViewData["Title"] = "Danh sách danh mục";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,7 +11,79 @@
 <div class="container-fluid">
     <h1 class="mt-4">Danh sách danh mục</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
         <li class="breadcrumb-item active">Danh sách danh mục</li>
     </ol>
+    <div class="card mb-12">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-5 col-xs-12">
+                    <a class="btn btn-success" asp-action="Create" asp-controller="Category">Tạo mới</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                @if (ViewBag.SuccessMsg != null)
+                {
+                    <div id="msgAlert" class="alert alert-success" role="alert">
+                        @ViewBag.SuccessMsg
+                    </div>
+                }
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="text-center">
+                            <th>
+                                ID
+                            </th>
+                            <th>
+                                Tên
+                            </th>
+                            <th>
+                                Danh mục cha
+                            </th>
+                            <th>
+                                Thứ tự hiển thị
+                            </th>
+                            <th>
+                                Trạng thái
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ParentId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SortOrder)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            <td>
+                                <button class="btn btn-success">@Html.ActionLink("Xem", "Details", new { id = item.Id })</button>
+                                <button class="btn btn-primary">@Html.ActionLink("Sửa", "Edit", new { id = item.Id })</button>
+                                <button class="btn btn-danger">@Html.ActionLink("Xóa", "Delete", new { id = item.Id })</button>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @*truyền Model vào hàm InvokeAsync của class PagerViewComponent để phân trang *@
+            @*await Component.InvokeAsync("Pager", Model)*@
+        </div>
+    </div>
 </div>

@@ -45,9 +45,6 @@ namespace eShopSolution.Application.Catalog.Products
                         Name = request.Name,
                         Description = request.Description,
                         Details = request.Details,
-                        SeoDescription = request.SeoDescription,
-                        SeoTitle = request.SeoTitle,
-                        SeoAlias = request.SeoAlias,
                         LanguageId = request.LanguageId
                     });
                 }
@@ -59,7 +56,6 @@ namespace eShopSolution.Application.Catalog.Products
                         // product id ăn theo object Product() ở trên khi ta tạo dạng này
                         Name = SystemConstants.ProductConstants.NA,
                         Description = SystemConstants.ProductConstants.NA,
-                        SeoAlias = SystemConstants.ProductConstants.NA,
                         LanguageId = language.Id
                     });
                 }
@@ -69,7 +65,6 @@ namespace eShopSolution.Application.Catalog.Products
             {
                 // id tự tăng
                 Price = request.Price,
-                OriginalPrice = request.OriginalPrice,
                 Stock = request.Stock,
                 ViewCount = 0,
                 DateCreated = DateTime.Now,
@@ -104,9 +99,6 @@ namespace eShopSolution.Application.Catalog.Products
             if (product == null || productTranslations == null) throw new EShopException($"Cannot find product with id: {request.Id} ");
 
             productTranslations.Name = request.Name;
-            productTranslations.SeoAlias = request.SeoAlias;
-            productTranslations.SeoDescription = request.SeoDescription;
-            productTranslations.SeoTitle = request.SeoTitle;
             productTranslations.Description = request.Description;
             productTranslations.Details = request.Details;
 
@@ -177,11 +169,7 @@ namespace eShopSolution.Application.Catalog.Products
                     Description = x.pt.Description,
                     Details = x.pt.Details,
                     LanguageId = x.pt.LanguageId,
-                    OriginalPrice = x.p.OriginalPrice,
                     Price = x.p.Price,
-                    SeoAlias = x.pt.SeoAlias,
-                    SeoDescription = x.pt.SeoDescription,
-                    SeoTitle = x.pt.SeoTitle,
                     Stock = x.p.Stock,
                     ViewCount = x.p.ViewCount,
                     ThumbnailImage = x.pi.ImagePath
@@ -254,11 +242,7 @@ namespace eShopSolution.Application.Catalog.Products
                 LanguageId = productTranslation.LanguageId,
                 Details = productTranslation != null ? productTranslation.Details : null,
                 Name = productTranslation != null ? productTranslation.Name : null,
-                OriginalPrice = product.OriginalPrice,
                 Price = product.Price,
-                SeoAlias = productTranslation != null ? productTranslation.SeoAlias : null,
-                SeoDescription = productTranslation != null ? productTranslation.SeoDescription : null,
-                SeoTitle = productTranslation != null ? productTranslation.SeoTitle : null,
                 Stock = product.Stock,
                 ViewCount = product.ViewCount,
                 Categories = categories,
@@ -391,11 +375,7 @@ namespace eShopSolution.Application.Catalog.Products
                     Description = x.pt.Description,
                     Details = x.pt.Details,
                     LanguageId = x.pt.LanguageId,
-                    OriginalPrice = x.p.OriginalPrice,
                     Price = x.p.Price,
-                    SeoAlias = x.pt.SeoAlias,
-                    SeoDescription = x.pt.SeoDescription,
-                    SeoTitle = x.pt.SeoTitle,
                     Stock = x.p.Stock,
                     ViewCount = x.p.ViewCount
                 }).ToListAsync();
@@ -464,11 +444,7 @@ namespace eShopSolution.Application.Catalog.Products
                     Description = x.pt.Description,
                     Details = x.pt.Details,
                     LanguageId = x.pt.LanguageId,
-                    OriginalPrice = x.p.OriginalPrice,
                     Price = x.p.Price,
-                    SeoAlias = x.pt.SeoAlias,
-                    SeoDescription = x.pt.SeoDescription,
-                    SeoTitle = x.pt.SeoTitle,
                     Stock = x.p.Stock,
                     ViewCount = x.p.ViewCount,
                     ThumbnailImage = x.pi.ImagePath
@@ -500,11 +476,7 @@ namespace eShopSolution.Application.Catalog.Products
                     Description = x.pt.Description,
                     Details = x.pt.Details,
                     LanguageId = x.pt.LanguageId,
-                    OriginalPrice = x.p.OriginalPrice,
                     Price = x.p.Price,
-                    SeoAlias = x.pt.SeoAlias,
-                    SeoDescription = x.pt.SeoDescription,
-                    SeoTitle = x.pt.SeoTitle,
                     Stock = x.p.Stock,
                     ViewCount = x.p.ViewCount,
                     ThumbnailImage = x.pi.ImagePath

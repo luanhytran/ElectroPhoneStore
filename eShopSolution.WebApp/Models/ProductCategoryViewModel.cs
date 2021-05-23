@@ -10,7 +10,7 @@ namespace eShopSolution.WebApp.Models
 {
     public class ProductCategoryViewModel
     {
-        public CategoryVm Category { get; set; }
+        public CategoryViewModel Category { get; set; }
 
         public PagedResult<ProductViewModel> Products { get; set; }
     }
