@@ -17,7 +17,7 @@
 
     function registerEvents() {
         // Chức năng thêm vào giỏ hàng
-        $('body').on('click', '.btn-add-cart', function (e) {
+        $('body').on('click', '.add-to-cart-btn', function (e) {
             e.preventDefault(); // line này để khi bấm ok (alert) thì không bị nhảy lên top website
 
             const culture = $('#hidCulture').val();

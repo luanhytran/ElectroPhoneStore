@@ -96,7 +96,6 @@ namespace eShopSolution.WebApp.Controllers
             var cartItem = new CartItemViewModel()
             {
                 ProductId = id,
-                Description = product.Description,
                 Image = product.ThumbnailImage,
                 Name = product.Name,
                 Price = product.Price,

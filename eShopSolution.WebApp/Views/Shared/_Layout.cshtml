@@ -72,7 +72,7 @@
                     <!-- LOGO -->
                     <div class="col-md-3">
                         <div class="header-logo">
-                            <a href="#" class="logo">
+                            <a href="/" class="logo">
                                 <img src="/hat logo.png" style="width:200px;height:50px;margin-top:10px" alt="">
                             </a>
                         </div>
@@ -101,7 +101,7 @@
                                 <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                     <i class="fa fa-shopping-cart"></i>
                                     <span>Your Cart</span>
-                                    <div class="qty">3</div>
+                                    <div class="qty" id="lbl_number_of_items_header">0</div>
                                 </a>
                                 <div class="cart-dropdown">
                                     <div class="cart-list">
@@ -132,8 +132,8 @@
                                         <h5>SUBTOTAL: $2940.00</h5>
                                     </div>
                                     <div class="cart-btns">
-                                        <a href="#">View Cart</a>
-                                        <a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+                                        <a href="/@culture/cart">View Cart</a>
+                                        <a href="/@culture/cart/checkout">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -287,6 +287,12 @@
     <script src="/js/nouislider.min.js"></script>
     <script src="/js/jquery.zoom.min.js"></script>
     <script src="/js/main.js"></script>
+    <script src="~/js/site.js"></script>
+    <script>
+        var siteController = new SiteController();
+        siteController.initialize();
+    </script>
+    @RenderSection("scripts", required: false)
 
 </body>
 </html>
