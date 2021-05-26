@@ -127,20 +127,20 @@
     <div class="main container">
         <div class="page-content">
             <div class="account-login">
-                <div class="box-authentication">
+                <form action="/@culture/Account/Login" method="post" class="box-authentication">
                     <h4>Login</h4>
                     <p class="before-login-text">Welcome back! Sign in to your account</p>
                     <label for="emmail_login">Email address<span class="required">*</span></label>
-                    <input id="emmail_login" type="text" class="form-control">
+                    <input asp-for="UserName" type="text" class="form-control">
                     <label for="password_login">Password<span class="required">*</span></label>
-                    <input id="password_login" type="password" class="form-control">
+                    <input asp-for="Password" type="password" class="form-control">
                     <p class="forgot-pass"><a href="#">Lost your password?</a></p>
                     <button class="button" style="margin-right:10px"><i class="fa fa-lock"></i>&nbsp; <span>Login</span></button>
                     <label class="inline" for="rememberme">
                         <input type="checkbox" value="forever" id="rememberme" name="rememberme">
                         Remember me
                     </label>
-                </div>
+                </form>
                 <div class="box-authentication">
                     <h4>Register</h4>
                     <p>Create your very own account</p>

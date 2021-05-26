@@ -35,6 +35,7 @@ namespace eShopSolution.WebApp.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequest request)
         {
@@ -71,7 +72,7 @@ namespace eShopSolution.WebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Register()
+        public IActionResult Register()
         {
             return View();
         }

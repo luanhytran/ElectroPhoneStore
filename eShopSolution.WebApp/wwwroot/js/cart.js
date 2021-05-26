@@ -66,14 +66,18 @@
                     html += "<tr>"
                         + "<td> <img width=\"60\" src=\"" + $('#hidBaseAddress').val() + item.image + "\" alt=\"\" /></td>"
                         + "<td>" + item.name + "</td>"
+                        + "<td class=\"availability in-stock text-center\"><span class=\"label\">In stock</span></td>"
+                        + "<td>" + numberWithCommas(item.price) + " <span>&#8363;</span>" + "</td>"
                         + "<td><div class=\"input-append\"><input class=\"span1\" style=\"max-width: 34px\" placeholder=\"1\" id=\"txt_quantity_" + item.productId + "\" value=\"" + item.quantity + "\" size=\"16\" type=\"text\">"
-                        + "<button class=\"btn btn-minus\" data-id=\"" + item.productId + "\" type =\"button\"> <i class=\"icon-minus\"></i></button>"
-                        + "<button class=\"btn btn-plus\" data-id=\"" + item.productId + "\" type=\"button\"><i class=\"icon-plus\"></i></button>"
-                        + "<button class=\"btn btn-danger btn-remove\" type=\"button\" data-id=\"" + item.productId + "\"><i class=\"icon-remove icon-white\"></i></button>"
+                        + "<button class=\"btn-minus\" data-id=\"" + item.productId + "\" type =\"button\"> <i class=\"fa fa-minus\"></i></button>"
+                        + "<button class=\"btn-plus\" data-id=\"" + item.productId + "\" type=\"button\"><i class=\"fa fa-plus\"></i></button>"
                         + "</div>"
                         + "</td>"
-                        + "<td>" + numberWithCommas(item.price) + "</td>"
-                        + "<td>" + numberWithCommas(amount) + "</td>"
+                        + "<td>" + numberWithCommas(amount) + " <span>&#8363;</span>" + "</td>"
+                        + "<td><div class=\"input-append text-center\">"
+                        + "<a class=\"btn-remove\" type=\"button\" data-id=\"" + item.productId + "\"><i class=\"fa fa-trash-o\"></i></a>"
+                        + "</div>"
+                        + "</td>"
                         + "</tr>";
                     total += amount;
                 });

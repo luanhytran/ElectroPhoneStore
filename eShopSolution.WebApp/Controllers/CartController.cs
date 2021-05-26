@@ -16,9 +16,12 @@ namespace eShopSolution.WebApp.Controllers
     {
         private readonly IProductApiClient _productApiClient;
 
-        public CartController(IProductApiClient productApiClient)
+        private readonly IOrderApiClient _orderApiClient;
+
+        public CartController(IProductApiClient productApiClient, IOrderApiClient orderApiClient)
         {
             _productApiClient = productApiClient;
+            _orderApiClient = orderApiClient;
         }
 
         public IActionResult Index()
@@ -33,10 +36,18 @@ namespace eShopSolution.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Checkout(CheckoutViewModel request)
+        //[Consumes("multipart/form-data")]
+        public async Task<IActionResult> Checkout(CheckoutViewModel request)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
+            // Order detail là lấy từ session chứ không lấy qua CheckoutViewModel, vì model binding không có bind cái danh sách sản phẩm
             var model = GetCheckoutViewModel();
             var orderDetails = new List<OrderDetailViewModel>();
+
             foreach (var item in model.CartItems)
             {
                 orderDetails.Add(new OrderDetailViewModel()
@@ -45,6 +56,7 @@ namespace eShopSolution.WebApp.Controllers
                     Quantity = item.Quantity
                 });
             }
+
             var checkoutRequest = new CheckoutRequest()
             {
                 Address = request.CheckoutModel.Address,
@@ -54,12 +66,33 @@ namespace eShopSolution.WebApp.Controllers
                 OrderDetails = orderDetails
             };
 
-            // TODO: Ađ to API
+            var result = await _orderApiClient.CreateOrder(checkoutRequest);
+
+            if (result)
+            {
+                TempData["SuccessMsg"] = "Order purchased successful";
+                return View(request);
+            }
+
+            // TODO: Add to API
             //Sau khi có checkoutRequest thì ta sẽ đẩy vào OrerApiClient để tích hợp với Api và là bài tập tự làm
+            ModelState.AddModelError("", "Đặt hàng thất bại");
+            return View(request);
+        }
 
-            TempData["SuccessMsg"] = "Order purchased successful";
+        private CheckoutViewModel GetCheckoutViewModel()
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.CartSession);
+            List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
+            if (session != null)
+                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
 
-            return View(model);
+            var checkoutVm = new CheckoutViewModel()
+            {
+                CartItems = currentCart,
+                CheckoutModel = new CheckoutRequest(),
+            };
+            return checkoutVm;
         }
 
         [HttpGet]
@@ -136,19 +169,6 @@ namespace eShopSolution.WebApp.Controllers
             return Ok(currentCart);
         }
 
-        private CheckoutViewModel GetCheckoutViewModel()
-        {
-            var session = HttpContext.Session.GetString(SystemConstants.CartSession);
-            List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
-            if (session != null)
-                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
-
-            var checkoutVm = new CheckoutViewModel()
-            {
-                CartItems = currentCart,
-                CheckoutModel = new CheckoutRequest(),
-            };
-            return checkoutVm;
-        }
+     
     }
 }

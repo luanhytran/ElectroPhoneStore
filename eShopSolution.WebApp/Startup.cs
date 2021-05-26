@@ -87,6 +87,7 @@ namespace eShopSolution.WebApp
             services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
             services.AddTransient<IUserApiClient, UserApiClient>();
+            services.AddTransient<IOrderApiClient, OrderApiClient>();
 
             services.AddMarkdown();
 

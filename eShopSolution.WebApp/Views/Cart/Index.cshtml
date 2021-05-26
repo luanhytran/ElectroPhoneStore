@@ -14,38 +14,6 @@
     var culture = CultureInfo.CurrentCulture.Name;
 }
 
-@*<ul class="breadcrumb">
-        <li><a href="index.html">Home</a> <span class="divider">/</span></li>
-        <li class="active"> SHOPPING CART</li>
-    </ul>
-    <h3>
-        SHOPPING CART [ <small> <span id="lbl_number_of_items">0</span></small> ]
-        <a href="/" class="btn btn-large pull-right"><i class="icon-arrow-left"></i> Continue Shopping </a>
-    </h3>
-
-    <hr class="soft" />
-
-    <table class="table table-bordered" id="tbl_cart">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Description</th>
-                <th>Quantity/Update</th>
-                <th>Price</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody id="cart_body"></tbody>
-        <tfoot>
-            <tr>
-                <td colspan="4" style="text-align:right"><strong>TOTAL =</strong></td>
-                <td class="label label-important" style="display:block"> <strong> <span id="lbl_total"></span> </strong></td>
-            </tr>
-        </tfoot>
-    </table>
-
-    <a href="/" class="btn btn-large"><i class="icon-arrow-left"></i> Continue Shopping </a>
-    <a href="/@culture/Cart/Checkout" class="btn btn-large pull-right">Next <i class="icon-arrow-right"></i></a>*@
 
 <style>
     /******************************************
@@ -224,6 +192,23 @@
             border: none;
             border-bottom: 1px solid #e5e5e5;
         }
+
+    .availability.in-stock span {
+        color: #fff;
+        background-color: #5cb85c;
+        padding: 5px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 3px;
+    }
+
+    .availability.out-of-stock span {
+        color: #fff;
+        background-color: #d9534f;
+        padding: 5px 12px;
+        font-size: 12px;
+        font-weight: 600
+    }
 </style>
 
 <!-- BREADCRUMB -->
@@ -245,7 +230,6 @@
 </div>
 <!-- /BREADCRUMB -->
 
-
 <section class="main-container col1-layout">
     <div class="main container">
         <div class="cart">
@@ -259,15 +243,15 @@
                 <div class="order-detail-content">
                     <div class="table-responsive">
                         <table class="table table-bordered cart_summary" id="tbl_cart">
-                            <thead>
+                            <thead >
                                 <tr>
                                     <th class="cart_product">Product</th>
                                     <th>Name</th>
-                                    <th>Avail.</th>
+                                    <th class="text-center">Avail.</th>
                                     <th>Unit price</th>
                                     <th>Qty</th>
                                     <th>Total</th>
-                                    <th class="action"><i class="fa fa-trash-o"></i></th>
+                                    <th class="action"><i class="fa fa-trash"></i></th>
                                 </tr>
                             </thead>
                             <tbody id="cart_body">
@@ -314,12 +298,8 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="2" rowspan="2"></td>
-                                    <td colspan="3">Total products (tax incl.)</td>
-                                    <td colspan="2">$237.88 </td>
-                                </tr>
-                                <tr>
                                     <td colspan="3"><strong>Total</strong></td>
-                                    <td colspan="2"><strong>$237.88 </strong></td>
+                                    <td colspan="2"><strong><span id="lbl_total"></span> <span>&#8363;</span> </strong></td>
                                 </tr>
                             </tfoot>
                         </table>

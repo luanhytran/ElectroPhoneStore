@@ -1,4 +1,5 @@
 ﻿using eShopSolution.Application.Catalog.Categories;
+using eShopSolution.Application.Catalog.Orders;
 using eShopSolution.Application.Catalog.Products;
 using eShopSolution.Application.Common;
 using eShopSolution.Application.System.Languages;
@@ -62,6 +63,7 @@ namespace eShopSolutionBackendApi
             services.AddTransient<ISlideService, SlideService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IOrderService, OrderService>();
             
 
             //fluent validator

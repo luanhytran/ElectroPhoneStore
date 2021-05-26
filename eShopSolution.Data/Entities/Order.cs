@@ -11,7 +11,7 @@ namespace eShopSolution.Data.Entities
 
         public DateTime OrderDate { set; get; }
 
-        public Guid UserId { set; get; }
+        public Guid? UserId { set; get; }
 
         public string ShipName { set; get; }
 
