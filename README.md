@@ -30,9 +30,13 @@ dotnet add package Microsoft.EntityFrameworkCore.Tools --version 3.1.15
 ### 2. Start multiple project
 <img src="https://github.com/luanhytran/web-ban-dien-thoai-cnpmnc/blob/master/image/2.%20start%20multiple%20project.gif"> 
 
-### 3. Set up database
+### 3. Run Entity Framework Core command
 - After this step, SQL Server will appear your database
-<img src="https://github.com/luanhytran/web-ban-dien-thoai-cnpmnc/blob/master/image/3.%20setup%20database.gif" > 
+<img src="https://github.com/luanhytran/web-ban-dien-thoai-cnpmnc/blob/master/image/3.%20setup%20database.gif" >
+
+### 4. Add user-content folder
+- Add this folder to store your product image
+<img src="https://github.com/luanhytran/electro-phone-store/blob/master/image/4.png">
 
 
 
