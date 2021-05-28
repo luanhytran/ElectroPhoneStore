@@ -6,7 +6,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
+@section Scripts{
+    <script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 2000);
+    </script>
+}
 
 <div class="container-fluid">
     <h1 class="mt-4">Danh sách danh mục</h1>
@@ -43,41 +49,25 @@
                                 Tên
                             </th>
                             <th>
-                                Danh mục cha
-                            </th>
-                            <th>
-                                Thứ tự hiển thị
-                            </th>
-                            <th>
-                                Trạng thái
+                                Thao tác
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Id)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ParentId)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.SortOrder)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Status)
-                            </td>
-                            <td>
-                                <button class="btn btn-success">@Html.ActionLink("Xem", "Details", new { id = item.Id })</button>
-                                <button class="btn btn-primary">@Html.ActionLink("Sửa", "Edit", new { id = item.Id })</button>
-                                <button class="btn btn-danger">@Html.ActionLink("Xóa", "Delete", new { id = item.Id })</button>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary">@Html.ActionLink("Sửa", "Edit", new { id = item.Id })</button>
+                                    <button class="btn btn-danger">@Html.ActionLink("Xóa", "Delete", new { id = item.Id })</button>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>

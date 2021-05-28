@@ -31,29 +31,13 @@ namespace eShopSolutionBackendApi.Controllers
             return Ok(product);
         }
 
-        [HttpGet("{productId}/{languageId}")]
-        public async Task<IActionResult> GetById(int productId, string languageId)
+        [HttpGet("{productId}")]
+        public async Task<IActionResult> GetById(int productId)
         {
-            var product = await _productService.GetById(productId, languageId);
+            var product = await _productService.GetById(productId);
             if (product == null)
-                return BadRequest("Cannot find product");
+                return BadRequest("Không tìm thấy sản phẩm");
             return Ok(product);
-        }
-
-        [HttpGet("featured/{languageId}/{take}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetFeaturedProducts(int take, string languageId)
-        {
-            var product = await _productService.GetFeaturedProducts(languageId, take);
-            return Ok(product);
-        }
-
-        [HttpGet("latest/{languageId}/{take}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetLatestProducts(int take, string languageId)
-        {
-            var products = await _productService.GetLatestProducts(languageId, take);
-            return Ok(products);
         }
 
         [HttpPost]
@@ -73,7 +57,7 @@ namespace eShopSolutionBackendApi.Controllers
                 return BadRequest();
             }
 
-            var product = await _productService.GetById(productId, request.LanguageId);
+            var product = await _productService.GetById(productId);
 
             return CreatedAtAction(nameof(GetById), new { id = productId }, product);
         }
@@ -111,103 +95,20 @@ namespace eShopSolutionBackendApi.Controllers
             return Ok();
         }
 
-        // HttpPatch: update một phần
-        [HttpPatch("{productId}/{newPrice}")]
-        [Authorize]
-        public async Task<IActionResult> UpdatePrice(int productId, decimal newPrice)
+        [HttpGet("featured/{take}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetFeaturedProducts(int take)
         {
-            var isSuccessful = await _productService.UpdatePrice(productId, newPrice);
-            if (isSuccessful)
-            {
-                return Ok();
-            }
-
-            return BadRequest();
+            var product = await _productService.GetFeaturedProducts(take);
+            return Ok(product);
         }
 
-        // Phương thức tạo Images
-        [HttpPost("{productId}/images")]
-        public async Task<IActionResult> CreateImage(int productId, [FromForm] ProductImageCreateRequest request)
+        [HttpGet("latest/{take}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetLatestProducts(int take)
         {
-            //kiểm tra validation
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var imageId = await _productService.AddImage(productId, request);
-            if (imageId == 0)
-            {
-                return BadRequest();
-            }
-
-            var image = await _productService.GetImageById(imageId);
-
-            // trả về mã 201 : created
-            return CreatedAtAction(nameof(GetImageById), new { id = imageId }, image);
-        }
-
-        [HttpGet("{productId}/images/{imageId}")]
-        // product id có thể không cần nhưng cứ để đúng theo quy tắc, có thể sau này chúng ta sẽ cần
-        public async Task<IActionResult> GetImageById(int productId, int imageId)
-        {
-            var image = await _productService.GetImageById(imageId);
-            if (image == null)
-                return BadRequest("Cannot find image");
-            return Ok(image);
-        }
-
-        [HttpPut("{productId}/images/{imageId}")]
-        [Authorize]
-        public async Task<IActionResult> UpdateImage(int imageId, [FromForm] ProductImageUpdateRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var result = await _productService.UpdateImage(imageId, request);
-            if (result == 0)
-            {
-                return BadRequest();
-            }
-
-            // trả về http code 200, tương ứng với Ok Object Result
-            return Ok();
-        }
-
-        [HttpDelete("{productId}/images/{imageId}")]
-        [Authorize]
-        public async Task<IActionResult> RemoveImage(int imageId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var result = await _productService.RemoveImage(imageId);
-            if (result == 0)
-            {
-                return BadRequest();
-            }
-
-            // trả về http code 200, tương ứng với Ok Object Result
-            return Ok();
-        }
-
-        [HttpPut("{id}/categories")]
-        [Authorize]
-        public async Task<IActionResult> CategoryAssign(int id, [FromBody] CategoryAssignRequest request)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var result = await _productService.CategoryAssign(id, request);
-            if (!result.IsSuccessed)
-            {
-                return BadRequest(result);
-            }
-            return Ok(result);
+            var products = await _productService.GetLatestProducts(take);
+            return Ok(products);
         }
     }
 }

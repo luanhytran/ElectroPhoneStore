@@ -1,14 +1,13 @@
-﻿using eShopSolution.ViewModels.Utilities.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace eShopSolution.ViewModels.Catalog.Categories
 {
-    public class CategoryViewModel
+    public class CategoryCreateRequest
     {
-        public int Id { get; set; }
+        [Display(Name = "Tên danh mục")]
         public string Name { get; set; }
-
     }
 }

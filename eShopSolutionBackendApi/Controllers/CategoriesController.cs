@@ -1,4 +1,6 @@
 ﻿using eShopSolution.Application.Catalog.Categories;
+using eShopSolution.ViewModels.Catalog.Categories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,18 +23,67 @@ namespace eShopSolutionBackendApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(string languageId)
+        public async Task<IActionResult> GetAll()
         {
-            var products = await _categoryService.GetAll(languageId);
+            var products = await _categoryService.GetAll();
             return Ok(products);
         }
 
 
-        [HttpGet("{id}/{languageId}")]
-        public async Task<IActionResult> GetById(string languageId, int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
         {
-            var category = await _categoryService.GetById(languageId, id);
+            var category = await _categoryService.GetById(id);
             return Ok(category);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Create([FromBody] CategoryCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var categoryId = await _categoryService.Create(request);
+
+            if (categoryId == 0)
+                return BadRequest();
+
+            var category = await _categoryService.GetById(categoryId);
+
+            return CreatedAtAction(nameof(GetById), new { id = categoryId }, category );
+
+        }
+
+        // HttpPut: update toàn phần
+        [HttpPut("updateCategory")]
+        [Authorize]
+        public async Task<IActionResult> Update([FromBody] CategoryUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var affectedResult = await _categoryService.Update(request);
+            if (affectedResult == 0)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var affectedResult = await _categoryService.Delete(id);
+            if (affectedResult == 0)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using eShopSolution.ApiIntegration;
 using eShopSolution.Utilities.Constants;
+using eShopSolution.ViewModels.Catalog.Categories;
 using eShopSolution.WebApp.Models;
 using LazZiya.ExpressLocalization;
 using Microsoft.AspNetCore.Http;
@@ -18,27 +19,40 @@ namespace eShopSolution.WebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ISlideApiClient _slideApiClient;
         private readonly IProductApiClient _productApiClient;
+        private readonly ICategoryApiClient _categoryApiClient;
 
         public HomeController(ILogger<HomeController> logger, 
-            ISlideApiClient slideApiClient,
-            IProductApiClient productApiClient)
+            IProductApiClient productApiClient, ICategoryApiClient categoryApiClient)
         {
             _logger = logger;
-            _slideApiClient = slideApiClient;
             _productApiClient = productApiClient;
+            _categoryApiClient = categoryApiClient;
         }
 
         public async Task<IActionResult> Index()
         {
             var culture = CultureInfo.CurrentCulture.Name;
+
             var viewModel = new HomeViewModel
             {
-                Slides = await _slideApiClient.GetAll(),
                 FeaturedProducts = await _productApiClient.GetFeaturedProducts(culture, SystemConstants.ProductSettings.NumberOfFeturedProducts),
                 LatestProducts = await _productApiClient.GetLatestProducts(culture, SystemConstants.ProductSettings.NumberOfLatestProducts),
             };
+
+
+            foreach (var item in viewModel.LatestProducts)
+            {
+                var category = await _categoryApiClient.GetById(item.Id);
+                item.Category = category;
+            }
+
+            foreach (var item in viewModel.FeaturedProducts)
+            {
+                var category = await _categoryApiClient.GetById(item.Id);
+                item.Category = category;
+            }
+
             return View(viewModel);
         }
 

@@ -89,10 +89,8 @@ namespace eShopSolution.AdminApp.Controllers
                 var user = result.ResultObj;
                 var updateRequest = new UserUpdateRequest()
                 {
-                    Dob = user.Dob,
                     Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
+                    Name = user.Name,
                     PhoneNumber = user.PhoneNumber,
                     Id = id
                 };

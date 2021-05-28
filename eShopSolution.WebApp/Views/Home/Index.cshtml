@@ -1,7 +1,7 @@
 ﻿@model HomeViewModel
 @using eShopSolution.ViewModels.Catalog.Products;
 @inject LazZiya.ExpressLocalization.ISharedCultureLocalizer _loc;
-@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @{
     var culture = CultureInfo.CurrentCulture.Name;
 }
@@ -91,37 +91,37 @@
                                 @foreach (var item in Model.LatestProducts)
                                 {
                                     var url = $"/{culture}/{_loc["productUrl"]}/{item.Id}";
-                                <div class="product">
-                                    <div class="product-img">
-                                        <a style="height:214px;" href="@url">
-                                            <img style="margin-left:auto;margin-right:auto;display:block" height="214" src="@(Configuration["BaseAddress"] + item.ThumbnailImage)" alt="@item.Name">
-                                        </a>
-                                        <div class="product-label">
-                                            <span class="sale">-30%</span>
-                                            <span class="new">NEW</span>
+                                    <div class="product">
+                                        <div class="product-img">
+                                            <a style="height:214px;" href="@url">
+                                                <img style="margin-left:auto;margin-right:auto;display:block" height="214" src="@(Configuration["BaseAddress"] + item.ThumbnailImage)" alt="@item.Name">
+                                            </a>
+                                            <div class="product-label">
+                                                <span class="sale">-30%</span>
+                                                <span class="new">NEW</span>
+                                            </div>
+                                        </div>
+                                        <div class="product-body">
+                                            <p class="product-category">@item.Category.Name</p>
+                                            <h3 class="product-name"><a href="#">@item.Name</a></h3>
+                                            <h4 class="product-price">@item.Price.ToString("N0") <span>&#8363;</span></h4>
+                                            <div class="product-rating">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                            <div class="product-btns">
+                                                <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+                                                <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+                                                <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+                                            </div>
+                                        </div>
+                                        <div class="add-to-cart">
+                                            <button class="add-to-cart-btn" data-id="@item.Id"><i class="fa fa-shopping-cart"></i> add to cart</button>
                                         </div>
                                     </div>
-                                    <div class="product-body">
-                                        <p class="product-category">Category</p>
-                                        <h3 class="product-name"><a href="#">@item.Name</a></h3>
-                                        <h4 class="product-price">@item.Price.ToString("N0") <span>&#8363;</span></h4>
-                                        <div class="product-rating">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                        <div class="product-btns">
-                                            <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-                                            <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-                                            <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-                                        </div>
-                                    </div>
-                                    <div class="add-to-cart">
-                                        <button class="add-to-cart-btn" data-id="@item.Id"><i class="fa fa-shopping-cart"></i> add to cart</button>
-                                    </div>
-                                </div>
                                 }
                                 <!-- /product -->
                             </div>
@@ -363,4 +363,3 @@
     <!-- /container -->
 </div>
 <!-- /SECTION -->
-

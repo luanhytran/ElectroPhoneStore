@@ -8,14 +8,8 @@ namespace eShopSolution.ViewModels.System.Users
         public RegisterRequestValidator()
         {
             // Đây là một phương thức của abstract validator
-            RuleFor(x => x.FirstName).NotEmpty().WithMessage("Tên là bắt buộc")
+            RuleFor(x => x.Name).NotEmpty().WithMessage("Tên là bắt buộc")
                 .MaximumLength(200).WithMessage("Tên không được quá 200 ký tự");
-                
-            RuleFor(x => x.LastName).NotEmpty().WithMessage("Họ là bắt buộc")
-                .MaximumLength(200).WithMessage("Họ không được quá 200 ký tự");
-                
-            RuleFor(x => x.Dob).GreaterThan(DateTime.Now.AddYears(-100))
-                .WithMessage("Năm sinh không thể lớn hơn 100 năm");
                 
             RuleFor(x => x.Email).NotEmpty().WithMessage("Email là bắt buộc")
                 .Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")

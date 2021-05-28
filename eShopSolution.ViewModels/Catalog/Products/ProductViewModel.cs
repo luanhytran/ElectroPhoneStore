@@ -1,4 +1,5 @@
-﻿using System;
+﻿using eShopSolution.ViewModels.Catalog.Categories;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,18 +9,15 @@ namespace eShopSolution.ViewModels.Catalog.Products
     {
         public int Id { set; get; }
         public decimal Price { set; get; }
+        public int CategoryId { set; get; }
         public int Stock { set; get; }
-        public int ViewCount { set; get; }
-        public DateTime DateCreated { set; get; }
+        public DateTime DateCreated { get; set; }
         public string Name { set; get; }
         public string Description { set; get; }
         public string Details { set; get; }
-        public string LanguageId { set; get; }
-        public bool? IsFeature { get; set; }
-
         public string ThumbnailImage { get; set; }
+        public string ProductImage { get; set; }
 
-        // Danh sách danh mục của sản phẩm, new ra để nó rỗng luôn chứ không bị null
-        public List<string> Categories { get; set; } = new List<string>();
+        public CategoryViewModel Category { get; set; }
     }
 }

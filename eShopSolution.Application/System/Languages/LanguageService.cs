@@ -40,5 +40,7 @@ namespace eShopSolution.Application.System.Languages
             }).ToListAsync();
             return new ApiSuccessResult<List<LanguageViewModel>>(languages);
         }
+
+
     }
 }

@@ -1,19 +1,20 @@
-﻿@model eShopSolution.ViewModels.Catalog.Products.ProductDeleteRequest
-
+﻿@model eShopSolution.ViewModels.Catalog.Categories.CategoryDeleteRequest
 @{
-    ViewData["Title"] = "Xóa sản phẩm";
+
+    ViewData["Title"] = "Xoá danh mục";
+
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container-fluid">
-    <h1 class="mt-4">Xóa sản phẩm</h1>
+    <h1 class="mt-4">Xoá danh mục</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
-        <li class="breadcrumb-item active">Xóa sản phẩm</li>
+        <li class="breadcrumb-item active">Xoá danh mục</li>
     </ol>
     <div class="card mb-4">
         <div class="card-header">
-            <a class="btn btn-success" asp-action="Index" asp-controller="Product">Về danh sách</a>
+            <a class="btn btn-success" asp-action="Index" asp-controller="Category">Về danh sách</a>
         </div>
 
         <div class="card-body">

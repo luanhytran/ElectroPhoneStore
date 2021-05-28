@@ -33,20 +33,14 @@ namespace eShopSolution.Application.Catalog.Orders
                 {
                     Product = product,
                     Quantity = item.Quantity,
-                    Price = product.Price * item.Quantity
                 });
             }
 
-            Guid g = new Guid("69BD714F-9576-45BA-B5B7-F00649BE00DE");
-
+            //Guid g = new Guid("69BD714F-9576-45BA-B5B7-F00649BE00DE");
             //var user = _context.Users.Find(g);
 
             var order = new Order()
             {
-                ShipName = request.Name,
-                ShipEmail = request.Email,
-                ShipAddress = request.Address,
-                ShipPhoneNumber = request.PhoneNumber,
                 OrderDate = DateTime.Now,
                 OrderDetails = orderDetails,
                 //AppUser = user

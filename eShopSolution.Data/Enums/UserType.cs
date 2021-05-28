@@ -4,9 +4,9 @@ using System.Text;
 
 namespace eShopSolution.Data.Enums
 {
-    public enum TransactionStatus
+    public enum UserType
     {
-        Success,
-        Failed
+        Admin,
+        Customer
     }
 }

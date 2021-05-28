@@ -43,13 +43,13 @@ namespace eShopSolution.Application.System.Users
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
             if (!result.Succeeded)
             {
-                return new ApiErrorResult<string>("Đăng nhập không đúng");
+                return new ApiErrorResult<string>("Đăng nhập không thành công");
             }
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email,user.Email),
-                new Claim(ClaimTypes.GivenName,user.FirstName),
+                new Claim(ClaimTypes.GivenName,user.Name),
                 new Claim(ClaimTypes.Role, string.Join(";",roles)),
                 new Claim(ClaimTypes.Name, request.UserName)
             };
@@ -96,9 +96,7 @@ namespace eShopSolution.Application.System.Users
                 UserName = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Dob = user.Dob,
+                Name = user.Name,
                 Id = user.Id,
                 Roles = roles
             };
@@ -125,9 +123,8 @@ namespace eShopSolution.Application.System.Users
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
                     UserName = x.UserName,
-                    FirstName = x.FirstName,
+                    Name = x.Name,
                     Id = x.Id,
-                    LastName = x.LastName
                 }).ToListAsync();
 
             //4. Select and projection
@@ -159,10 +156,8 @@ namespace eShopSolution.Application.System.Users
 
             user = new AppUser()
             {
-                Dob = request.Dob,
                 Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
+                Name = request.Name,
                 UserName = request.UserName,
                 PhoneNumber = request.PhoneNumber
             };
@@ -223,10 +218,8 @@ namespace eShopSolution.Application.System.Users
 
             // Phải to string id vì FindByIdAsync nhận tham số kiểu string
             var user = await _userManager.FindByIdAsync(id.ToString());
-            user.Dob = request.Dob;
             user.Email = request.Email;
-            user.FirstName = request.FirstName;
-            user.LastName = request.LastName;
+            user.Name = request.Name;
             user.PhoneNumber = request.PhoneNumber;
 
             var result = await _userManager.UpdateAsync(user);

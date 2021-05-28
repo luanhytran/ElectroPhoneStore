@@ -1,13 +1,16 @@
-﻿using eShopSolution.Application.Common;
+﻿using eShopSolution.ApiIntegration;
+using eShopSolution.Application.Common;
 using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.Utilities.Exceptions;
+using eShopSolution.ViewModels.Catalog.Categories;
 using eShopSolution.ViewModels.Catalog.ProductImages;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,72 +24,52 @@ namespace eShopSolution.Application.Catalog.Products
     {
         private readonly EShopDbContext _context;
         private readonly IStorageService _storageService;
+        private readonly IConfiguration _configuration;
         private const string USER_CONTENT_FOLDER_NAME = "user-content";
 
         // dependency injection, truyền context vào để thao tác CRUD
-        public ProductService(EShopDbContext context, IStorageService storageService)
+        public ProductService(EShopDbContext context, IStorageService storageService,IConfiguration configuration)
         {
             _context = context;
             _storageService = storageService;
+            _configuration = configuration;
         }
 
         public async Task<int> Create(ProductCreateRequest request)
         {
-            var languages = _context.Languages;
-            var translations = new List<ProductTranslation>();
-            foreach (var language in languages)
-            {
-                if (language.Id == request.LanguageId)
-                {
-                    translations.Add(new ProductTranslation()
-                    {
-                        // id tự tăng
-                        // product id ăn theo object Product() ở trên khi ta tạo dạng này
-                        Name = request.Name,
-                        Description = request.Description,
-                        Details = request.Details,
-                        LanguageId = request.LanguageId
-                    });
-                }
-                else
-                {
-                    translations.Add(new ProductTranslation()
-                    {
-                        // id tự tăng
-                        // product id ăn theo object Product() ở trên khi ta tạo dạng này
-                        Name = SystemConstants.ProductConstants.NA,
-                        Description = SystemConstants.ProductConstants.NA,
-                        LanguageId = language.Id
-                    });
-                }
-            }
-
             var product = new Product()
             {
                 // id tự tăng
+                Name = request.Name,
+                CategoryId = request.CategoryId,
                 Price = request.Price,
                 Stock = request.Stock,
-                ViewCount = 0,
-                DateCreated = DateTime.Now,
-                ProductTranslations = translations
+                Description = request.Description,
+                Details = request.Details,
             };
-            //Save image
+
+            //Save thumbnail image
             if (request.ThumbnailImage != null)
             {
-                product.ProductImage = new List<ProductImage>()
-                {
-                    new ProductImage()
-                    {
-                        Caption = "Thumbnail image",
-                        DateCreated = DateTime.Now,
-                        FileSize = request.ThumbnailImage.Length,
-                        ImagePath = await this.SaveFile(request.ThumbnailImage),
-                        IsDefault = true,
-                        SortOrder = 1
-                    }
-                };
+                product.Thumbnail = await this.SaveFile(request.ThumbnailImage);
             }
+            else
+            {
+                product.Thumbnail = "/user-content/no-image.png";
+            }
+
+            //Save product image
+            if (request.ProductImage != null)
+            {
+                product.ProductImage = await this.SaveFile(request.ProductImage);
+            }
+            else
+            {
+                product.ProductImage = "/user-content/no-image.png";
+            }
+
             _context.Products.Add(product);
+
             //trả về số lượng bản ghi maybe
             await _context.SaveChangesAsync();
             return product.Id;
@@ -95,23 +78,31 @@ namespace eShopSolution.Application.Catalog.Products
         public async Task<int> Update(ProductUpdateRequest request)
         {
             var product = await _context.Products.FindAsync(request.Id);
-            var productTranslations = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == request.Id && x.LanguageId == request.LanguageId);
-            if (product == null || productTranslations == null) throw new EShopException($"Cannot find product with id: {request.Id} ");
+            if (product == null ) throw new EShopException($"Không thể tìm sản phẩm có ID: {request.Id} ");
 
-            productTranslations.Name = request.Name;
-            productTranslations.Description = request.Description;
-            productTranslations.Details = request.Details;
+            product.Name = request.Name;
+            product.CategoryId = request.CategoryId;
+            product.Description = request.Description;
+            product.Details = request.Details;
 
-            //Save image
+            //Save thumbnail image
             if (request.ThumbnailImage != null)
             {
-                var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.IsDefault == true && i.ProductId == request.Id);
-                if (thumbnailImage != null)
-                {
-                    thumbnailImage.FileSize = request.ThumbnailImage.Length;
-                    thumbnailImage.ImagePath = await this.SaveFile(request.ThumbnailImage);
-                    _context.ProductImages.Update(thumbnailImage);
-                }
+                product.Thumbnail = await this.SaveFile(request.ThumbnailImage);
+            }
+            else
+            {
+                product.Thumbnail = "/user-content/no-image.png";
+            }
+
+            //Save product image
+            if (request.ProductImage != null)
+            {
+                product.ProductImage = await this.SaveFile(request.ProductImage);
+            }
+            else
+            {
+                product.ProductImage = "/user-content/no-image.png";
             }
 
             return await _context.SaveChangesAsync();
@@ -120,12 +111,13 @@ namespace eShopSolution.Application.Catalog.Products
         public async Task<int> Delete(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
-            if (product == null) throw new EShopException($"Cannot find a product: {productId}");
+            if (product == null) throw new EShopException($"Không thể tìm sản phẩm có ID: {productId}");
 
-            var images = _context.ProductImages.Where(i => i.ProductId == productId);
+            var images = _context.Products.Where(i => i.Id == productId);
             foreach (var image in images)
             {
-                await _storageService.DeleteFileAsync(image.ImagePath);
+                await _storageService.DeleteFileAsync(image.Thumbnail);
+                await _storageService.DeleteFileAsync(image.ProductImage);
             }
 
             _context.Products.Remove(product);
@@ -137,23 +129,15 @@ namespace eShopSolution.Application.Catalog.Products
         {
             //1. Select join
             var query = from p in _context.Products
-                        join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
-                        from pic in ppic.DefaultIfEmpty()
-                        join c in _context.Categories on pic.CategoryId equals c.Id into picc
-                        from c in picc.DefaultIfEmpty()
-                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
-                        from pi in ppi.DefaultIfEmpty()
-                        where pt.LanguageId == request.LanguageId
-                        //where pt.LanguageId == request.LanguageId && pi.IsDefault == true
-                        select new { p, pt, pic, pi };
+                        join c in _context.Categories on p.CategoryId equals c.Id
+                        select new { p};
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
-                query = query.Where(x => x.pt.Name.Contains(request.Keyword));
+                query = query.Where(x => x.p.Name.Contains(request.Keyword));
 
             if (request.CategoryId != null && request.CategoryId != 0)
             {
-                query = query.Where(p => p.pic.CategoryId == request.CategoryId);
+                query = query.Where(x => x.p.CategoryId == request.CategoryId);
             }
 
             //3. Paging
@@ -164,15 +148,14 @@ namespace eShopSolution.Application.Catalog.Products
                 .Select(x => new ProductViewModel()
                 {
                     Id = x.p.Id,
-                    Name = x.pt.Name,
-                    DateCreated = x.p.DateCreated,
-                    Description = x.pt.Description,
-                    Details = x.pt.Details,
-                    LanguageId = x.pt.LanguageId,
+                    Name = x.p.Name,
+                    CategoryId = x.p.CategoryId,
+                    Description = x.p.Description,
+                    Details = x.p.Details,
                     Price = x.p.Price,
                     Stock = x.p.Stock,
-                    ViewCount = x.p.ViewCount,
-                    ThumbnailImage = x.pi.ImagePath
+                    ThumbnailImage = x.p.Thumbnail,
+                    ProductImage = x.p.ProductImage
                 }).ToListAsync();
 
             //4. Select and projection
@@ -184,31 +167,6 @@ namespace eShopSolution.Application.Catalog.Products
                 Items = data
             };
             return pagedResult;
-        }
-
-        public async Task AddViewCount(int productId)
-        {
-            var product = await _context.Products.FindAsync(productId);
-            product.ViewCount += 1;
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<bool> UpdatePrice(int productId, decimal newPrice)
-        {
-            var product = await _context.Products.FindAsync(productId);
-
-            if (product == null) throw new EShopException($"Cannot find product with id: {productId} ");
-            product.Price = newPrice;
-            return await _context.SaveChangesAsync() > 0;
-        }
-
-        public async Task<bool> UpdateStock(int productId, int addedQuantity)
-        {
-            var product = await _context.Products.FindAsync(productId);
-
-            if (product == null) throw new EShopException($"Cannot find product with id: {productId} ");
-            product.Stock += addedQuantity;
-            return await _context.SaveChangesAsync() > 0;
         }
 
         private async Task<string> SaveFile(IFormFile file)
@@ -219,148 +177,176 @@ namespace eShopSolution.Application.Catalog.Products
             return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
         }
 
-        public async Task<ProductViewModel> GetById(int productId, string languageId)
+        public async Task<ProductViewModel> GetById(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
-            var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId
-            && x.LanguageId == languageId);
 
             // Lấy danh mục của sản phẩm
             var categories = await (from c in _context.Categories
-                                    join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
-                                    join pic in _context.ProductInCategories on c.Id equals pic.CategoryId
-                                    where pic.ProductId == productId && ct.LanguageId == languageId
-                                    select ct.Name).ToListAsync();
-
-            var image = await _context.ProductImages.Where(x => x.ProductId == productId && x.IsDefault == true).FirstOrDefaultAsync();
+                                    join p in _context.Products on c.Id equals p.CategoryId
+                                    select p.Name).ToListAsync();
 
             var productViewModel = new ProductViewModel()
             {
                 Id = product.Id,
-                DateCreated = product.DateCreated,
-                Description = productTranslation != null ? productTranslation.Description : null,
-                LanguageId = productTranslation.LanguageId,
-                Details = productTranslation != null ? productTranslation.Details : null,
-                Name = productTranslation != null ? productTranslation.Name : null,
+                Name = product.Name != null ? product.Name : null,
+                CategoryId = product.CategoryId != 0 ? product.CategoryId : 0,
+                Description = product.Description != null ? product.Description : null,
+                Details = product.Details != null ? product.Details : null,
                 Price = product.Price,
                 Stock = product.Stock,
-                ViewCount = product.ViewCount,
-                Categories = categories,
-                ThumbnailImage = image != null ? image.ImagePath : "no-image.jpg"
+                ThumbnailImage = product.Thumbnail != null ? product.Thumbnail : "no-image.jpg",
+                ProductImage = product.ProductImage != null ? product.ProductImage : "no-image.jpg"
             };
             return productViewModel;
         }
 
-        public async Task<int> AddImage(int productId, ProductImageCreateRequest request)
-        {
-            var productImage = new ProductImage()
-            {
-                Caption = request.Caption,
-                DateCreated = DateTime.Now,
-                IsDefault = request.IsDefault,
-                ProductId = productId,
-                SortOrder = request.SortOrder
-            };
+        #region AddViewCount
+        //public async Task AddViewCount(int productId)
+        //{
+        //    var product = await _context.Products.FindAsync(productId);
+        //    product.ViewCount += 1;
+        //    await _context.SaveChangesAsync();
+        //}
+        #endregion
 
-            if (request.ImageFile != null)
-            {
-                productImage.ImagePath = await this.SaveFile(request.ImageFile);
-                productImage.FileSize = request.ImageFile.Length;
-            }
+        #region UpdatePrice
+        //public async Task<bool> UpdatePrice(int productId, decimal newPrice)
+        //{
+        //    var product = await _context.Products.FindAsync(productId);
 
-            _context.ProductImages.Add(productImage);
+        //    if (product == null) throw new EShopException($"Cannot find product with id: {productId} ");
+        //    product.Price = newPrice;
+        //    return await _context.SaveChangesAsync() > 0;
+        //}
 
-            await _context.SaveChangesAsync();
+        //public async Task<bool> UpdateStock(int productId, int addedQuantity)
+        //{
+        //    var product = await _context.Products.FindAsync(productId);
 
-            return productImage.Id;
-        }
+        //    if (product == null) throw new EShopException($"Cannot find product with id: {productId} ");
+        //    product.Stock += addedQuantity;
+        //    return await _context.SaveChangesAsync() > 0;
+        //}
+        #endregion
 
-        public async Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request)
-        {
-            var productImage = await _context.ProductImages.FindAsync(imageId);
-            if (productImage == null)
-            {
-                throw new EShopException($"Cannot find an image with id {imageId}");
-            }
+        #region AddImage
+        //public async Task<int> AddImage(int productId, ProductImageCreateRequest request)
+        //{
+        //    var productImage = new ProductImage()
+        //    {
+        //        Caption = request.Caption,
+        //        DateCreated = DateTime.Now,
+        //        IsDefault = request.IsDefault,
+        //        ProductId = productId,
+        //        SortOrder = request.SortOrder
+        //    };
 
-            if (request.ImageFile != null)
-            {
-                productImage.ImagePath = await this.SaveFile(request.ImageFile);
-                productImage.FileSize = request.ImageFile.Length;
-            }
+        //    if (request.ImageFile != null)
+        //    {
+        //        productImage.ImagePath = await this.SaveFile(request.ImageFile);
+        //        productImage.FileSize = request.ImageFile.Length;
+        //    }
 
-            _context.ProductImages.Update(productImage);
+        //    _context.ProductImages.Add(productImage);
 
-            // trả về số bản ghi affected
-            return await _context.SaveChangesAsync();
-        }
+        //    await _context.SaveChangesAsync();
 
-        public async Task<int> RemoveImage(int imageId)
-        {
-            var productImage = await _context.ProductImages.FindAsync(imageId);
+        //    return productImage.Id;
+        //}
+        #endregion
 
-            if (productImage == null)
-            {
-                throw new EShopException($"Cannot find an image with id {imageId}");
-            }
+        #region UpdateImage
+        //public async Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request)
+        //{
+        //    var productImage = await _context.ProductImages.FindAsync(imageId);
+        //    if (productImage == null)
+        //    {
+        //        throw new EShopException($"Cannot find an image with id {imageId}");
+        //    }
 
-            _context.ProductImages.Remove(productImage);
-            return await _context.SaveChangesAsync();
-        }
+        //    if (request.ImageFile != null)
+        //    {
+        //        productImage.ImagePath = await this.SaveFile(request.ImageFile);
+        //        productImage.FileSize = request.ImageFile.Length;
+        //    }
 
-        public async Task<List<ProductImageViewModel>> GetListImages(int productId)
-        {
-            return await _context.ProductImages.Where(x => x.ProductId == productId)
-                .Select(i => new ProductImageViewModel()
-                {
-                    Caption = i.Caption,
-                    DateCreated = i.DateCreated,
-                    FileSize = i.FileSize,
-                    Id = i.Id,
-                    ImagePath = i.ImagePath,
-                    IsDefault = i.IsDefault,
-                    ProductId = i.ProductId,
-                    SortOrder = i.SortOrder
-                }).ToListAsync();
-        }
+        //    _context.ProductImages.Update(productImage);
 
-        public async Task<ProductImageViewModel> GetImageById(int imageId)
-        {
-            var image = await _context.ProductImages.FindAsync(imageId);
+        //    // trả về số bản ghi affected
+        //    return await _context.SaveChangesAsync();
+        //}
+        #endregion
 
-            if (image == null)
-            {
-                throw new EShopException($"Cannot find an image with id {imageId}");
-            }
+        #region RemoveImage
+        //public async Task<int> RemoveImage(int imageId)
+        //{
+        //    var productImage = await _context.ProductImages.FindAsync(imageId);
 
-            var viewModel = new ProductImageViewModel()
-            {
-                Caption = image.Caption,
-                DateCreated = image.DateCreated,
-                FileSize = image.FileSize,
-                Id = image.Id,
-                ImagePath = image.ImagePath,
-                IsDefault = image.IsDefault,
-                ProductId = image.ProductId,
-                SortOrder = image.SortOrder
-            };
+        //    if (productImage == null)
+        //    {
+        //        throw new EShopException($"Cannot find an image with id {imageId}");
+        //    }
 
-            return viewModel;
-        }
+        //    _context.ProductImages.Remove(productImage);
+        //    return await _context.SaveChangesAsync();
+        //}
+        #endregion
 
-        public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
+        #region GetListImages
+        //public async Task<List<ProductImageViewModel>> GetListImages(int productId)
+        //{
+        //    return await _context.ProductImages.Where(x => x.ProductId == productId)
+        //        .Select(i => new ProductImageViewModel()
+        //        {
+        //            Caption = i.Caption,
+        //            DateCreated = i.DateCreated,
+        //            FileSize = i.FileSize,
+        //            Id = i.Id,
+        //            ImagePath = i.ImagePath,
+        //            IsDefault = i.IsDefault,
+        //            ProductId = i.ProductId,
+        //            SortOrder = i.SortOrder
+        //        }).ToListAsync();
+        //}
+        #endregion
+
+        #region GetImageById
+        //public async Task<ProductImageViewModel> GetImageById(int imageId)
+        //{
+        //    var image = await _context.ProductImages.FindAsync(imageId);
+
+        //    if (image == null)
+        //    {
+        //        throw new EShopException($"Cannot find an image with id {imageId}");
+        //    }
+
+        //    var viewModel = new ProductImageViewModel()
+        //    {
+        //        Caption = image.Caption,
+        //        DateCreated = image.DateCreated,
+        //        FileSize = image.FileSize,
+        //        Id = image.Id,
+        //        ImagePath = image.ImagePath,
+        //        IsDefault = image.IsDefault,
+        //        ProductId = image.ProductId,
+        //        SortOrder = image.SortOrder
+        //    };
+
+        //    return viewModel;
+        //}
+        #endregion
+
+        public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request)
         {
             //1. Select join
             var query = from p in _context.Products
-                        join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId
-                        join c in _context.Categories on pic.CategoryId equals c.Id
-                        where pt.LanguageId == languageId
-                        select new { p, pt, pic };
+                        join c in _context.Categories on p.CategoryId equals c.Id
+                        select new { p};
             //2. filter
             if (request.CategoryId.HasValue && request.CategoryId.Value > 0)
             {
-                query = query.Where(p => p.pic.CategoryId == request.CategoryId);
+                query = query.Where(p => p.p.CategoryId == request.CategoryId);
             }
             //3. Paging
             int totalRow = await query.CountAsync();
@@ -370,14 +356,14 @@ namespace eShopSolution.Application.Catalog.Products
                 .Select(x => new ProductViewModel()
                 {
                     Id = x.p.Id,
-                    Name = x.pt.Name,
-                    DateCreated = x.p.DateCreated,
-                    Description = x.pt.Description,
-                    Details = x.pt.Details,
-                    LanguageId = x.pt.LanguageId,
+                    Name = x.p.Name,
+                    CategoryId = x.p.CategoryId,
+                    Description = x.p.Description,
+                    Details = x.p.Details,
                     Price = x.p.Price,
                     Stock = x.p.Stock,
-                    ViewCount = x.p.ViewCount
+                    ThumbnailImage = x.p.Thumbnail,
+                    ProductImage = x.p.ProductImage
                 }).ToListAsync();
 
             //4. Select and projection
@@ -391,98 +377,87 @@ namespace eShopSolution.Application.Catalog.Products
             return pagedResult;
         }
 
-        public async Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request)
-        {
-            var user = await _context.Products.FindAsync(id);
-            if (user == null)
-            {
-                return new ApiErrorResult<bool>($"Sản phẩm với id {id} không tồn tại");
-            }
-            foreach (var category in request.Categories)
-            {
-                var productInCategory = await _context.ProductInCategories
-                    .FirstOrDefaultAsync(x => x.CategoryId == int.Parse(category.Id)
-                    && x.ProductId == id);
-                if (productInCategory != null && category.Selected == false)
-                {
-                    _context.ProductInCategories.Remove(productInCategory);
-                }
-                else if (productInCategory == null && category.Selected)
-                {
-                    await _context.ProductInCategories.AddAsync(new ProductInCategory()
-                    {
-                        CategoryId = int.Parse(category.Id),
-                        ProductId = id
-                    });
-                }
-            }
-            await _context.SaveChangesAsync();
-            return new ApiSuccessResult<bool>();
-        }
+        //public async Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request)
+        //{
+        //    var user = await _context.Products.FindAsync(id);
+        //    if (user == null)
+        //    {
+        //        return new ApiErrorResult<bool>($"Sản phẩm với id {id} không tồn tại");
+        //    }
+        //    foreach (var category in request.Categories)
+        //    {
+        //        var productInCategory = await _context.ProductInCategories
+        //            .FirstOrDefaultAsync(x => x.CategoryId == int.Parse(category.Id)
+        //            && x.ProductId == id);
+        //        if (productInCategory != null && category.Selected == false)
+        //        {
+        //            _context.ProductInCategories.Remove(productInCategory);
+        //        }
+        //        else if (productInCategory == null && category.Selected)
+        //        {
+        //            await _context.ProductInCategories.AddAsync(new ProductInCategory()
+        //            {
+        //                CategoryId = int.Parse(category.Id),
+        //                ProductId = id
+        //            });
+        //        }
+        //    }
+        //    await _context.SaveChangesAsync();
+        //    return new ApiSuccessResult<bool>();
+        //}
 
-        public async Task<List<ProductViewModel>> GetFeaturedProducts(string languageId, int take)
+        #region GetFeaturedProducts
+        public async Task<List<ProductViewModel>> GetFeaturedProducts(int take)
         {
             //1. Select join
             var query = from p in _context.Products
-                        join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
-                        from pic in ppic.DefaultIfEmpty()
-                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
-                        from pi in ppi.DefaultIfEmpty()
-                        join c in _context.Categories on pic.CategoryId equals c.Id into picc
-                        from c in picc.DefaultIfEmpty()
-                        where pt.LanguageId == languageId && (pi == null || pi.IsDefault == true)
-                        && p.IsFeature == true
-                        select new { p, pt, pic, pi };
+                        join c in _context.Categories on p.CategoryId equals c.Id 
+                        select new { p };
 
             var data = await query.OrderByDescending(x => x.p.DateCreated).Take(take)
                 .Select(x => new ProductViewModel()
                 {
                     Id = x.p.Id,
-                    Name = x.pt.Name,
+                    Name = x.p.Name,
+                    CategoryId = x.p.CategoryId,
                     DateCreated = x.p.DateCreated,
-                    Description = x.pt.Description,
-                    Details = x.pt.Details,
-                    LanguageId = x.pt.LanguageId,
+                    Description = x.p.Description,
+                    Details = x.p.Details,
                     Price = x.p.Price,
                     Stock = x.p.Stock,
-                    ViewCount = x.p.ViewCount,
-                    ThumbnailImage = x.pi.ImagePath
+                    ThumbnailImage = x.p.Thumbnail,
+                    ProductImage = x.p.ProductImage,
                 }).ToListAsync();
 
             return data;
         }
+        #endregion
 
-        public async Task<List<ProductViewModel>> GetLatestProducts(string languageId, int take)
+        #region GetLatestProducts
+        public async Task<List<ProductViewModel>> GetLatestProducts(int take)
         {
             //1. Select join
             var query = from p in _context.Products
-                        join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
-                        from pic in ppic.DefaultIfEmpty()
-                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
-                        from pi in ppi.DefaultIfEmpty()
-                        join c in _context.Categories on pic.CategoryId equals c.Id into picc
-                        from c in picc.DefaultIfEmpty()
-                        where pt.LanguageId == languageId && (pi == null || pi.IsDefault == true)
-                        select new { p, pt, pic, pi };
+                        join c in _context.Categories on p.CategoryId equals c.Id 
+                        select new { p };
 
             var data = await query.OrderByDescending(x => x.p.DateCreated).Take(take)
                 .Select(x => new ProductViewModel()
                 {
                     Id = x.p.Id,
-                    Name = x.pt.Name,
+                    Name = x.p.Name,
+                    CategoryId = x.p.CategoryId,
                     DateCreated = x.p.DateCreated,
-                    Description = x.pt.Description,
-                    Details = x.pt.Details,
-                    LanguageId = x.pt.LanguageId,
+                    Description = x.p.Description,
+                    Details = x.p.Details,
                     Price = x.p.Price,
                     Stock = x.p.Stock,
-                    ViewCount = x.p.ViewCount,
-                    ThumbnailImage = x.pi.ImagePath
+                    ThumbnailImage = x.p.Thumbnail,
+                    ProductImage = x.p.ProductImage
                 }).ToListAsync();
 
             return data;
         }
+        #endregion
     }
 }
