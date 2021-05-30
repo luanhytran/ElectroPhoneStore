@@ -1,0 +1,120 @@
+﻿@using eShopSolution.ViewModels.Common;
+@using eShopSolution.ViewModels.Utilities.Enums;
+@model PagedResult<eShopSolution.ViewModels.Sales.OrderViewModel>
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{
+    ViewData["Title"] = "Danh sách đơn hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{
+    <script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 2000);
+    </script>
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Danh sách đơn hàng</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Danh sách đơn hàng</li>
+    </ol>
+    <div class="card mb-12">
+        <div class="card-body">
+                @if (ViewBag.SuccessMsg != null)
+                {
+                    <div id="msgAlert" class="alert alert-success" role="alert">
+                        @ViewBag.SuccessMsg
+                    </div>
+                }
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr >
+                            <th class="text-center">
+                                ID
+                            </th>
+                            <th>
+                                Khách hàng
+                            </th>
+                            <th class="text-center">
+                                Ngày đặt
+                            </th>
+                            <th class="text-center">
+                                Trạng thái
+                            </th>
+                            <th class="text-center">
+                                Giá trị đơn hàng
+                            </th>
+                            <th class="text-center">
+                                Xử lý đơn
+                            </th>
+                            <th class="text-center">
+                                Thao tác
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                        <tr>
+                            <td class="text-center" >
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.OrderDate)
+                            </td>
+                            <td class="text-center">
+                                @{ 
+                                    var status = "";
+                                    var statusEnum = item.Status;
+                                    switch (statusEnum)
+                                    {
+                                        case (OrderStatus)1:
+                                            status = "Đang chờ duyệt";
+                                            break;
+                                        case (OrderStatus)2:
+                                            status = "Đã duyệt";
+                                            break;
+                                        case (OrderStatus)3:
+                                            status = "Đang giao";
+                                            break;
+                                        case (OrderStatus)4:
+                                            status = "Đã giao";
+                                            break;
+                                        case (OrderStatus)5:
+                                            status = "Đã huỷ";
+                                            break;
+                                        default:
+                                            status = "...";
+                                            break;
+                                    }
+                                }
+                                @status
+                            </td>
+                            <td class="text-center">
+                               @item.Price.ToString("N0")
+                                 <span>&#8363;</span>
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn btn-primary">@Html.ActionLink("Duyệt đơn", "UpdateOrderStatus", new { orderId = item.Id })</button>
+                                <button class="btn btn btn-danger">@Html.ActionLink("Huỷ đơn", "CancelOrderStatus", new { orderId = item.Id })</button>
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-success">@Html.ActionLink("Xem chi tiết", "Details", new { id = item.Id })</button>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @*truyền Model vào hàm InvokeAsync của class PagerViewComponent để phân trang *@
+            @await Component.InvokeAsync("Pager", Model)
+        </div>
+    </div>
+</div>

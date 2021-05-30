@@ -43,18 +43,23 @@ namespace eShopSolution.WebApp.Controllers
                 return View(request);
 
             var result = await _userApiClient.Authenticate(request);
+
             if (result.ResultObj == null)
             {
                 ModelState.AddModelError("", "Login failure");
                 return View();
             }
+
             var userPrincipal = this.ValidateToken(result.ResultObj);
+
             var authProperties = new AuthenticationProperties
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                 IsPersistent = false
             };
+
             HttpContext.Session.SetString(SystemConstants.AppSettings.Token, result.ResultObj);
+
             await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         userPrincipal,

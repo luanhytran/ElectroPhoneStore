@@ -21,8 +21,8 @@ namespace eShopSolution.BackendApi.Controllers
 
         [HttpPost("authenticate")]
         [AllowAnonymous]
-        /* Dùng FromBody thì mới lấy Json đã serialize bên UserApiClien truyền vô được
-        còn FromForm thì không */
+        /* Dùng FromBody thì lấy từ json đã serialize bên UserApiClient truyền vô được
+        còn FromForm thì lấy từ form */
         public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
         {
             if (!ModelState.IsValid)
@@ -99,7 +99,12 @@ namespace eShopSolution.BackendApi.Controllers
             return Ok(user);
         }
 
-
+        [HttpGet("getAllUser")]
+        public async Task<IActionResult> GetAll()
+        {
+            var allUser = await _userService.GetAll();
+            return Ok(allUser);
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)

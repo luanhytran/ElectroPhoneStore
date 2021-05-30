@@ -10,7 +10,7 @@ namespace eShopSolution.ApiIntegration
     public interface IUserApiClient
     {
         Task<ApiResult<string>> Authenticate(LoginRequest request);
-
+        Task<List<UserViewModel>> GetAll();
         Task<ApiResult<PagedResult<UserViewModel>>> GetUsersPagings(GetUserPagingRequest request);
 
         Task<ApiResult<bool>> RegisterUser(RegisterRequest registerRequest);

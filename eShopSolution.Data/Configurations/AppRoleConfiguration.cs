@@ -16,7 +16,7 @@ namespace eShopSolution.Data.Configurations
 
             builder.ToTable("AppRoles");
 
-            builder.Property(x => x.Id).HasMaxLength(200).IsRequired();
+            builder.Property(x => x.Id).HasMaxLength(200);
         }
     }
 }

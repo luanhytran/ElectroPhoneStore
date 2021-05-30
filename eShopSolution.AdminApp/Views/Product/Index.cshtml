@@ -48,39 +48,38 @@
         </div>
 
         <div class="card-body">
-            <div class="row">
                 @if (ViewBag.SuccessMsg != null)
                 {
                     <div id="msgAlert" class="alert alert-success" role="alert">
                         @ViewBag.SuccessMsg
                     </div>
                 }
-            </div>
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>
-                        <tr class="text-center">
-                            <th>
+                        <tr>
+                            <th class="text-center">
                                 ID
                             </th>
-                            <th>
+                            <th class="text-center">
                                 Ảnh đại diện
                             </th>
                             <th>
                                 Tên
                             </th>
-                            <th>
+                            <th class="text-center">
                                 Giá bán
                             </th>
-                            <th>
+                            <th class="text-center">
                                 Số lượng tồn
                             </th>
-                            <th>
+                            <th class="text-center">
                                Thao tác
                             </th>
                         </tr>
                     </thead>
                     <tbody>
+                        
                         @foreach (var item in Model.Items)
                         {
                             <tr>
@@ -93,15 +92,15 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     @item.Price.ToString("N0") <span>&#8363;</span>
-                                </td>
+                                </td >
                                 <td class="text-center">
                                     @Html.DisplayFor(modelItem => item.Stock)
                                 </td>
-                                <td>
-                                    <button class="btn btn-success">@Html.ActionLink("Xem", "Details", new { id = item.Id })</button>
-                                    <button class="btn btn-primary">@Html.ActionLink("Sửa", "Edit", new { id = item.Id })</button>
+                                <td class="text-center">
+                                    <button class="btn btn-success">@Html.ActionLink("Xem chi tiết", "Details", new { id = item.Id })</button>
+                                    <button class="btn btn-primary">@Html.ActionLink("Cập nhật", "Edit", new { id = item.Id })</button>
                                     <button class="btn btn-danger">@Html.ActionLink("Xóa", "Delete", new { id = item.Id })</button>
                                 </td>
                             </tr>
@@ -110,7 +109,11 @@
                 </table>
             </div>
             @*truyền Model vào hàm InvokeAsync của class PagerViewComponent để phân trang *@
+        <div>
+      
             @await Component.InvokeAsync("Pager", Model)
+
+        </div>
         </div>
     </div>
 </div>

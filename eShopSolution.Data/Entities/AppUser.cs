@@ -10,7 +10,7 @@ namespace eShopSolution.Data.Entities
     public class AppUser : IdentityUser<Guid>
     {
         public string Name { get; set; }
-        public UserType UserType { get; set; }
+        public string Address { get; set; }
         public List<Order> Orders { get; set; }
     }
 }

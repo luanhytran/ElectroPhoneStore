@@ -1,4 +1,5 @@
-﻿using eShopSolution.Data.Entities;
+﻿using eShopSolution.Data.EF;
+using eShopSolution.Data.Entities;
 using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -20,16 +22,19 @@ namespace eShopSolution.Application.System.Users
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly RoleManager<AppRole> _roleManager;
+        private readonly EShopDbContext _context;
         private readonly IConfiguration _config;
 
         public UserService(UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             RoleManager<AppRole> roleManager,
+            EShopDbContext context,
             IConfiguration config)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _context = context;
             _config = config;
         }
 
@@ -45,18 +50,24 @@ namespace eShopSolution.Application.System.Users
             {
                 return new ApiErrorResult<string>("Đăng nhập không thành công");
             }
+
             var roles = await _userManager.GetRolesAsync(user);
+
+            // Lưu ý khi claim mà các thông tin bị null sẽ báo lỗi
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email,user.Email),
                 new Claim(ClaimTypes.GivenName,user.Name),
                 new Claim(ClaimTypes.Role, string.Join(";",roles)),
-                new Claim(ClaimTypes.Name, request.UserName)
+                new Claim(ClaimTypes.Name, request.UserName),
+                new Claim(ClaimTypes.StreetAddress, user?.Address),
+                new Claim(ClaimTypes.MobilePhone, user?.PhoneNumber)
             };
 
             // Sau khi có được claim thì ta cần mã hóa nó
             // Tokens key và issuer nằm ở appsettings.json và truy cập được thông qua DI 1 Iconfig
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
+
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             // 1 SecurityToken ( cần cài jwt ) 
@@ -83,6 +94,22 @@ namespace eShopSolution.Application.System.Users
                 return new ApiErrorResult<bool>("Xóa không thành công");
         }
 
+        public async Task<List<UserViewModel>> GetAll()
+        {
+            var query = from c in _userManager.Users
+                        select new { c };
+
+            return await query.Select(x => new UserViewModel()
+            {
+                Id = x.c.Id,
+                Name = x.c.Name,
+                UserName = x.c.UserName,
+                PhoneNumber = x.c.PhoneNumber,
+                Email = x.c.Email,
+                Address = x.c.Address
+            }).ToListAsync();
+        }
+
         public async Task<ApiResult<UserViewModel>> GetById(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -91,6 +118,7 @@ namespace eShopSolution.Application.System.Users
                 return new ApiErrorResult<UserViewModel>("User không tồn tại");
             }
             var roles = await _userManager.GetRolesAsync(user);
+
             var userVm = new UserViewModel()
             {
                 UserName = user.UserName,
@@ -100,6 +128,7 @@ namespace eShopSolution.Application.System.Users
                 Id = user.Id,
                 Roles = roles
             };
+
             return new ApiSuccessResult<UserViewModel>(userVm);
         }
 

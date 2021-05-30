@@ -30,25 +30,23 @@
         </div>
 
         <div class="card-body">
-            <div class="row">
                 @if (ViewBag.SuccessMsg != null)
                 {
                     <div id="msgAlert" class="alert alert-success" role="alert">
                         @ViewBag.SuccessMsg
                     </div>
                 }
-            </div>
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>
-                        <tr class="text-center">
-                            <th>
+                        <tr >
+                            <th class="text-center">
                                 ID
                             </th>
                             <th>
                                 Tên
                             </th>
-                            <th>
+                            <th class="text-center">
                                 Thao tác
                             </th>
                         </tr>
@@ -60,11 +58,11 @@
                                 <td class="text-center">
                                     @Html.DisplayFor(modelItem => item.Id)
                                 </td>
-                                <td>
+                                <td >
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
-                                <td>
-                                    <button class="btn btn-primary">@Html.ActionLink("Sửa", "Edit", new { id = item.Id })</button>
+                                <td class="text-center">
+                                    <button class="btn btn-primary">@Html.ActionLink("Cập nhật", "Edit", new { id = item.Id })</button>
                                     <button class="btn btn-danger">@Html.ActionLink("Xóa", "Delete", new { id = item.Id })</button>
                                 </td>
                             </tr>
