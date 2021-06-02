@@ -3,6 +3,7 @@ using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -22,12 +23,21 @@ namespace eShopSolution.WebApp.Controllers
     {
         private readonly IUserApiClient _userApiClient;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AccountController(IUserApiClient userApiClient,
-            IConfiguration configuration)
+            IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult Index()
+        {
+            return View();
         }
 
         [HttpGet]
@@ -64,6 +74,7 @@ namespace eShopSolution.WebApp.Controllers
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         userPrincipal,
                         authProperties);
+
 
             return RedirectToAction("Index", "Home");
         }

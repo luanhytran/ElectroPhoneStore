@@ -54,7 +54,10 @@
             type: "GET",
             url: "/" + culture + '/Cart/GetListItems',
             success: function (res) {
+
                 if (res.length === 0) {
+                    $('#checkout-button-modal').attr("href", "/")
+                    $('.checkout-btn').hide();
                     $('#tbl_cart').hide();
                 }
 

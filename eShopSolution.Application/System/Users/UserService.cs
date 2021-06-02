@@ -80,6 +80,39 @@ namespace eShopSolution.Application.System.Users
             return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
+        public async Task<ApiResult<bool>> Register(RegisterRequest request)
+        {
+            var user = await _userManager.FindByNameAsync(request.UserName);
+
+            // Kiểm tra tài khoản đã tồn tại chưa
+            if (user != null)
+            {
+                return new ApiErrorResult<bool>("Tài khoản đã tồn tại");
+            }
+
+            // Kiểm tra email đã tồn tại chưa
+            if (await _userManager.FindByEmailAsync(request.Email) != null)
+            {
+                return new ApiErrorResult<bool>("Email đã tồn tại");
+            }
+
+            user = new AppUser()
+            {
+                Email = request.Email,
+                Address = request.Address,
+                Name = request.Name,
+                UserName = request.UserName,
+                PhoneNumber = request.PhoneNumber
+            };
+
+            var result = await _userManager.CreateAsync(user, request.Password);
+            if (result.Succeeded)
+            {
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Đăng ký không thành công");
+        }
+
         public async Task<ApiResult<bool>> Delete(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -167,36 +200,7 @@ namespace eShopSolution.Application.System.Users
             return new ApiSuccessResult<PagedResult<UserViewModel>>(pagedResult);
         }
 
-        public async Task<ApiResult<bool>> Register(RegisterRequest request)
-        {
-            var user = await _userManager.FindByNameAsync(request.UserName);
-
-            // Kiểm tra tài khoản đã tồn tại chưa
-            if (user != null)
-            {
-                return new ApiErrorResult<bool>("Tài khoản đã tồn tại");
-            }
-
-            // Kiểm tra email đã tồn tại chưa
-            if (await _userManager.FindByEmailAsync(request.Email) != null)
-            {
-                return new ApiErrorResult<bool>("Email đã tồn tại");
-            }
-
-            user = new AppUser()
-            {
-                Email = request.Email,
-                Name = request.Name,
-                UserName = request.UserName,
-                PhoneNumber = request.PhoneNumber
-            };
-            var result = await _userManager.CreateAsync(user, request.Password);
-            if (result.Succeeded)
-            {
-                return new ApiSuccessResult<bool>();
-            }
-            return new ApiErrorResult<bool>("Đăng ký không thành công");
-        }
+        
 
         public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)
         {

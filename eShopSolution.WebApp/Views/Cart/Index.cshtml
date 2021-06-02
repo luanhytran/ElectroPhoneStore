@@ -1,4 +1,6 @@
-﻿@{
+﻿@model int
+
+@{
     ViewData["Title"] = "Index";
 }
 
@@ -219,8 +221,8 @@
         <div class="row">
             <div class="col-md-12">
                 <ul class="breadcrumb-tree">
-                    <li><a href="/">Home</a></li>
-                    <li>Cart</li>
+                    <li><a href="/">Trang chủ</a></li>
+                    <li>Giỏ hàng</li>
                 </ul>
             </div>
         </div>
@@ -236,7 +238,7 @@
 
             <div class="page-content page-order">
                 <div class="page-title">
-                    <h2>Shopping Cart</h2>
+                    <h2>Giỏ hàng</h2>
                 </div>
 
 
@@ -304,7 +306,17 @@
                             </tfoot>
                         </table>
                     </div>
-                    <div class="cart_navigation"> <a class="continue-btn" href="/"><i class="fa fa-arrow-left"> </i>&nbsp; Continue shopping</a> <a class="checkout-btn" href="/@culture/Cart/Checkout"><i class="fa fa-check"></i> Proceed to checkout</a> </div>
+                    <div class="cart_navigation">
+                        <a class="continue-btn" href="/"><i class="fa fa-arrow-left"> </i>&nbsp; Tiếp tục mua hàng</a>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a class="checkout-btn" href="/@culture/Cart/Checkout"><i class="fa fa-check"></i> Tiến hành thanh toán</a>
+                            }
+                            else
+                            {
+                                <a class="checkout-btn" asp-action="Login" asp-controller="Account"><i class="fa fa-check"></i> Tiến hành thanh toán</a>
+                            }
+                    </div>
                 </div>
             </div>
         </div>

@@ -14,7 +14,7 @@ namespace eShopSolution.ViewModels.System.Users
             RuleFor(x => x.Email).NotEmpty().WithMessage("Email là bắt buộc")
                 .Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")
                 .WithMessage("Định dạng Email không đúng");
-                
+
             RuleFor(x => x.PhoneNumber).NotEmpty().WithMessage("Số điện thoại là bắt buộc");
             
             RuleFor(x => x.UserName).NotEmpty().WithMessage("Tên người dùng là bắt buộc");

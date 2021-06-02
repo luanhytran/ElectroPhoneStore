@@ -110,8 +110,8 @@
         <div class="row">
             <div class="col-md-12">
                 <ul class="breadcrumb-tree">
-                    <li><a href="/">Home</a></li>
-                    <li class="active">Register</li>
+                    <li><a href="/">Trang chủ</a></li>
+                    <li class="active">Đăng ký</li>
                 </ul>
             </div>
         </div>
@@ -132,52 +132,54 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="check-title">
-                                        <h4>New Customer</h4>
+                                        <h4>Khách hàng mới</h4>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <label>First Name:</label>
+                                <div class="col-xs-12" style="margin-top:15px">
+                                    <label>Tên người dùng:</label>
                                     <div class="input-text">
-                                        <input type="text" name="name" class="form-control">
+                                        <input type="text" asp-for="Name" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <label>Last Name:</label>
+                                <div class="col-xs-12" style="margin-top:15px">
+                                    <label>Địa chỉ:</label>
                                     <div class="input-text">
-                                        <input type="text" name="name" class="form-control">
+                                        <input type="text" asp-for="Address" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-xs-12">
-                                    <label>Address:</label>
-                                    <div class="input-text">
-                                        <input type="text" name="address" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-xs-12">
-                                    <label>City/Town:</label>
-                                    <div class="input-text">
-                                        <input type="text" name="city" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-6" style="margin-top:15px">
                                     <label>Email:</label>
                                     <div class="input-text">
-                                        <input type="text" name="email" class="form-control">
+                                        <input type="text" asp-for="Email" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <label>Phone:</label>
+                                <div class="col-sm-6" style="margin-top:15px">
+                                    <label>Số điện thoại:</label>
                                     <div class="input-text">
-                                        <input type="text" name="phone" class="form-control">
+                                        <input type="text" asp-for="PhoneNumber" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-xs-12">
-                                    <div class="billing-checkbox">
-                                        <input type="checkbox" value="forever" id="rememberme" name="rememberme">
-                                        Sign up for our newsletter!
+                                <div class="col-xs-12" style="margin-top:15px">
+                                    <label>Tên tài khoản</label>
+                                    <div class="input-text">
+                                        <input type="text" asp-for="UserName" class="form-control">
                                     </div>
+                                </div>
+                                <div class="col-xs-12" style="margin-top:15px">
+                                    <label>Mật khẩu:</label>
+                                    <div class="input-text">
+                                        <input type="password" asp-for="Password" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12" style="margin-top:15px">
+                                    <label>Xác nhận mật khẩu:</label>
+                                    <div class="input-text">
+                                        <input type="password" asp-for="ConfirmPassword" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12" style="margin-top:15px">
                                     <div class="submit-text">
-                                        <button class="button"><i class="fa fa-user"></i>&nbsp; <span>Register</span></button>
+                                        <button class="button"><i class="fa fa-user"></i>&nbsp; <span>Đăng ký</span></button>
                                     </div>
                                 </div>
                             </div>

@@ -34,5 +34,7 @@ namespace eShopSolution.Application.Catalog.Products
         Task<List<ProductViewModel>> GetFeaturedProducts(int take);
 
         Task<List<ProductViewModel>> GetLatestProducts(int take);
+
+        Task<bool> DecreaseStock(int productId, int quantity);
     }
 }

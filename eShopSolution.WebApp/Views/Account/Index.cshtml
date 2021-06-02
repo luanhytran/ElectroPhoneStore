@@ -1,0 +1,164 @@
+﻿<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a href="/">Trang chủ</a></li>
+                    <li>Tài khoản</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+<!-- Main Container -->
+<section class="main-container col2-right-layout">
+    <div class="main container">
+        <div class="row">
+            <div class="col-main col-sm-12 col-xs-12">
+                <div class="my-account">
+                    <div class="page-title">
+                        <h2>Tài khoản của bạn</h2>
+                    </div>
+                    <div class="dashboard">
+                        <div class="welcome-msg">
+                            @{
+                                var claims = User.Claims.ToList();
+                                var name = claims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName).Value;
+                            }
+                            <strong>Xin chào, @name!</strong>
+                            <p>Từ Trang tổng quan tài khoản của bạn, bạn có thể xem về các đơn hàng gần đây và cập nhật thông tin tài khoản của mình.</p>
+                        </div>
+                        <div class="recent-orders">
+                            <div class="title-buttons"><strong>Đơn hàng gần đây</strong> <a href="#">View All </a> </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered cart_summary table-striped">
+                                    <colgroup>
+                                        <col>
+                                        <col>
+                                        <col>
+                                        <col width="1">
+                                        <col width="1">
+                                        <col width="1">
+                                    </colgroup>
+                                    <thead>
+                                        <tr class="first last">
+                                            <th>Order #</th>
+                                            <th>Date</th>
+                                            <th>Ship to</th>
+                                            <th><span class="nobr">Order Total</span></th>
+                                            <th>Status</th>
+                                            <th>&nbsp;</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="first odd">
+                                            <td>1234567</td>
+                                            <td>10/05/2017 </td>
+                                            <td> jones d</td>
+                                            <td><span class="price">$49.00</span></td>
+                                            <td><em>Pending</em></td>
+                                            <td class="a-center last"><span class="nobr"> <a href="#">View Order</a> <span class="separator">|</span> <a href="#">Reorder</a> </span></td>
+                                        </tr>
+                                        <tr class="last even">
+                                            <td>987654</td>
+                                            <td>10/12/2017 </td>
+                                            <td> jones d</td>
+                                            <td><span class="price">$79.99</span></td>
+                                            <td><em>Pending</em></td>
+                                            <td class="a-center last"><span class="nobr"> <a href="#">View Order</a> <span class="separator">|</span> <a href="#">Reorder</a> </span></td>
+                                        </tr>
+                                        <tr class="first odd">
+                                            <td>1234567</td>
+                                            <td>10/05/2017 </td>
+                                            <td> jones d</td>
+                                            <td><span class="price">$49.00</span></td>
+                                            <td><em>Pending</em></td>
+                                            <td class="a-center last"><span class="nobr"> <a href="#">View Order</a> <span class="separator">|</span> <a href="#">Reorder</a> </span></td>
+                                        </tr>
+                                        <tr class="last even">
+                                            <td>987654</td>
+                                            <td>10/12/2017 </td>
+                                            <td> jones d</td>
+                                            <td><span class="price">$79.99</span></td>
+                                            <td><em>Pending</em></td>
+                                            <td class="a-center last"><span class="nobr"> <a href="#">View Order</a> <span class="separator">|</span> <a href="#">Reorder</a> </span></td>
+                                        </tr>
+                                        <tr class="first odd">
+                                            <td>1234567</td>
+                                            <td>10/05/2017 </td>
+                                            <td> jones d</td>
+                                            <td><span class="price">$49.00</span></td>
+                                            <td><em>Pending</em></td>
+                                            <td class="a-center last"><span class="nobr"> <a href="#">View Order</a> <span class="separator">|</span> <a href="#">Reorder</a> </span></td>
+                                        </tr>
+                                        <tr class="last even">
+                                            <td>987654</td>
+                                            <td>10/12/2017 </td>
+                                            <td> jones d</td>
+                                            <td><span class="price">$79.99</span></td>
+                                            <td><em>Pending</em></td>
+                                            <td class="a-center last"><span class="nobr"> <a href="#">View Order</a> <span class="separator">|</span> <a href="#">Reorder</a> </span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="box-account">
+                            <div class="page-title">
+                                <h2>Thông tin tài khoản</h2>
+                            </div>
+                            <div class="col2-set">
+                                <div class="col-1">
+                                    <h6>Contact Information</h6>
+                                    <a href="#">Edit</a>
+                                    <p>
+                                        jones don<br>
+                                        jonesd15@gmail.com<br>
+                                        <a href="#">Change Password</a>
+                                    </p>
+                                </div>
+                                <div class="col-2">
+                                    <h5>Newsletters</h5>
+                                    <a href="#">Edit</a>
+                                    <p> You are currently not subscribed to any newsletter. </p>
+                                </div>
+                            </div>
+                            <div class="col2-set">
+                                <h5>Address Book</h5>
+                                <div class="manage_add"><a href="#">Manage Addresses</a> </div>
+                                <div class="col-1">
+                                    <h5>Primary Billing Address</h5>
+                                    <address>
+                                        jones d<br>
+                                        Hawaii<br>
+                                        Britain,  North America, 65432<br>
+                                        United States<br>
+                                        T: 123456 <br>
+                                        <a href="#">Edit Address</a>
+                                    </address>
+                                </div>
+                                <div class="col-2">
+                                    <h5>Primary Shipping Address</h5>
+                                    <address>
+                                        jones d<br>
+                                        Hawaii<br>
+                                        Britain,  North America, 65432<br>
+                                        United States<br>
+                                        T: 123456 <br>
+                                        <a href="#">Edit Address</a>
+                                    </address>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

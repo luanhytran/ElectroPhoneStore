@@ -111,8 +111,8 @@
         <div class="row">
             <div class="col-md-12">
                 <ul class="breadcrumb-tree">
-                    <li><a href="/">Home</a></li>
-                    <li class="active">Login</li>
+                    <li><a href="/">Trang chủ</a></li>
+                    <li class="active">Đăng nhập</li>
                 </ul>
             </div>
         </div>
@@ -128,31 +128,28 @@
         <div class="page-content">
             <div class="account-login">
                 <form action="/@culture/Account/Login" method="post" class="box-authentication">
-                    <h4>Login</h4>
-                    <p class="before-login-text">Welcome back! Sign in to your account</p>
-                    <label for="emmail_login">Email address<span class="required">*</span></label>
+                    <h4>Đăng nhập</h4>
+                    <p class="before-login-text">Chào mừng quay trở lại! Hãy đăng nhập vào tài khoản của bạn</p>
+                    <label for="emmail_login">Tài khoản<span class="required">*</span></label>
                     <input asp-for="UserName" type="text" class="form-control">
-                    <label for="password_login">Password<span class="required">*</span></label>
+                    <label for="password_login">Mật khẩu<span class="required">*</span></label>
                     <input asp-for="Password" type="password" class="form-control">
-                    <p class="forgot-pass"><a href="#">Lost your password?</a></p>
-                    <button class="button" style="margin-right:10px"><i class="fa fa-lock"></i>&nbsp; <span>Login</span></button>
+                    <p class="forgot-pass"><a href="#">Bạn quên mật khẩu?</a></p>
+                    <button class="button" style="margin-right:10px"><i class="fa fa-lock"></i>&nbsp; <span>Đăng nhập</span></button>
                     <label class="inline" for="rememberme">
                         <input type="checkbox" value="forever" id="rememberme" name="rememberme">
-                        Remember me
+                        Ghi nhớ đăng nhập
                     </label>
                 </form>
                 <div class="box-authentication">
-                    <h4>Register</h4>
-                    <p>Create your very own account</p>
-                    <label for="emmail_register">Email address<span class="required">*</span></label>
-                    <input id="emmail_register" type="text" class="form-control">
-                    <button class="button"><i class="fa fa-user-o"></i>&nbsp; <span>Register</span></button>
+                    <h4>Đăng ký</h4>
+                    <p>Tạo tài khoản của riêng bạn</p>
+                    <button class="button"><i class="fa fa-user-o"></i>&nbsp; <span>Đăng ký</span></button>
                     <div class="register-benefits">
-                        <h5>Sign up today and you will be able to :</h5>
+                        <h5>Đăng ký ngay hôm nay để có thể :</h5>
                         <ul>
-                            <li>Speed your way through checkout</li>
-                            <li>Track your orders easily</li>
-                            <li>Keep a record of all your purchases</li>
+                            <li><i class="fa fa-check-circle text-primary"></i>Thủ tục thanh toán nhanh hơn</li>
+                            <li><i class="fa fa-check-circle text-primary"></i>Tra cứu đơn hàng của bạn dễ dàng</li>
                         </ul>
                     </div>
                 </div>

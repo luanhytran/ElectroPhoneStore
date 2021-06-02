@@ -13,6 +13,9 @@ namespace eShopSolution.ViewModels.System.Users
         [Display(Name = "Email")]
         public string Email { get; set; }
 
+        [Display(Name = "Địa chỉ")]
+        public string Address { get; set; }
+
         [Display(Name = "Số điện thoại")]
         public string PhoneNumber { get; set; }
 
@@ -26,5 +29,6 @@ namespace eShopSolution.ViewModels.System.Users
         [Display(Name = "Xác nhận mật khẩu")]
         [DataType(DataType.Password)]
         public string ConfirmPassword{ get; set; }
+
     }
 }

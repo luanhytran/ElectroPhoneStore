@@ -102,8 +102,23 @@
                                  <span>&#8363;</span>
                             </td>
                             <td class="text-center">
-                                <button class="btn btn btn-primary">@Html.ActionLink("Duyệt đơn", "UpdateOrderStatus", new { orderId = item.Id })</button>
-                                <button class="btn btn btn-danger">@Html.ActionLink("Huỷ đơn", "CancelOrderStatus", new { orderId = item.Id })</button>
+
+                                @if (item.Status == (OrderStatus)1)
+                                {
+                                    <button class="btn btn btn-primary">@Html.ActionLink("Duyệt đơn", "UpdateOrderStatus", new { orderId = item.Id })</button>
+                                    <button class="btn btn btn-danger">@Html.ActionLink("Huỷ đơn", "CancelOrderStatus", new { orderId = item.Id })</button>
+                                }
+                                else if (item.Status == (OrderStatus)2)
+                                {
+                                    <button class="btn btn btn-primary">@Html.ActionLink("Giao hàng", "UpdateOrderStatus", new { orderId = item.Id })</button>
+                                    <button class="btn btn btn-danger">@Html.ActionLink("Huỷ đơn", "CancelOrderStatus", new { orderId = item.Id })</button>
+                                }
+                                else if (item.Status == (OrderStatus)3)
+                                {
+                                    <button class="btn btn btn-primary">@Html.ActionLink("Xác nhận thanh toán", "UpdateOrderStatus", new { orderId = item.Id })</button>
+                                }
+                              
+
                             </td>
                             <td class="text-center">
                                 <button class="btn btn-success">@Html.ActionLink("Xem chi tiết", "Details", new { id = item.Id })</button>

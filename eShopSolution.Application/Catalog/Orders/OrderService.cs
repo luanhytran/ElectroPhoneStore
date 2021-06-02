@@ -31,11 +31,14 @@ namespace eShopSolution.Application.Catalog.Orders
             foreach (var item in request.OrderDetails)
             {
                 var product =  _context.Products.Find(item.ProductId);
+                
                 orderDetails.Add(new OrderDetail()
                 {
                     Product = product,
                     Quantity = item.Quantity,
                 });
+
+                product.Stock -= item.Quantity;
             }
 
             var order = new Order()
@@ -48,6 +51,17 @@ namespace eShopSolution.Application.Catalog.Orders
 
             _context.Orders.Add(order);
             return _context.SaveChanges();
+        }
+
+        public async Task<ApiResult<bool>> CreateUser(AppUser user )
+        {
+            var createUserResult = await _userManager.CreateAsync(user);
+
+            if (createUserResult.Succeeded)
+            {
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Tạo user không thành công");
         }
 
         public async Task<ApiResult<bool>> UpdateOrderStatus(int orderId)
@@ -123,6 +137,11 @@ namespace eShopSolution.Application.Catalog.Orders
             };
             return pagedResult;
         }
+
+        //public async Task<PagedResult<OrderViewModel>> GetOrderByUser(Guid userId)
+        //{
+
+        //}
 
         public List<OrderDetailViewModel> GetOrderDetails(int orderId)
         {

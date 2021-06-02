@@ -74,7 +74,7 @@ namespace eShopSolution.WebApp
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
              .AddCookie(options =>
              {
-                 options.LoginPath = "/Account/Login";
+                 options.LoginPath = "/Account/Login/";
                  options.AccessDeniedPath = "/User/Forbidden/";
              });
 
@@ -82,6 +82,7 @@ namespace eShopSolution.WebApp
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<ISlideApiClient, SlideApiClient>();
             services.AddTransient<IProductApiClient, ProductApiClient>();

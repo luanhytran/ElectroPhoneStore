@@ -2,6 +2,7 @@
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.Sales;
 using eShopSolution.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,16 +31,19 @@ namespace eShopSolution.WebApp.Controllers
 
         public IActionResult Index()
         {
+
             return View();
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Checkout()
         {
             return View(GetCheckoutViewModel());
         }
 
         [HttpPost]
+        [Authorize]
         //[Consumes("multipart/form-data")]
         public async Task<IActionResult> Checkout(CheckoutViewModel request)
         {
@@ -48,83 +52,54 @@ namespace eShopSolution.WebApp.Controllers
                 return View(request);
             }
 
-            if (User.Identity.IsAuthenticated)
+            // Tìm Guid của người mua để gán vào order
+            var users = await _userApiClient.GetAll();
+            var x = users.FirstOrDefault(x => x.Email == request.CheckoutModel.Email);
+
+            // Order detail là lấy từ session chứ không lấy qua CheckoutViewModel, vì model binding không có bind cái danh sách sản phẩm
+            var model = GetCheckoutViewModel();
+            var orderDetails = new List<OrderDetailViewModel>();
+
+            foreach (var item in model.CartItems)
             {
-                var users = await _userApiClient.GetAll();
-
-                var x = users.FirstOrDefault(x => x.Email == request.CheckoutModel.Email);
-
-                // Order detail là lấy từ session chứ không lấy qua CheckoutViewModel, vì model binding không có bind cái danh sách sản phẩm
-                var model = GetCheckoutViewModel();
-                var orderDetails = new List<OrderDetailViewModel>();
-
-                foreach (var item in model.CartItems)
+                orderDetails.Add(new OrderDetailViewModel()
                 {
-                    orderDetails.Add(new OrderDetailViewModel()
-                    {
-                        ProductId = item.ProductId,
-                        Quantity = item.Quantity
-                    });
-                }
-                var checkoutRequest = new CheckoutRequest()
-                {
-                    UserID = x.Id,
-                    Address = request.CheckoutModel.Address,
-                    Name = request.CheckoutModel.Name,
-                    Email = request.CheckoutModel.Email,
-                    PhoneNumber = request.CheckoutModel.PhoneNumber,
-                    OrderDetails = orderDetails,
-                };
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity
+                });
+            }
 
-                var result = await _orderApiClient.CreateOrder(checkoutRequest);
+            foreach(var item in orderDetails)
+            {
 
-                if (result)
-                {
-                    TempData["SuccessMsg"] = "Order purchased successful";
-                    return View(request);
-                }
+            }
 
-                // TODO: Add to API
-                //Sau khi có checkoutRequest thì ta sẽ đẩy vào OrerApiClient để tích hợp với Api và là bài tập tự làm
-                ModelState.AddModelError("", "Đặt hàng thất bại");
+            var checkoutRequest = new CheckoutRequest()
+            {
+                UserID = x.Id,
+                Address = request.CheckoutModel.Address,
+                Name = request.CheckoutModel.Name,
+                Email = request.CheckoutModel.Email,
+                PhoneNumber = request.CheckoutModel.PhoneNumber,
+                OrderDetails = orderDetails,
+            };
+
+            var result = await _orderApiClient.CreateOrder(checkoutRequest);
+
+            if (result)
+            {
+                var session = HttpContext.Session.GetString(SystemConstants.CartSession);
+                var currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
+                currentCart.Clear();
+                HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
+                TempData["SuccessMsg"] = "Order purchased successful";
                 return View(request);
             }
-            else
-            {
-                // Order detail là lấy từ session chứ không lấy qua CheckoutViewModel, vì model binding không có bind cái danh sách sản phẩm
-                var model = GetCheckoutViewModel();
-                var orderDetails = new List<OrderDetailViewModel>();
 
-                foreach (var item in model.CartItems)
-                {
-                    orderDetails.Add(new OrderDetailViewModel()
-                    {
-                        ProductId = item.ProductId,
-                        Quantity = item.Quantity
-                    });
-                }
-                var checkoutRequest = new CheckoutRequest()
-                {
-                    Address = request.CheckoutModel.Address,
-                    Name = request.CheckoutModel.Name,
-                    Email = request.CheckoutModel.Email,
-                    PhoneNumber = request.CheckoutModel.PhoneNumber,
-                    OrderDetails = orderDetails,
-                };
-
-                var result = await _orderApiClient.CreateOrder(checkoutRequest);
-
-                if (result)
-                {
-                    TempData["SuccessMsg"] = "Order purchased successful";
-                    return View(request);
-                }
-
-                // TODO: Add to API
-                //Sau khi có checkoutRequest thì ta sẽ đẩy vào OrerApiClient để tích hợp với Api và là bài tập tự làm
-                ModelState.AddModelError("", "Đặt hàng thất bại");
-                return View(request);
-            }
+            // TODO: Add to API
+            //Sau khi có checkoutRequest thì ta sẽ đẩy vào OrerApiClient để tích hợp với Api và là bài tập tự làm
+            ModelState.AddModelError("", "Đặt hàng thất bại");
+            return View(request);
         }
 
         private CheckoutViewModel GetCheckoutViewModel()
@@ -133,43 +108,27 @@ namespace eShopSolution.WebApp.Controllers
 
             //var claims = ClaimsPrincipal.Current.Identities.First().Claims.ToList();
             var claims = User.Claims.ToList();
-            if (User.Identity.IsAuthenticated)
+           
+            var name = claims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName).Value;
+            var email = claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
+            var address = claims.FirstOrDefault(x => x.Type == ClaimTypes.StreetAddress).Value;
+            var phoneNumber = claims.FirstOrDefault(x => x.Type == ClaimTypes.MobilePhone).Value;
+
+            List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
+
+            if (session != null)
+                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
+
+            var checkoutVm = new CheckoutViewModel()
             {
-                var name = claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
-                var email = claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
-                var address = claims.FirstOrDefault(x => x.Type == ClaimTypes.StreetAddress).Value;
-                var phoneNumber = claims.FirstOrDefault(x => x.Type == ClaimTypes.MobilePhone).Value;
-
-                List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
-
-                if (session != null)
-                    currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
-
-                var checkoutVm = new CheckoutViewModel()
-                {
-                    CartItems = currentCart,
-                    CheckoutModel = new CheckoutRequest(),
-                    Name = name.ToString(),
-                    Email = email.ToString(),
-                    Address = address.ToString(),
-                    PhoneNumber = phoneNumber.ToString()
-                };
-                return checkoutVm;
-            }
-            else
-            {
-                List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
-
-                if (session != null)
-                    currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
-
-                var checkoutVm = new CheckoutViewModel()
-                {
-                    CartItems = currentCart,
-                    CheckoutModel = new CheckoutRequest(),
-                };
-                return checkoutVm;
-            }
+                CartItems = currentCart,
+                CheckoutModel = new CheckoutRequest(),
+                Name = name.ToString(),
+                Email = email.ToString(),
+                Address = address.ToString(),
+                PhoneNumber = phoneNumber.ToString()
+            };
+            return checkoutVm;
         }
 
         [HttpGet]
@@ -200,26 +159,34 @@ namespace eShopSolution.WebApp.Controllers
 
             if (currentCart.Any(x => x.ProductId == id))
             {
+                if(currentCart.First(x => x.ProductId == id).Quantity == product.Stock)
+                {
+                    return Ok(currentCart);
+                }
+
                 quantity = currentCart.First(x => x.ProductId == id).Quantity + quantity;
+                currentCart.First(x => x.ProductId == id).Quantity = quantity;
             }
-
-            var cartItem = new CartItemViewModel()
+            else
             {
-                ProductId = id,
-                Image = product.ThumbnailImage,
-                Name = product.Name,
-                Price = product.Price,
-                Quantity = quantity
-            };
+                var cartItem = new CartItemViewModel()
+                {
+                    ProductId = id,
+                    Image = product.ThumbnailImage,
+                    Name = product.Name,
+                    Price = product.Price,
+                    Quantity = quantity
+                };
 
-            currentCart.Add(cartItem);
+                currentCart.Add(cartItem);
+            }
 
             HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
 
             return Ok(currentCart);
         }
 
-        public IActionResult UpdateCart(int id, int quantity)
+        public async Task<IActionResult> UpdateCart(int id, int quantity)
         {
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
 
@@ -232,10 +199,15 @@ namespace eShopSolution.WebApp.Controllers
             {
                 if (item.ProductId == id)
                 {
+                    var product = await _productApiClient.GetById(item.ProductId);
+                    var productStock = product.Stock;
                     if (quantity == 0)
                     {
                         currentCart.Remove(item);
                         break;
+                    }else if(quantity > productStock)
+                    {
+                        return StatusCode(406, "Số lượng mua lớn hơn số lượng trong kho của sán phẩm !");
                     }
                     item.Quantity = quantity;
                 }

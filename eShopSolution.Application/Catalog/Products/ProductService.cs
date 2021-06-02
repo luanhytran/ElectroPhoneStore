@@ -201,6 +201,17 @@ namespace eShopSolution.Application.Catalog.Products
             return productViewModel;
         }
 
+
+        // giảm số lượng sản phẩm trong kho khi khách hàng tăng sl sp
+        public async Task<bool> DecreaseStock(int productId, int quantity)
+        {
+            var product = await _context.Products.FindAsync(productId);
+
+            if (product == null) throw new EShopException($"Cannot find product with id: {productId} ");
+            product.Stock -= quantity;
+            return await _context.SaveChangesAsync() > 0;
+        }
+
         #region AddViewCount
         //public async Task AddViewCount(int productId)
         //{
@@ -220,14 +231,7 @@ namespace eShopSolution.Application.Catalog.Products
         //    return await _context.SaveChangesAsync() > 0;
         //}
 
-        //public async Task<bool> UpdateStock(int productId, int addedQuantity)
-        //{
-        //    var product = await _context.Products.FindAsync(productId);
 
-        //    if (product == null) throw new EShopException($"Cannot find product with id: {productId} ");
-        //    product.Stock += addedQuantity;
-        //    return await _context.SaveChangesAsync() > 0;
-        //}
         #endregion
 
         #region AddImage

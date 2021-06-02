@@ -16,5 +16,6 @@ namespace eShopSolution.Application.Catalog.Orders
 
         Task<ApiResult<bool>> UpdateOrderStatus(int orderId);
         Task<ApiResult<bool>> CancelOrderStatus(int orderId);
+        //Task<PagedResult<OrderViewModel>> GetOrderByUser(Guid userId);
     }
 }
