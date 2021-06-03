@@ -128,7 +128,7 @@ namespace eShopSolution.Application.Catalog.Orders
             return pagedResult;
         }
 
-        public async Task<List<OrderViewModel>> GetOrderByUser(string userId)
+        public async Task<OrderByUserViewModel> GetOrderByUser(string userId)
         {
             var Guid = new Guid(userId);
 
@@ -159,31 +159,28 @@ namespace eShopSolution.Application.Catalog.Orders
                 //item.OrderDetails = GetOrderDetails(item.Id);
             }
 
-            //// get user information
-            //var userInformation = await _userManager.FindByIdAsync(Guid.ToString());
+            // get user information
+            var userInformation = await _userManager.FindByIdAsync(Guid.ToString());
 
-            //var userID = Guid;
-            //var name = userInformation.Name;
-            //var username = userInformation.UserName;
-            //var address = userInformation.Address;
-            //var phoneNumber = userInformation.PhoneNumber;
-            //var email = userInformation.Email;
-            //List<OrderViewModel> orders = new List<OrderViewModel>();
-       
+            var userID = Guid;
+            var name = userInformation.Name;
+            var username = userInformation.UserName;
+            var address = userInformation.Address;
+            var phoneNumber = userInformation.PhoneNumber;
+            var email = userInformation.Email;
 
-            //var orderByUserVM = new OrderByUserViewModel()
-            //{
-            //    UserID = userID,
-            //    Name = name,
-            //    UserName = username,
-            //    Address = address,
-            //    PhoneNumber = phoneNumber,
-            //    Email = email,
-            //};
+            var orderByUserVM = new OrderByUserViewModel()
+            {
+                UserID = userID,
+                Name = name,
+                UserName = username,
+                Address = address,
+                PhoneNumber = phoneNumber,
+                Email = email,
+                Orders = orderList
+            };
 
-            //orderByUserVM.Orders = orderList
-
-            return orderList;
+            return orderByUserVM;
         }
 
         public List<OrderDetailViewModel> GetOrderDetails(int orderId)

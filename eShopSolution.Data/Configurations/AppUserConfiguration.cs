@@ -16,7 +16,6 @@ namespace eShopSolution.Data.Configurations
 
             builder.ToTable("AppUsers");
             builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
-            builder.Property(x => x.Address).IsRequired().HasMaxLength(3000);
         }
     }
 }

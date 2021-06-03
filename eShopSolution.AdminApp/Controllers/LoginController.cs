@@ -4,6 +4,7 @@ using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
@@ -44,7 +45,15 @@ namespace eShopSolution.AdminApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(ModelState);
+                return View(request);
+            }
+
+            var user = await _userApiClient.GetByUserName(request.UserName);
+            
+            if(user.ResultObj.Roles.ToString() != "admin")
+            {
+                ModelState.AddModelError(nameof(request.UserName), "Tài khoản không có quyền truy cập vào trang này");
+                return View(request);
             }
 
             /* Khi đăng nhập thành công thì chúng ta sẽ giả mã token này ra có những claim gì */
@@ -66,7 +75,7 @@ namespace eShopSolution.AdminApp.Controllers
             // tập properties của cookie
             var authProperties = new AuthenticationProperties
             {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
                 IsPersistent = false
             };
 

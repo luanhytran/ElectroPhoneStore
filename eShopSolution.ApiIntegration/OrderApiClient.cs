@@ -54,9 +54,9 @@ namespace eShopSolution.ApiIntegration
             return data;
         }
 
-        public async Task<List<OrderViewModel>> GetOrderByUser(string id)
+        public async Task<OrderByUserViewModel> GetOrderByUser(string id)
         {
-            var data = await GetAsync<List<OrderViewModel>>(
+            var data = await GetAsync<OrderByUserViewModel>(
                 $"/api/orders/userOrders/{id}");
 
             return data;

@@ -8,7 +8,7 @@
 <div class="container-fluid">
     <h1 class="mt-4">Chi tiết</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
         <li class="breadcrumb-item active">Chi tiết</li>
     </ol>
     <div class="card mb-4">
@@ -26,22 +26,28 @@
                         @Html.DisplayFor(model => model.Name)
                     </dd>
                     <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.PhoneNumber)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.PhoneNumber)
-                    </dd>
-                    <dt class="col-sm-2">
                         @Html.DisplayNameFor(model => model.UserName)
                     </dt>
                     <dd class="col-sm-10">
                         @Html.DisplayFor(model => model.UserName)
                     </dd>
                     <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.PhoneNumber)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.PhoneNumber)
+                    </dd>
+                    <dt class="col-sm-2">
                         @Html.DisplayNameFor(model => model.Email)
                     </dt>
                     <dd class="col-sm-10">
                         @Html.DisplayFor(model => model.Email)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Address)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Address)
                     </dd>
                 </dl>
             </div>

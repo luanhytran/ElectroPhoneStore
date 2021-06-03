@@ -29,9 +29,13 @@ namespace eShopSolution.Data.EF
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
 
             modelBuilder.ApplyConfiguration(new OrderDetailConfiguration());
-modelBuilder.ApplyConfiguration(new LanguageConfiguration());
+
+            modelBuilder.ApplyConfiguration(new LanguageConfiguration());
+
             modelBuilder.ApplyConfiguration(new AppUserConfiguration());
+
             modelBuilder.ApplyConfiguration(new AppRoleConfiguration());
+
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
 
             // những entity có HasKey là do lúc migrate báo lỗi yêu cầu thêm key

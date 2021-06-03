@@ -127,14 +127,20 @@
     <div class="main container">
         <div class="page-content">
             <div class="account-login">
-                <form action="/@culture/Account/Login" method="post" class="box-authentication">
+                <form action="/@culture/Login/Login" method="post" class="box-authentication">
                     <h4>Đăng nhập</h4>
                     <p class="before-login-text">Chào mừng quay trở lại! Hãy đăng nhập vào tài khoản của bạn</p>
-                    <label for="emmail_login">Tài khoản<span class="required">*</span></label>
-                    <input asp-for="UserName" type="text" class="form-control">
-                    <label for="password_login">Mật khẩu<span class="required">*</span></label>
-                    <input asp-for="Password" type="password" class="form-control">
-                    <p class="forgot-pass"><a href="#">Bạn quên mật khẩu?</a></p>
+                    <div>
+                        <label for="emmail_login">Tài khoản<span class="required">*</span></label>
+                        <input asp-for="UserName" type="text" class="form-control">
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label for="password_login">Mật khẩu<span class="required">*</span></label>
+                        <input asp-for="Password" type="password" class="form-control">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <p class="forgot-pass"><a asp-action="ForgotPassword">Bạn quên mật khẩu?</a></p>
                     <button class="button" style="margin-right:10px"><i class="fa fa-lock"></i>&nbsp; <span>Đăng nhập</span></button>
                     <label class="inline" for="rememberme">
                         <input type="checkbox" value="forever" id="rememberme" name="rememberme">
@@ -144,7 +150,7 @@
                 <div class="box-authentication">
                     <h4>Đăng ký</h4>
                     <p>Tạo tài khoản của riêng bạn</p>
-                    <button class="button"><i class="fa fa-user-o"></i>&nbsp; <span>Đăng ký</span></button>
+                    <button class="button"><i class="fa fa-user-o"></i>&nbsp; Đăng ký</button>
                     <div class="register-benefits">
                         <h5>Đăng ký ngay hôm nay để có thể :</h5>
                         <ul>

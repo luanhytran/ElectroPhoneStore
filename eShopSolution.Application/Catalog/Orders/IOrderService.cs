@@ -14,6 +14,6 @@ namespace eShopSolution.Application.Catalog.Orders
         Task<PagedResult<OrderViewModel>> GetAllPaging(GetManageOrderPagingRequest request);
         Task<ApiResult<bool>> UpdateOrderStatus(int orderId);
         Task<ApiResult<bool>> CancelOrderStatus(int orderId);
-        Task<List<OrderViewModel>> GetOrderByUser(string userId);
+        Task<OrderByUserViewModel> GetOrderByUser(string userId);
     }
 }

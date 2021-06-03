@@ -89,10 +89,12 @@ namespace eShopSolution.AdminApp.Controllers
                 var user = result.ResultObj;
                 var updateRequest = new UserUpdateRequest()
                 {
-                    Email = user.Email,
+                    Id = id,
                     Name = user.Name,
+                    UserName = user.UserName,
                     PhoneNumber = user.PhoneNumber,
-                    Id = id
+                    Email = user.Email,
+                    Address = user.Address
                 };
                 return View(updateRequest);
             }

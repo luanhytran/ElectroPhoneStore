@@ -85,14 +85,14 @@
                         <li><a asp-action="Index" asp-controller="Account"><i class="fa fa-user-o"></i> Tài khoản</a></li>
                         <li><button form="logout_form" id="logout-button" type="submit"><span id="logout_label">Đăng xuất</span></button></li>
                     </ul>
-                    <form id="logout_form" action="/@culture/Account/Logout" method="post">
+                    <form id="logout_form" action="/@culture/Login/Logout" method="post">
                     </form>
                 }
                 else
                 {
                     <ul class="header-links pull-right">
-                        <li><a asp-action="Login" asp-controller="Account" asp-route-returnurl="@Context.Request.Headers["Referer"].ToString();"> Đăng nhập</a></li>
-                        <li><a asp-action="Register" asp-controller="Account" asp-route-returnurl="@Context.Request.Headers["Referer"].ToString();"> Đăng ký</a></li>
+                        <li><a asp-action="Login" asp-controller="Login" > Đăng nhập</a></li>
+                        <li><a asp-action="Register" asp-controller="Login" > Đăng ký</a></li>
                     </ul>
                 }
             </div>
@@ -174,7 +174,7 @@
                                         }
                                         else
                                         {
-                                            <a asp-action="Login" asp-controller="Account">Thanh toán  <i class="fa fa-arrow-circle-right"></i></a>
+                                            <a asp-action="Login" asp-controller="Login">Thanh toán  <i class="fa fa-arrow-circle-right"></i></a>
                                         }
 
                                     </div>

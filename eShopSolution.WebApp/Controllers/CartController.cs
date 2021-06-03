@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using MailKit.Net.Smtp;
+using MimeKit;
 
 namespace eShopSolution.WebApp.Controllers
 {
@@ -83,6 +85,9 @@ namespace eShopSolution.WebApp.Controllers
 
             if (result)
             {
+                //var message = await MailUtils.MailUtils.SendGmail("hytranluan@gmail.com", "hytranluan@gmail.com",
+                //                                                  "ĐƠN HÀNG MỚI", $"Có một đơn hàng của khách hàng có sdt là {checkoutRequest.PhoneNumber} và email là {checkoutRequest.Email} cần duyệt",
+                //                                                  "enter_your_gmail","enter_your_gmail_password");
                 var session = HttpContext.Session.GetString(SystemConstants.CartSession);
                 var currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
                 currentCart.Clear();

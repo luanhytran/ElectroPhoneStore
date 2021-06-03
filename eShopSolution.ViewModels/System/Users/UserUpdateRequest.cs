@@ -9,7 +9,7 @@ namespace eShopSolution.ViewModels.System.Users
     {
         public Guid Id { get; set; }
 
-        [Display(Name = "Tên")]
+        [Display(Name = "Tên khách hàng")]
         public string Name { get; set; }
 
         [Display(Name = "Email")]
@@ -17,5 +17,11 @@ namespace eShopSolution.ViewModels.System.Users
 
         [Display(Name = "Số điện thoại")]
         public string PhoneNumber { get; set; }
+
+        [Display(Name = "Địa chỉ")]
+        public string Address { get; set; }
+
+        [Display(Name = "Tên tài khoản")]
+        public string UserName { get; set; }
     }
 }

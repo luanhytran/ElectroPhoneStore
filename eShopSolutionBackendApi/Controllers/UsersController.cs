@@ -99,6 +99,18 @@ namespace eShopSolution.BackendApi.Controllers
             return Ok(user);
         }
 
+        [HttpGet("getByUserName/{userName}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetByUserName(string userName)
+        {
+            var user = await _userService.GetByUserName(userName);
+            if (!user.IsSuccessed)
+            {
+                return BadRequest(user);
+            }
+            return Ok(user);
+        }
+
         [HttpGet("getAllUser")]
         public async Task<IActionResult> GetAll()
         {

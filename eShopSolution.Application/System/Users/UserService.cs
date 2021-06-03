@@ -2,6 +2,7 @@
 using eShopSolution.Data.Entities;
 using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,7 @@ namespace eShopSolution.Application.System.Users
         {
             // Tìm xem tên user có tồn tại hay không
             var user = await _userManager.FindByNameAsync(request.UserName);
+        
             if (user == null) return new ApiErrorResult<string>("Tài khoản không tồn tại");
 
             // Trả về một SignInResult, tham số cuối là IsPersistent kiểu bool
@@ -62,7 +64,7 @@ namespace eShopSolution.Application.System.Users
                 new Claim(ClaimTypes.Role, string.Join(";",roles)),
                 new Claim(ClaimTypes.Name, request.UserName),
                 new Claim(ClaimTypes.StreetAddress, user?.Address),
-                new Claim(ClaimTypes.MobilePhone, user?.PhoneNumber)
+                new Claim(ClaimTypes.MobilePhone, user?.PhoneNumber),
             };
 
             // Sau khi có được claim thì ta cần mã hóa nó
@@ -103,7 +105,7 @@ namespace eShopSolution.Application.System.Users
                 Address = request.Address,
                 Name = request.Name,
                 UserName = request.UserName,
-                PhoneNumber = request.PhoneNumber
+                PhoneNumber = request.PhoneNumber,
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
@@ -156,12 +158,54 @@ namespace eShopSolution.Application.System.Users
             var userVm = new UserViewModel()
             {
                 UserName = user.UserName,
+                Address = user.Address,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 Name = user.Name,
                 Id = user.Id,
-                Roles = roles
             };
+
+            foreach (var role in roles)
+            {
+                userVm.Roles = role.ToString();
+            }
+
+            return new ApiSuccessResult<UserViewModel>(userVm);
+        }
+
+        [AllowAnonymous]
+        public async Task<ApiResult<UserViewModel>> GetByUserName(string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+
+            if (user == null)
+            {
+                return new ApiErrorResult<UserViewModel>("User không tồn tại");
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var userVm = new UserViewModel()
+            {
+                UserName = user.UserName,
+                Address = user.Address,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Name = user.Name,
+                Id = user.Id,
+            };
+
+            if(roles.Count == 0)
+            {
+                userVm.Roles = "customer";
+            }
+            else
+            {
+                foreach (var role in roles)
+                {
+                    userVm.Roles = role.ToString();
+                }
+            }
 
             return new ApiSuccessResult<UserViewModel>(userVm);
         }
@@ -200,8 +244,6 @@ namespace eShopSolution.Application.System.Users
             };
             return new ApiSuccessResult<PagedResult<UserViewModel>>(pagedResult);
         }
-
-        
 
         public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)
         {
