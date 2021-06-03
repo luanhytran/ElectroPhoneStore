@@ -69,11 +69,6 @@ namespace eShopSolution.WebApp.Controllers
                 });
             }
 
-            foreach(var item in orderDetails)
-            {
-
-            }
-
             var checkoutRequest = new CheckoutRequest()
             {
                 UserID = x.Id,

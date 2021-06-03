@@ -67,17 +67,17 @@ namespace eShopSolution.Application.Catalog.Orders
         public async Task<ApiResult<bool>> UpdateOrderStatus(int orderId)
         {
             var order = await _context.Orders.FindAsync(orderId);
-            var status = order.Status;
+            var status = (int) order.Status;
 
             switch (status)
             {
-                case (Data.Enums.OrderStatus) 1:
-                    order.Status = (Data.Enums.OrderStatus)2;
+                case 1:
+                    order.Status = (Data.Enums.OrderStatus) 2;
                     break;
-                case (Data.Enums.OrderStatus) 2:
+                case 2:
                     order.Status = (Data.Enums.OrderStatus)3;
                     break;
-                case (Data.Enums.OrderStatus) 3:
+                case 3:
                     order.Status = (Data.Enums.OrderStatus)4;
                     break;
             }

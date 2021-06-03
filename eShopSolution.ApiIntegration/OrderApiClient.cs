@@ -1,4 +1,5 @@
-﻿using eShopSolution.ViewModels.Catalog.Products;
+﻿using eShopSolution.Utilities.Constants;
+using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.Sales;
 using eShopSolution.ViewModels.Utilities.Enums;
@@ -30,10 +31,16 @@ namespace eShopSolution.ApiIntegration
 
         public async Task<bool> CreateOrder(CheckoutRequest request)
         {
+            var sessions = _httpContextAccessor
+                            .HttpContext
+                            .Session
+                            .GetString(SystemConstants.AppSettings.Token);
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var response = await client.PostAsync($"/api/orders/createOrder", httpContent);
             return true;
         }
@@ -49,27 +56,37 @@ namespace eShopSolution.ApiIntegration
 
         public async Task<bool> UpdateOrderStatus(int id)
         {
-            
+            var sessions = _httpContextAccessor
+                             .HttpContext
+                             .Session
+                             .GetString(SystemConstants.AppSettings.Token);
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
             var json = JsonConvert.SerializeObject(id);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
-            var response = await client.PutAsync($"/api/orders/updateOrderStatus/{id}", httpContent);
-            return true;
+            var response = await client.PatchAsync($"/api/orders/updateOrderStatus/{id}", httpContent);
+            if (response.IsSuccessStatusCode)
+                return true;
+            return false;
         }
 
         public async Task<bool> CancelOrderStatus(int id)
         {
+            var sessions = _httpContextAccessor
+                            .HttpContext
+                            .Session
+                            .GetString(SystemConstants.AppSettings.Token);
+
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
             var json = JsonConvert.SerializeObject(id);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
-            var response = await client.PutAsync($"/api/orders/cancelOrderStatus/{id}", httpContent);
-            return true;
+            var response = await client.PatchAsync($"/api/orders/cancelOrderStatus/{id}", httpContent);
+            if (response.IsSuccessStatusCode)
+                return true;
+            return false;
         }
     }
 }

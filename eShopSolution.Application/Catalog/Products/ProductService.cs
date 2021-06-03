@@ -186,11 +186,18 @@ namespace eShopSolution.Application.Catalog.Products
                                     join p in _context.Products on c.Id equals p.CategoryId
                                     select p.Name).ToListAsync();
 
+            //var category = new CategoryViewModel()
+            //{
+            //    Id = product.CategoryId,
+            //    Name = product.Category.Name,
+            //};
+
             var productViewModel = new ProductViewModel()
             {
                 Id = product.Id,
                 Name = product.Name != null ? product.Name : null,
                 CategoryId = product.CategoryId != 0 ? product.CategoryId : 0,
+                //Category = category,
                 Description = product.Description != null ? product.Description : null,
                 Details = product.Details != null ? product.Details : null,
                 Price = product.Price,

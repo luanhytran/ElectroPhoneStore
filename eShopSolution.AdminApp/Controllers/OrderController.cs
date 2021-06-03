@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace eShopSolution.AdminApp.Controllers
 {
-    public class OrderController : Controller
+    public class OrderController : BaseController
     {
         private readonly IOrderApiClient _orderApiClient;
         public OrderController(IOrderApiClient orderApiClient)
@@ -30,7 +30,10 @@ namespace eShopSolution.AdminApp.Controllers
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
-
+            else
+            {
+                ViewBag.FailMsg = TempData["resultFail"];
+            }
 
             return View(data);
         }
@@ -45,7 +48,7 @@ namespace eShopSolution.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", "Cập nhật trạng thái đơn hàng thành công");
+            TempData["resultFail"] = "Cập nhật trạng thái đơn hàng không thành công";
             return RedirectToAction("Index", "Order");
         }
 
@@ -59,7 +62,8 @@ namespace eShopSolution.AdminApp.Controllers
                 return RedirectToAction("Index", "Order");
             }
 
-            ModelState.AddModelError("", "Huỷ đơn hàng thành công");
+            //ModelState.AddModelError("", "Huỷ đơn hàng thành công");
+            TempData["resultFail"] = "Huỷ đơn hàng không thành công";
             return RedirectToAction("Index", "Order");
         }
     }

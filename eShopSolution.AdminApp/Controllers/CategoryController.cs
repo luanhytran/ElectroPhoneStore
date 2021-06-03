@@ -11,7 +11,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace eShopSolution.AdminApp.Controllers
 {
-    public class CategoryController : Controller
+    public class CategoryController : BaseController
     {
         private readonly ICategoryApiClient _categoryApiClient;
         private readonly IConfiguration _configuration;

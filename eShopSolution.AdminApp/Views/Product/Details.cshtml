@@ -56,7 +56,13 @@
                                 Thông số kỹ thuật
                             </td>
                             <td>
-                                @Html.DisplayFor(model => model.Description)
+                                @{
+                                    string html = @Model.Description;
+                                    string removeFirstFigure = html.Remove(0, 22);
+                                    string removeLastFigure = removeFirstFigure.Remove(removeFirstFigure.Length - 9);
+                                    string addedTableFormat = removeLastFigure.Insert(6, " class=\"table table-bordered table-striped\"");
+                                }
+                                @Html.Raw(addedTableFormat)
                             </td>
                         </tr>
                         <tr>
@@ -80,7 +86,7 @@
                                 Ảnh đầy đủ
                             </td>
                             <td>
-                                <img style="width:190px;height:250px" src="@(Configuration["BaseAddress"] + Model.ProductImage)" alt="Alternate Text" />
+                                <img style="width:250px;height:250px" src="@(Configuration["BaseAddress"] + Model.ProductImage)" alt="Alternate Text" />
                             </td>
                         </tr>
                     </tbody>

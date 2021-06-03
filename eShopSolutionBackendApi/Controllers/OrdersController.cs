@@ -25,7 +25,7 @@ namespace eShopSolutionBackendApi.Controllers
 
 
         [HttpPost("createOrder")]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult CreateOrder([FromBody] CheckoutRequest request)
         {
             if (!ModelState.IsValid)
@@ -45,20 +45,22 @@ namespace eShopSolutionBackendApi.Controllers
             return Ok(order);
         }
 
-        [HttpPut("updateOrderStatus/{id}")]
-        [Authorize]
-        public async Task<IActionResult> UpdateOrderStatus([FromRoute] int id)
+        [HttpPatch("updateOrderStatus/{id}")]
+        public async Task<IActionResult> UpdateOrderStatus([FromBody] int id)
         {
-            await _orderService.UpdateOrderStatus(id);
-            return Ok();
+            var result = await _orderService.UpdateOrderStatus(id);
+            if (result.IsSuccessed)
+                return Ok();
+            return BadRequest("Không huỷ được đơn hàng");
         }
 
-        [HttpPut("cancelOrderStatus/{id}")]
-        [Authorize]
-        public async Task<IActionResult> CancelOrderStatus([FromRoute] int id)
+        [HttpPatch("cancelOrderStatus/{id}")]
+        public async Task<IActionResult> CancelOrderStatus([FromBody] int id)
         {
-            await _orderService.CancelOrderStatus(id);
-            return Ok();
+            var result =  await _orderService.CancelOrderStatus(id);
+            if(result.IsSuccessed)
+                return Ok();
+            return BadRequest("Không huỷ được đơn hàng");
         }
     }
 }
