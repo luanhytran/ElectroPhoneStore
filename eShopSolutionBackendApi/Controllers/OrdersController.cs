@@ -38,6 +38,14 @@ namespace eShopSolutionBackendApi.Controllers
             return Ok();
         }
 
+        [HttpGet("userOrders/{id}")]
+        public async Task<IActionResult> GetOrderByUser(string id)
+        {
+            var result = await _orderService.GetOrderByUser(id);
+
+            return Ok(result);
+        }
+
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetManageOrderPagingRequest request)
         {

@@ -11,11 +11,9 @@ namespace eShopSolution.Application.Catalog.Orders
     public interface IOrderService
     {
         int Create(CheckoutRequest request);
-
         Task<PagedResult<OrderViewModel>> GetAllPaging(GetManageOrderPagingRequest request);
-
         Task<ApiResult<bool>> UpdateOrderStatus(int orderId);
         Task<ApiResult<bool>> CancelOrderStatus(int orderId);
-        //Task<PagedResult<OrderViewModel>> GetOrderByUser(Guid userId);
+        Task<List<OrderViewModel>> GetOrderByUser(string userId);
     }
 }

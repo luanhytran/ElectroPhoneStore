@@ -1,4 +1,8 @@
-﻿<!-- BREADCRUMB -->
+﻿@model List<OrderViewModel>
+@using eShopSolution.ViewModels.Common;
+@using eShopSolution.ViewModels.Utilities.Enums;
+
+<!-- BREADCRUMB -->
 <div id="breadcrumb" class="section">
     <!-- container -->
     <div class="container">
@@ -36,8 +40,20 @@
                         </div>
                         <div class="recent-orders">
                             <div class="title-buttons"><strong>Đơn hàng gần đây</strong> <a href="#">View All </a> </div>
+                            @if (ViewBag.SuccessMsg != null)
+                            {
+                                <div id="msgAlert" class="alert alert-success" role="alert">
+                                    @ViewBag.SuccessMsg
+                                </div>
+                            }
+                            else if (ViewBag.FailMsg != null)
+                            {
+                                <div id="msgAlert" class="alert alert-danger" role="alert">
+                                    @ViewBag.FailMsg
+                                </div>
+                            }
                             <div class="table-responsive">
-                                <table class="table table-bordered cart_summary table-striped">
+                                <table class="table table-bordered cart_summary table-striped" style="margin-top:10px">
                                     <colgroup>
                                         <col>
                                         <col>
@@ -48,63 +64,85 @@
                                     </colgroup>
                                     <thead>
                                         <tr class="first last">
-                                            <th>Order #</th>
-                                            <th>Date</th>
-                                            <th>Ship to</th>
-                                            <th><span class="nobr">Order Total</span></th>
-                                            <th>Status</th>
-                                            <th>&nbsp;</th>
+                                            <th class="text-center">
+                                                ID
+                                            </th>
+                                            <th>
+                                                Khách hàng
+                                            </th>
+                                            <th class="text-center">
+                                                Ngày đặt
+                                            </th>
+                                            <th class="text-center">
+                                                Trạng thái
+                                            </th>
+                                            <th class="text-center">
+                                                Giá trị đơn hàng
+                                            </th>
+                                            <th class="text-center">
+                                                Xử lý đơn
+                                            </th>
+                                            <th class="text-center">
+                                                Thao tác
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="first odd">
-                                            <td>1234567</td>
-                                            <td>10/05/2017 </td>
-                                            <td> jones d</td>
-                                            <td><span class="price">$49.00</span></td>
-                                            <td><em>Pending</em></td>
-                                            <td class="a-center last"><span class="nobr"> <a href="#">View Order</a> <span class="separator">|</span> <a href="#">Reorder</a> </span></td>
-                                        </tr>
-                                        <tr class="last even">
-                                            <td>987654</td>
-                                            <td>10/12/2017 </td>
-                                            <td> jones d</td>
-                                            <td><span class="price">$79.99</span></td>
-                                            <td><em>Pending</em></td>
-                                            <td class="a-center last"><span class="nobr"> <a href="#">View Order</a> <span class="separator">|</span> <a href="#">Reorder</a> </span></td>
-                                        </tr>
-                                        <tr class="first odd">
-                                            <td>1234567</td>
-                                            <td>10/05/2017 </td>
-                                            <td> jones d</td>
-                                            <td><span class="price">$49.00</span></td>
-                                            <td><em>Pending</em></td>
-                                            <td class="a-center last"><span class="nobr"> <a href="#">View Order</a> <span class="separator">|</span> <a href="#">Reorder</a> </span></td>
-                                        </tr>
-                                        <tr class="last even">
-                                            <td>987654</td>
-                                            <td>10/12/2017 </td>
-                                            <td> jones d</td>
-                                            <td><span class="price">$79.99</span></td>
-                                            <td><em>Pending</em></td>
-                                            <td class="a-center last"><span class="nobr"> <a href="#">View Order</a> <span class="separator">|</span> <a href="#">Reorder</a> </span></td>
-                                        </tr>
-                                        <tr class="first odd">
-                                            <td>1234567</td>
-                                            <td>10/05/2017 </td>
-                                            <td> jones d</td>
-                                            <td><span class="price">$49.00</span></td>
-                                            <td><em>Pending</em></td>
-                                            <td class="a-center last"><span class="nobr"> <a href="#">View Order</a> <span class="separator">|</span> <a href="#">Reorder</a> </span></td>
-                                        </tr>
-                                        <tr class="last even">
-                                            <td>987654</td>
-                                            <td>10/12/2017 </td>
-                                            <td> jones d</td>
-                                            <td><span class="price">$79.99</span></td>
-                                            <td><em>Pending</em></td>
-                                            <td class="a-center last"><span class="nobr"> <a href="#">View Order</a> <span class="separator">|</span> <a href="#">Reorder</a> </span></td>
-                                        </tr>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr class="first odd">
+                                                <td>@item.Id</td>
+                                                <td>@item.Name</td>
+                                                <td>@item.OrderDate</td>
+                                                <td class="text-center">
+                                                    @{
+                                                        var status = "";
+                                                        var statusEnum = (int)item.Status;
+                                                        switch (statusEnum)
+                                                        {
+                                                            case 1:
+                                                                status = "Đang chờ duyệt";
+                                                                break;
+                                                            case 2:
+                                                                status = "Đã duyệt";
+                                                                break;
+                                                            case 3:
+                                                                status = "Đang giao";
+                                                                break;
+                                                            case 4:
+                                                                status = "Đã giao";
+                                                                break;
+                                                            case 5:
+                                                                status = "Đã huỷ";
+                                                                break;
+                                                            default:
+                                                                status = "...";
+                                                                break;
+                                                        }
+                                                    }
+                                                    @status
+                                                </td>
+                                                <td class="text-center">
+                                                    @item.Price.ToString("N0")
+                                                    <span>&#8363;</span>
+                                                </td>
+                                                <td class="text-center">
+
+                                                    @if (item.Status == (OrderStatus)1)
+                                                    {
+                                                        @Html.ActionLink("Huỷ đơn", "CancelOrderStatus", new { orderId = item.Id })
+                                                    }
+                                                    else if (item.Status == (OrderStatus)2)
+                                                    {
+                                                        @Html.ActionLink("Huỷ đơn", "CancelOrderStatus", new { orderId = item.Id })
+                                                    }
+                                                </td>
+                                                <td class="text-center">
+                                                    @Html.ActionLink("Xem chi tiết", "Details", new { id = item.Id })
+                                                </td>
+                                            </tr>
+                                        }
+
                                     </tbody>
                                 </table>
                             </div>

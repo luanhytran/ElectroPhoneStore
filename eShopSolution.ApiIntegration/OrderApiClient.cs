@@ -54,6 +54,14 @@ namespace eShopSolution.ApiIntegration
             return data;
         }
 
+        public async Task<List<OrderViewModel>> GetOrderByUser(string id)
+        {
+            var data = await GetAsync<List<OrderViewModel>>(
+                $"/api/orders/userOrders/{id}");
+
+            return data;
+        }
+
         public async Task<bool> UpdateOrderStatus(int id)
         {
             var sessions = _httpContextAccessor

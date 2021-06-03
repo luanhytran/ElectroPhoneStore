@@ -24,6 +24,7 @@ namespace eShopSolution.Application.Catalog.Orders
             _userManager = userManager;
         }
 
+        // Create Order
         public int Create(CheckoutRequest request)
         {
             var orderDetails = new List<OrderDetail>();
@@ -51,17 +52,6 @@ namespace eShopSolution.Application.Catalog.Orders
 
             _context.Orders.Add(order);
             return _context.SaveChanges();
-        }
-
-        public async Task<ApiResult<bool>> CreateUser(AppUser user )
-        {
-            var createUserResult = await _userManager.CreateAsync(user);
-
-            if (createUserResult.Succeeded)
-            {
-                return new ApiSuccessResult<bool>();
-            }
-            return new ApiErrorResult<bool>("Tạo user không thành công");
         }
 
         public async Task<ApiResult<bool>> UpdateOrderStatus(int orderId)
@@ -138,10 +128,63 @@ namespace eShopSolution.Application.Catalog.Orders
             return pagedResult;
         }
 
-        //public async Task<PagedResult<OrderViewModel>> GetOrderByUser(Guid userId)
-        //{
+        public async Task<List<OrderViewModel>> GetOrderByUser(string userId)
+        {
+            var Guid = new Guid(userId);
 
-        //}
+            // get user's order
+            var query = from o in _context.Orders
+                        join c in _userManager.Users on o.UserId equals c.Id
+                        where c.Id == Guid
+                        select new { o, c };
+
+            var data = await query
+                 .Select(x => new OrderViewModel()
+                 {
+                     Id = x.o.Id,
+                     UserID = x.o.UserId,
+                     Name = x.c.Name,
+                     Address = x.c.Address,
+                     PhoneNumber = x.c.PhoneNumber,
+                     Email = x.c.Email,
+                     OrderDate = x.o.OrderDate,
+                     Status = (OrderStatus)x.o.Status
+                 }).ToListAsync();
+
+            var orderList = data.ToList();
+
+            foreach (var item in orderList)
+            {
+                item.Price = GetOrderPrice(GetOrderDetails(item.Id));
+                //item.OrderDetails = GetOrderDetails(item.Id);
+            }
+
+            //// get user information
+            //var userInformation = await _userManager.FindByIdAsync(Guid.ToString());
+
+            //var userID = Guid;
+            //var name = userInformation.Name;
+            //var username = userInformation.UserName;
+            //var address = userInformation.Address;
+            //var phoneNumber = userInformation.PhoneNumber;
+            //var email = userInformation.Email;
+            //List<OrderViewModel> orders = new List<OrderViewModel>();
+       
+
+            //var orderByUserVM = new OrderByUserViewModel()
+            //{
+            //    UserID = userID,
+            //    Name = name,
+            //    UserName = username,
+            //    Address = address,
+            //    PhoneNumber = phoneNumber,
+            //    Email = email,
+            //};
+
+            //orderByUserVM.Orders = orderList
+
+            return orderList;
+        }
 
         public List<OrderDetailViewModel> GetOrderDetails(int orderId)
         {

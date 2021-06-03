@@ -15,6 +15,6 @@ namespace eShopSolution.ApiIntegration
         Task<PagedResult<OrderViewModel>> GetPagings(GetManageOrderPagingRequest request);
         Task<bool> UpdateOrderStatus(int id);
         Task<bool> CancelOrderStatus(int id);
-
+        Task<List<OrderViewModel>> GetOrderByUser(string id);
     }
 }

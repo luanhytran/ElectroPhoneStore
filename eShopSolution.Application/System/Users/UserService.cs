@@ -56,6 +56,7 @@ namespace eShopSolution.Application.System.Users
             // Lưu ý khi claim mà các thông tin bị null sẽ báo lỗi
             var claims = new[]
             {
+                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
                 new Claim(ClaimTypes.Email,user.Email),
                 new Claim(ClaimTypes.GivenName,user.Name),
                 new Claim(ClaimTypes.Role, string.Join(";",roles)),

@@ -1,5 +1,6 @@
 ﻿using eShopSolution.ApiIntegration;
 using eShopSolution.Utilities.Constants;
+using eShopSolution.ViewModels.Sales;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -22,22 +23,42 @@ namespace eShopSolution.WebApp.Controllers
     public class AccountController : Controller
     {
         private readonly IUserApiClient _userApiClient;
+        private readonly IOrderApiClient _orderApiClient;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountController(IUserApiClient userApiClient,
+        public AccountController(IUserApiClient userApiClient,IOrderApiClient orderApiClient,
             IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _userApiClient = userApiClient;
+            _orderApiClient = orderApiClient;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
-        [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var claims = User.Claims.ToList();
+            Guid id = new Guid(claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var orders = await _orderApiClient.GetOrderByUser(id.ToString());
+
+            return View(orders);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CancelOrderStatus(int orderId)
+        {
+            var result = await _orderApiClient.CancelOrderStatus(orderId);
+            if (result)
+            {
+                TempData["result"] = "Huỷ đơn hàng thành công";
+                return RedirectToAction("Index", "Account");
+            }
+
+            //ModelState.AddModelError("", "Huỷ đơn hàng thành công");
+            TempData["resultFail"] = "Huỷ đơn hàng không thành công";
+            return RedirectToAction("Index", "Account");
         }
 
         [HttpGet]
@@ -64,7 +85,7 @@ namespace eShopSolution.WebApp.Controllers
 
             var authProperties = new AuthenticationProperties
             {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
                 IsPersistent = false
             };
 
