@@ -1,5 +1,4 @@
-﻿using EmailService;
-using eShopSolution.ApiIntegration;
+﻿using eShopSolution.ApiIntegration;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
