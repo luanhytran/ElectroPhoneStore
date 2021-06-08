@@ -37,11 +37,9 @@
                                             <input class="form-control py-4" asp-for="Password" type="password" placeholder="Nhập mật khẩu" />
                                             <span asp-validation-for="Password" class="text-danger"></span>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox">
-                                                <input class="custom-control-input" asp-for="RememberMe" type="checkbox" />
-                                                <label class="custom-control-label">Nhớ mật khẩu</label>
-                                            </div>
+                                        <div class="form-check">
+                                                <input class="form-check-input" asp-for="RememberMe" type="checkbox" />
+                                                <label class="form-check-label">Nhớ mật khẩu</label>
                                         </div>
                                         <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
                                             <a class="small" href="/User/ForgotPassword">Bạn quên mật khẩu?</a>

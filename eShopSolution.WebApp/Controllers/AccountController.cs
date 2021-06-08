@@ -76,12 +76,34 @@ namespace eShopSolution.WebApp.Controllers
             var result = await _userApiClient.UpdateUser(request.Id, request);
             if (result.IsSuccessed)
             {
-                TempData["result"] = "Cập nhật người dùng thành công";
-                return RedirectToAction("Index", "Account");
+                return View("EditSuccess");
             }
 
             ModelState.AddModelError("", result.Message);
             return View(request);
+        }
+
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            var result = await _userApiClient.ChangePassword(model);
+
+            if (result.IsSuccessed)
+            {
+                return View("ChangePasswordConfirmation");
+            }
+
+            ModelState.AddModelError("", result.Message);
+            return View(model);
         }
 
         [HttpGet]
@@ -98,7 +120,5 @@ namespace eShopSolution.WebApp.Controllers
             TempData["resultFail"] = "Huỷ đơn hàng không thành công";
             return RedirectToAction("Index", "Account");
         }
-
-       
     }
 }

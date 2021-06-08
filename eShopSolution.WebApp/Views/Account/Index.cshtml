@@ -209,14 +209,15 @@
                                 <span style="text-decoration:underline">
                                     @Html.ActionLink("Cập nhật thông tin", "Edit", new { userid = Model.UserID })
                                 </span>
-
                                 <p>
                                     @Model.Name<br>
                                     @Model.Email<br>
                                     @Model.PhoneNumber<br>
                                     @Model.Address<br>
-                                    <a href="/" style="text-decoration:underline">Đổi mật khẩu</a>
                                 </p>
+                                <span style="text-decoration: underline">
+                                    @Html.ActionLink("Đổi mật khẩu", "ChangePassword", new { userid = Model.UserID })
+                                </span>
                             </div>
                         </div>
                     </div>

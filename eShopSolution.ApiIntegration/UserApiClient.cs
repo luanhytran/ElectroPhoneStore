@@ -140,7 +140,7 @@ namespace eShopSolution.ApiIntegration
             return users;
         }
 
-        public async Task<ApiResult<bool>> RegisterUser(RegisterRequest registerRequest)
+        public async Task<ApiResult<string>> RegisterUser(RegisterRequest registerRequest)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
@@ -154,9 +154,9 @@ namespace eShopSolution.ApiIntegration
             var result = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(result);
 
-            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+            return JsonConvert.DeserializeObject<ApiErrorResult<string>>(result);
         }
 
         public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)
@@ -196,6 +196,110 @@ namespace eShopSolution.ApiIntegration
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await client.PutAsync($"/api/users/{id}", httpContent);
+
+            var result = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Deserialize thành 1 object cùng type với return type BackendApi trả về ở đây là ApiSuccessResult
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+
+        public async Task<ApiResult<bool>> ChangePassword(ChangePasswordViewModel model)
+        {
+            var client = _httpClientFactory.CreateClient();
+            // BaseAddress lấy trong appsettings.Development.json bằng Configuratrion
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(model);
+
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"/api/users/changePassword", httpContent);
+
+            var result = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Deserialize thành 1 object cùng type với return type BackendApi trả về ở đây là ApiSuccessResult
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+
+        public async Task<ApiResult<bool>> ConfirmEmail(ConfirmEmailViewModel model)
+        {
+            var client = _httpClientFactory.CreateClient();
+            // BaseAddress lấy trong appsettings.Development.json bằng Configuratrion
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(model);
+
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"/api/users/confirmEmail", httpContent);
+
+            var result = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Deserialize thành 1 object cùng type với return type BackendApi trả về ở đây là ApiSuccessResult
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+
+        public async Task<ApiResult<string>> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            var client = _httpClientFactory.CreateClient();
+            // BaseAddress lấy trong appsettings.Development.json bằng Configuratrion
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(model);
+
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"/api/users/forgotPassword", httpContent);
+
+            var result = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Deserialize thành 1 object cùng type với return type BackendApi trả về ở đây là ApiSuccessResult
+                return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(result);
+
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<string>>(result);
+        }
+
+        public async Task<ApiResult<bool>> ResetPassword(ResetPasswordViewModel model)
+        {
+            var client = _httpClientFactory.CreateClient();
+            // BaseAddress lấy trong appsettings.Development.json bằng Configuratrion
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(model);
+
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"/api/users/resetPassword", httpContent);
 
             var result = await response.Content.ReadAsStringAsync();
 

@@ -1,10 +1,12 @@
-﻿using eShopSolution.ApiIntegration;
+﻿using EmailService;
+using eShopSolution.ApiIntegration;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -28,7 +30,7 @@ namespace eShopSolution.WebApp.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public LoginController(IUserApiClient userApiClient, IOrderApiClient orderApiClient,
-            IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+            IConfiguration configuration, IHttpContextAccessor httpContextAccessor )
         {
             _userApiClient = userApiClient;
             _orderApiClient = orderApiClient;
@@ -37,8 +39,9 @@ namespace eShopSolution.WebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
+            
             return View();
         }
 
@@ -52,16 +55,23 @@ namespace eShopSolution.WebApp.Controllers
 
             if (result.ResultObj == null)
             {
-                ModelState.AddModelError("", "Login failure");
+                ModelState.AddModelError("", "Đăng nhập thất bại");
                 return View();
+            }
+
+            if (request.RememberMe == true)
+            {
+                CookieOptions option = new CookieOptions();
+                option.Expires = DateTime.Now.AddMonths(1);
+                Response.Cookies.Append("customerToken", result.ResultObj, option);
             }
 
             var userPrincipal = this.ValidateToken(result.ResultObj);
 
             var authProperties = new AuthenticationProperties
             {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
-                IsPersistent = false
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMonths(1),
+                IsPersistent = request.RememberMe
             };
 
             HttpContext.Session.SetString(SystemConstants.AppSettings.Token, result.ResultObj);
@@ -78,6 +88,7 @@ namespace eShopSolution.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
+            Response.Cookies.Delete("customerToken");
             await HttpContext.SignOutAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
@@ -96,36 +107,40 @@ namespace eShopSolution.WebApp.Controllers
                 return View(registerRequest);
 
             var result = await _userApiClient.RegisterUser(registerRequest);
-
+          
             if (!result.IsSuccessed)
             {
                 ModelState.AddModelError("", "Login failure");
                 return View();
             }
 
-            var loginResult = await _userApiClient.Authenticate(new LoginRequest()
-            {
-                UserName = registerRequest.UserName,
-                Password = registerRequest.Password,
-                RememberMe = true
-            });
+            var token = result.ResultObj;
+            var user = await _userApiClient.GetByUserName(registerRequest.UserName);
+            var confirmationLink = Url.Action(nameof(ConfirmEmail), "Login", new { token, email = user.ResultObj.Email }, Request.Scheme);
+            var message = await MailUtils.MailUtils.SendGmail("hytranluan@gmail.com", user.ResultObj.Email,
+                                                              "Link xác nhận email", confirmationLink,
+                                                              "your_gmail_here", "your_password_here");
+            return RedirectToAction(nameof(SuccessRegistration));
+        }
 
-            var userPrincipal = this.ValidateToken(loginResult.ResultObj);
-
-            var authProperties = new AuthenticationProperties
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            var confirmEmailVm = new ConfirmEmailViewModel()
             {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                IsPersistent = false
+                token = token,
+                email = email
             };
 
-            HttpContext.Session.SetString(SystemConstants.AppSettings.Token, loginResult.ResultObj);
+            var result = await _userApiClient.ConfirmEmail(confirmEmailVm);
 
-            await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        userPrincipal,
-                        authProperties);
+            return View(result.IsSuccessed ? nameof(ConfirmEmail) : "Error");
+        }
 
-            return RedirectToAction("Index", "Home");
+        [HttpGet] 
+        public IActionResult SuccessRegistration()
+        {
+            return View();
         }
 
         private ClaimsPrincipal ValidateToken(string jwtToken)
@@ -151,6 +166,51 @@ namespace eShopSolution.WebApp.Controllers
         public IActionResult ForgotPassword()
         {
             return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel request)
+        {
+            if (!ModelState.IsValid)
+                return View(request);
+
+            var token = await _userApiClient.ForgotPassword(request);
+            var passwordResetLink = Url.Action(nameof(ResetPassword), "Login",
+                                    new { email = request.Email, token = token.ResultObj }, Request.Scheme);
+            var message = await MailUtils.MailUtils.SendGmail("hytranluan@gmail.com", request.Email,
+                                                        "Link khôi phục mật khẩu", passwordResetLink,
+                                                        "your_gmail_here", "your_password_here");
+
+            return View("ForgotPasswordConfirmation");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPassword(string token, string email)
+        {
+            if(token == null || email == null)
+            {
+                ModelState.AddModelError("", "Token khôi phục mật khẩu không phù hợp");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            var resetPasswordVm = new ResetPasswordViewModel()
+            {
+                Token = model.Token,
+                Email = model.Email,
+                Password = model.Password,
+                ConfirmPassword = model.ConfirmPassword
+            };
+
+            var result = await _userApiClient.ResetPassword(resetPasswordVm);
+
+            return View(result.IsSuccessed ? "ResetPasswordConfirmation" : "Error");
         }
     }
 }

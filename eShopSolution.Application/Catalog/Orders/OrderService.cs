@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using eShopSolution.ViewModels.System.Users;
 
 namespace eShopSolution.Application.Catalog.Orders
 {
@@ -212,5 +213,7 @@ namespace eShopSolution.Application.Catalog.Orders
 
             return price;
         }
+
+       
     }
 }

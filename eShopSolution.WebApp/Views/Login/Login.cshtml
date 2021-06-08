@@ -143,7 +143,7 @@
                     <p class="forgot-pass"><a asp-action="ForgotPassword">Bạn quên mật khẩu?</a></p>
                     <button class="button" style="margin-right:10px"><i class="fa fa-lock"></i>&nbsp; <span>Đăng nhập</span></button>
                     <label class="inline" for="rememberme">
-                        <input type="checkbox" value="forever" id="rememberme" name="rememberme">
+                        <input asp-for="RememberMe" type="checkbox" >
                         Ghi nhớ đăng nhập
                     </label>
                 </form>

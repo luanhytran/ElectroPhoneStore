@@ -23,5 +23,8 @@ namespace eShopSolution.ViewModels.System.Users
 
         [Display(Name = "Tên tài khoản")]
         public string UserName { get; set; }
+
+        [Display(Name = "Mật khẩu")]
+        public string Password { get; set; }
     }
 }

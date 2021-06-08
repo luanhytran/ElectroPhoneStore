@@ -60,7 +60,7 @@
                 else
                 {
                     <ul class="header-links pull-left">
-                        <li><a href="#">Xin chào <strong>guest!</strong></a></li>
+                        <li><a href="#">Xin chào <strong>quý khách!</strong></a></li>
                     </ul>
                 }
 
@@ -91,8 +91,8 @@
                 else
                 {
                     <ul class="header-links pull-right">
-                        <li><a asp-action="Login" asp-controller="Login" > Đăng nhập</a></li>
-                        <li><a asp-action="Register" asp-controller="Login" > Đăng ký</a></li>
+                        <li><a asp-action="Login" asp-controller="Login"> Đăng nhập</a></li>
+                        <li><a asp-action="Register" asp-controller="Login"> Đăng ký</a></li>
                     </ul>
                 }
             </div>
@@ -116,14 +116,9 @@
                     <!-- SEARCH BAR -->
                     <div class="col-md-6">
                         <div class="header-search">
-                            <form>
-                                <select class="input-select">
-                                    <option value="0">Mọi danh mục</option>
-                                    <option value="1">Category 01</option>
-                                    <option value="1">Category 02</option>
-                                </select>
-                                <input class="input" placeholder="Tìm kiếm ở đây">
-                                <button class="search-btn">Tìm</button>
+                            <form asp-action="ViewBySearchProduct" asp-controller="Home" method="get">
+                                    <input type="text" value="@ViewBag.Keyword" name="keyword" class="input" placeholder="Tìm kiếm ở đây" style="border-radius: 20px 0px 0px 20px  ;" />
+                                    <button type="submit" class="search-btn">Tìm</button>
                             </form>
                         </div>
                     </div>
@@ -200,29 +195,7 @@
         <!-- /MAIN HEADER -->
     </header>
     <!-- /HEADER -->
-    <!-- NAVIGATION -->
-    <nav id="navigation">
-        <!-- container -->
-        <div class="container">
-            <!-- responsive-nav -->
-            <div id="responsive-nav">
-                <!-- NAV -->
-                <ul class="main-nav nav navbar-nav">
-                    <li class="active"><a href="/">Trang chủ</a></li>
-                    <li><a href="#">iPhone</a></li>
-                    <li><a href="#">Samsung</a></li>
-                    <li><a href="#">Oppo</a></li>
-                    <li><a href="#">Vivo</a></li>
-                    <li><a href="#">Xiaomi</a></li>
-                    <li><a href="#">Nokia</a></li>
-                </ul>
-                <!-- /NAV -->
-            </div>
-            <!-- /responsive-nav -->
-        </div>
-        <!-- /container -->
-    </nav>
-    <!-- /NAVIGATION -->
+    @await Component.InvokeAsync("Navigation")
     @RenderBody()
     <!-- NEWSLETTER -->
     <div id="newsletter" class="section">

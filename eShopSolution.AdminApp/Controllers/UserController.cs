@@ -123,6 +123,7 @@ namespace eShopSolution.AdminApp.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Remove("Token");
+            Response.Cookies.Delete("userToken");
             return RedirectToAction("Index", "Login");
         }
 

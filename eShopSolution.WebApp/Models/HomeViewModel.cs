@@ -13,5 +13,7 @@ namespace eShopSolution.WebApp.Models
         public List<ProductViewModel> FeaturedProducts { get; set; }
 
         public List<ProductViewModel> LatestProducts { get; set; }
+
+        public List<CategoryViewModel> Categories { get; set; }
     }
 }

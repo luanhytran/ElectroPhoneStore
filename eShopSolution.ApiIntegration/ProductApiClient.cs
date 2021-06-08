@@ -138,6 +138,16 @@ namespace eShopSolution.ApiIntegration
             return data;
         }
 
+        public async Task<PagedResult<ProductViewModel>> GetAllByCategoryPaging(GetPublicProductPagingRequest request)
+        {
+            var data = await GetAsync<PagedResult<ProductViewModel>>(
+                   $"/api/products/paging?pageIndex={request.PageIndex}" +
+                   $"&pageSize={request.PageSize}" +
+                   $"&categoryId={request.CategoryId}");
+
+            return data;
+        }
+
         public async Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request)
         {
             var client = _httpClientFactory.CreateClient();

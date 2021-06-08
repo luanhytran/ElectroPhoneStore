@@ -1,4 +1,5 @@
-﻿using eShopSolution.ViewModels.Common;
+﻿using eShopSolution.Data.Entities;
+using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
@@ -12,7 +13,7 @@ namespace eShopSolution.Application.System.Users
     {
         Task<ApiResult<string>> Authencate(LoginRequest request);
 
-        Task<ApiResult<bool>> Register(RegisterRequest request);
+        Task<ApiResult<string>> Register(RegisterRequest request);
 
         Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request);
 
@@ -27,5 +28,12 @@ namespace eShopSolution.Application.System.Users
         Task<ApiResult<bool>> Delete(Guid id);
 
         Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
+
+        Task<ApiResult<bool>> ChangePassword(ChangePasswordViewModel model);
+
+        Task<ApiResult<bool>> ConfirmEmail(ConfirmEmailViewModel request);
+
+        Task<ApiResult<string>> ForgotPassword(ForgotPasswordViewModel request);
+        Task<ApiResult<bool>> ResetPassword(ResetPasswordViewModel request);
     }
 }

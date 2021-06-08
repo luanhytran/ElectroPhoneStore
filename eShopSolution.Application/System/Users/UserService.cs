@@ -2,9 +2,11 @@
 using eShopSolution.Data.Entities;
 using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +17,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
+
 
 namespace eShopSolution.Application.System.Users
 {
@@ -47,56 +52,89 @@ namespace eShopSolution.Application.System.Users
             if (user == null) return new ApiErrorResult<string>("Tài khoản không tồn tại");
 
             // Trả về một SignInResult, tham số cuối là IsPersistent kiểu bool
-            var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
+            var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, false);
             if (!result.Succeeded)
             {
                 return new ApiErrorResult<string>("Đăng nhập không thành công");
             }
 
             var roles = await _userManager.GetRolesAsync(user);
-
-            // Lưu ý khi claim mà các thông tin bị null sẽ báo lỗi
-            var claims = new[]
+            if (roles.Count == 0)
             {
+                var claims = new[]
+                {  
                 new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
                 new Claim(ClaimTypes.Email,user.Email),
                 new Claim(ClaimTypes.GivenName,user.Name),
-                new Claim(ClaimTypes.Role, string.Join(";",roles)),
+                new Claim(ClaimTypes.Role, "customer"),
                 new Claim(ClaimTypes.Name, request.UserName),
                 new Claim(ClaimTypes.StreetAddress, user?.Address),
                 new Claim(ClaimTypes.MobilePhone, user?.PhoneNumber),
-            };
+                };
+                // Lưu ý khi claim mà các thông tin bị null sẽ báo lỗi
 
-            // Sau khi có được claim thì ta cần mã hóa nó
-            // Tokens key và issuer nằm ở appsettings.json và truy cập được thông qua DI 1 Iconfig
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
+                // Sau khi có được claim thì ta cần mã hóa nó
+                // Tokens key và issuer nằm ở appsettings.json và truy cập được thông qua DI 1 Iconfig
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
 
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            // 1 SecurityToken ( cần cài jwt ) 
-            var token = new JwtSecurityToken(_config["Tokens:Issuer"],
-                _config["Tokens:Issuer"],
-                claims,
-                expires: DateTime.Now.AddHours(3),
-                signingCredentials: creds);
+                // 1 SecurityToken ( cần cài jwt ) 
+                var token = new JwtSecurityToken(_config["Tokens:Issuer"],
+                    _config["Tokens:Issuer"],
+                    claims,
+                    expires: DateTime.Now.AddMonths(1),
+                    signingCredentials: creds);
 
-            return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
+                return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
+            }
+            else
+            {
+                var claims = new[]
+                {
+                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
+                new Claim(ClaimTypes.Email,user.Email),
+                new Claim(ClaimTypes.GivenName,user.Name),
+                new Claim(ClaimTypes.Role, "admin"),
+                new Claim(ClaimTypes.Name, request.UserName),
+                new Claim(ClaimTypes.StreetAddress, user?.Address),
+                new Claim(ClaimTypes.MobilePhone, user?.PhoneNumber),
+                };
+
+                // Lưu ý khi claim mà các thông tin bị null sẽ báo lỗi
+
+
+                // Sau khi có được claim thì ta cần mã hóa nó
+                // Tokens key và issuer nằm ở appsettings.json và truy cập được thông qua DI 1 Iconfig
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
+
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                // 1 SecurityToken ( cần cài jwt ) 
+                var token = new JwtSecurityToken(_config["Tokens:Issuer"],
+                    _config["Tokens:Issuer"],
+                    claims,
+                    expires: DateTime.Now.AddMonths(1),
+                    signingCredentials: creds);
+
+                return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
+            }
         }
 
-        public async Task<ApiResult<bool>> Register(RegisterRequest request)
+        public async Task<ApiResult<string>> Register(RegisterRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
 
             // Kiểm tra tài khoản đã tồn tại chưa
             if (user != null)
             {
-                return new ApiErrorResult<bool>("Tài khoản đã tồn tại");
+                return new ApiErrorResult<string>("Tài khoản đã tồn tại");
             }
 
             // Kiểm tra email đã tồn tại chưa
             if (await _userManager.FindByEmailAsync(request.Email) != null)
             {
-                return new ApiErrorResult<bool>("Email đã tồn tại");
+                return new ApiErrorResult<string>("Email đã tồn tại");
             }
 
             user = new AppUser()
@@ -111,9 +149,11 @@ namespace eShopSolution.Application.System.Users
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
-                return new ApiSuccessResult<bool>();
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                return new ApiSuccessResult<string>(token);
             }
-            return new ApiErrorResult<bool>("Đăng ký không thành công");
+
+            return new ApiErrorResult<string>("Đăng ký không thành công");
         }
 
         public async Task<ApiResult<bool>> Delete(Guid id)
@@ -210,6 +250,35 @@ namespace eShopSolution.Application.System.Users
             return new ApiSuccessResult<UserViewModel>(userVm);
         }
 
+        public async Task<ApiResult<bool>> ConfirmEmail(ConfirmEmailViewModel request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.email);
+            if (user == null)
+                return new ApiErrorResult<bool>($"Không tìm thấy người dùng có email {request.email}");
+            var result = await _userManager.ConfirmEmailAsync(user, request.token);
+            return new ApiSuccessResult<bool>();
+        }
+
+        public async Task<ApiResult<string>> ForgotPassword(ForgotPasswordViewModel request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user != null && await _userManager.IsEmailConfirmedAsync(user))
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                return new ApiSuccessResult<string>(token);
+            }
+            return new ApiErrorResult<string>($"Không thể khôi phục mật khẩu");
+        }
+
+        public async Task<ApiResult<bool>> ResetPassword(ResetPasswordViewModel request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+                return new ApiErrorResult<bool>($"Không tìm thấy người dùng có email {request.Email}");
+            var result = await _userManager.ResetPasswordAsync(user, request.Token, request.Password);
+            return new ApiSuccessResult<bool>();
+        }
+
         // Phương thức tìm kiếm
         public async Task<ApiResult<PagedResult<UserViewModel>>> GetUsersPaging(GetUserPagingRequest request)
         {
@@ -304,6 +373,20 @@ namespace eShopSolution.Application.System.Users
                 return new ApiSuccessResult<bool>();
             }
             return new ApiErrorResult<bool>("Cập nhật không thành công");
+        }
+
+        public async Task<ApiResult<bool>> ChangePassword(ChangePasswordViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                await _signInManager.RefreshSignInAsync(user);
+                return new ApiSuccessResult<bool>();
+            }
+
+            return new ApiErrorResult<bool>("Đổi mật khẩu không thành công");
         }
     }
 }

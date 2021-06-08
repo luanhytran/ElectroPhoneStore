@@ -143,6 +143,11 @@
                         <!-- tab2  -->
                         <div id="tab2" class="tab-pane fade in">
                             <div class="row">
+                                <style>
+                                    #more {
+                                        display: none;
+                                    }
+                                </style>
                                 <div class="col-md-12">
                                     @Html.Raw(Model.Product.Details)
                                 </div>
@@ -469,3 +474,21 @@
     <!-- /container -->
 </div>
 <!-- /Section -->
+
+<script>
+    function myFunction() {
+  var dots = document.getElementById("dots");
+  var moreText = document.getElementById("more");
+  var btnText = document.getElementById("myBtn");
+
+  if (dots.style.display === "none") {
+    dots.style.display = "inline";
+    btnText.innerHTML = "Read more";
+    moreText.style.display = "none";
+  } else {
+    dots.style.display = "none";
+    btnText.innerHTML = "Read less";
+    moreText.style.display = "inline";
+  }
+}
+</script>

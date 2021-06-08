@@ -31,6 +31,14 @@ namespace eShopSolutionBackendApi.Controllers
             return Ok(product);
         }
 
+        [HttpGet("pagingByCategory")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllByCategoryPaging([FromQuery] GetPublicProductPagingRequest request)
+        {
+            var product = await _productService.GetAllByCategoryId(request);
+            return Ok(product);
+        }
+
         [HttpGet("{productId}")]
         public async Task<IActionResult> GetById(int productId)
         {

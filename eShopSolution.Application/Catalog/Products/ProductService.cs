@@ -130,7 +130,7 @@ namespace eShopSolution.Application.Catalog.Products
             //1. Select join
             var query = from p in _context.Products
                         join c in _context.Categories on p.CategoryId equals c.Id
-                        select new { p};
+                        select new { p };
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
                 query = query.Where(x => x.p.Name.Contains(request.Keyword));

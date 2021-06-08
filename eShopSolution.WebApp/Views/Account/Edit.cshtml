@@ -80,12 +80,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="UserName" class="control-label"></label>
-                                    <input asp-for="UserName" class="form-control" />
+                                    <input asp-for="UserName" class="form-control" readonly/>
                                     <span asp-validation-for="UserName" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="Email" class="control-label"></label>
-                                    <input asp-for="Email" class="form-control" />
+                                    <input asp-for="Email" class="form-control" readonly/>
                                     <span asp-validation-for="Email" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
@@ -99,7 +99,7 @@
                                     <span asp-validation-for="Address" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" value="Lưu" class="btn btn-success" />
+                                    <input type="submit" value="Lưu" class="btn btn-primary" />
                                 </div>
                             </form>
                         </div>
