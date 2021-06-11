@@ -86,14 +86,19 @@ namespace eShopSolution.WebApp.Controllers
             if (result)
             {
                 // mail admin when have new email
-                var message = await MailUtils.MailUtils.SendGmail("hytranluan@gmail.com", "hytranluan@gmail.com",
-                                                                  "ĐƠN HÀNG MỚI", $"Đơn đặt hàng mới từ khách hàng có số điện thoại là {checkoutRequest.PhoneNumber} và email là {checkoutRequest.Email} cần duyệt",
-                                                                  "your_email_here", "your_password_here");
+                //var message = await MailUtils.MailUtils.SendGmail("hytranluan@gmail.com", "hytranluan@gmail.com",
+                //                                                  "ĐƠN HÀNG MỚI", $"Đơn đặt hàng mới từ khách hàng có số điện thoại là {checkoutRequest.PhoneNumber} và email là {checkoutRequest.Email} cần duyệt",
+                //                                                  "your_email_here", "your_password_here");
+                var email1 = new EmailService.EmailService();
+                email1.Send("hytranluan@gmail.com", "hytranluan@gmail.com", "ĐƠN HÀNG MỚI", $"Đơn đặt hàng mới từ khách hàng có số điện thoại là {checkoutRequest.PhoneNumber} và email là {checkoutRequest.Email} cần duyệt");
 
                 // mail client when placed order successfully
-                var clientMessage = await MailUtils.MailUtils.SendGmail("hytranluan@gmail.com", checkoutRequest.Email,
-                                                                 "ĐẶT HÀNG THÀNH CÔNG", $"Quý khách đã đặt hàng thành công ! Electro xin cảm ơn quý khách hàng.",
-                                                                 "your_email_here", "your_password_here");
+                //var clientMessage = await MailUtils.MailUtils.SendGmail("hytranluan@gmail.com", checkoutRequest.Email,
+                //                                                 "ĐẶT HÀNG THÀNH CÔNG", $"Quý khách đã đặt hàng thành công ! Electro xin cảm ơn quý khách hàng.",
+                //                                                 "your_email_here", "your_password_here");
+                var email2 = new EmailService.EmailService();
+                email2.Send("hytranluan@gmail.com", checkoutRequest.Email, "ĐẶT HÀNG THÀNH CÔNG", $"Quý khách đã đặt hàng thành công ! Electro xin cảm ơn quý khách hàng.");
+
                 var session = HttpContext.Session.GetString(SystemConstants.CartSession);
                 var currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
                 currentCart.Clear();
