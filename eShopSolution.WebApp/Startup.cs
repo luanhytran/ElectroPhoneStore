@@ -1,4 +1,3 @@
-using EmailService;
 using eShopSolution.ApiIntegration;
 using eShopSolution.ViewModels.System.Users;
 using eShopSolution.WebApp.LocalizationResources;

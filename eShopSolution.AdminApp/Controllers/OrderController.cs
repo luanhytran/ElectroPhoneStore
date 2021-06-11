@@ -38,6 +38,15 @@ namespace eShopSolution.AdminApp.Controllers
             return View(data);
         }
 
+        public async Task<IActionResult> Detail(string name, int orderId)
+        {
+            var order = await _orderApiClient.GetOrderById(orderId);
+
+            order.Name = name;
+
+            return View(order);
+        }
+
         [HttpGet]
         public async Task<IActionResult> UpdateOrderStatus(int orderId)
         {

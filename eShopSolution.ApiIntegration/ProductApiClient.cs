@@ -133,7 +133,7 @@ namespace eShopSolution.ApiIntegration
             var data = await GetAsync<PagedResult<ProductViewModel>>(
                 $"/api/products/paging?pageIndex={request.PageIndex}" +
                 $"&pageSize={request.PageSize}" +
-                $"&keyword={request.Keyword}&categoryId={request.CategoryId}");
+                $"&keyword={request.Keyword}&categoryId={request.CategoryId}&sortOption={request.SortOption}");
 
             return data;
         }

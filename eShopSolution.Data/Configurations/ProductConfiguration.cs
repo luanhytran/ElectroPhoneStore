@@ -15,9 +15,9 @@ namespace eShopSolution.Data.Configurations
 
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Price).IsRequired();
+            builder.Property(x => x.Price).IsRequired().HasMaxLength(100000000);
 
-            builder.Property(x => x.Stock).IsRequired().HasDefaultValue(0);
+            builder.Property(x => x.Stock).IsRequired().HasDefaultValue(0).HasMaxLength(100);
 
             builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
 

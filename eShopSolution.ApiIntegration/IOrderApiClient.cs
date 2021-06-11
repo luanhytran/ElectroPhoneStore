@@ -16,5 +16,6 @@ namespace eShopSolution.ApiIntegration
         Task<bool> UpdateOrderStatus(int id);
         Task<bool> CancelOrderStatus(int id);
         Task<OrderByUserViewModel> GetOrderByUser(string id);
+        Task<OrderViewModel> GetOrderById(int orderId);
     }
 }

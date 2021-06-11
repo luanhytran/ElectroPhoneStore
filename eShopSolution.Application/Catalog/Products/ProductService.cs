@@ -84,6 +84,7 @@ namespace eShopSolution.Application.Catalog.Products
             product.CategoryId = request.CategoryId;
             product.Description = request.Description;
             product.Details = request.Details;
+            product.Stock = request.Stock;
 
             //Save thumbnail image
             if (request.ThumbnailImage != null)
@@ -138,6 +139,22 @@ namespace eShopSolution.Application.Catalog.Products
             if (request.CategoryId != null && request.CategoryId != 0)
             {
                 query = query.Where(x => x.p.CategoryId == request.CategoryId);
+            }
+
+            if (!string.IsNullOrEmpty(request.SortOption))
+            {
+                switch (request.SortOption)
+                {
+                    case "Tên A-Z":
+                        query = query.OrderBy(x => x.p.Name);
+                        break;
+                    case "Giá thấp đến cao":
+                        query = query.OrderBy(x => x.p.Price);
+                        break;
+                    case "Giá cao đến thấp":
+                        query = query.OrderByDescending(x => x.p.Price);
+                        break;
+                }
             }
 
             //3. Paging
@@ -417,7 +434,6 @@ namespace eShopSolution.Application.Catalog.Products
         //    return new ApiSuccessResult<bool>();
         //}
 
-        #region GetFeaturedProducts
         public async Task<List<ProductViewModel>> GetFeaturedProducts(int take)
         {
             //1. Select join
@@ -442,9 +458,7 @@ namespace eShopSolution.Application.Catalog.Products
 
             return data;
         }
-        #endregion
 
-        #region GetLatestProducts
         public async Task<List<ProductViewModel>> GetLatestProducts(int take)
         {
             //1. Select join
@@ -469,6 +483,6 @@ namespace eShopSolution.Application.Catalog.Products
 
             return data;
         }
-        #endregion
+
     }
 }

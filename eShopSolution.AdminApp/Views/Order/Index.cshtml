@@ -127,7 +127,7 @@
 
                                 </td>
                                 <td class="text-center">
-                                    <button class="btn btn-success">@Html.ActionLink("Xem chi tiết", "Details", new { id = item.Id })</button>
+                                    <button class="btn btn-success">@Html.ActionLink("Xem chi tiết", "Detail", new { orderId = item.Id, name = item.Name  })</button>
                                 </td>
                             </tr>
                         }

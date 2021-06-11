@@ -687,7 +687,7 @@
             <div class="col-md-12">
                 <ul class="breadcrumb-tree">
                     <li><a href="/">Trang chủ</a></li>
-                    @*<li>@Model.Category.Name</li>*@
+                    <li>@Model.Items.Select(x=>x.Category.Name).FirstOrDefault().ToString()</li>
                 </ul>
             </div>
         </div>
@@ -703,21 +703,22 @@
             <div class="col-main col-sm-12 col-xs-12">
                 <div class="shop-inner">
                     <div class="page-title">
-                        @*<strong>@Model.Category.Name</strong>*@
+                        <strong>@Model.Items.Select(x => x.Category.Name).FirstOrDefault().ToString()</strong>
                     </div>
-                    <div class="toolbar column">
-                        <div class="sorter">
-                            <div class="short-by">
-                                <label>Sort By:</label>
-                                <select>
-                                    <option selected="selected">Position</option>
-                                    <option>Name</option>
-                                    <option>Price</option>
-                                    <option>Size</option>
+                    <form asp-action="ViewByCategory" asp-controller="Home" method="get">
+                        <div class="toolbar column">
+                            <div class="sorter">
+                                <label>Sắp xếp:</label>
+                                <select name="sortOrder"  onchange="this.form.submit()">
+                                    <option>Tất cả </option>
+                                    @foreach (var option in ViewBag.SortOption)
+                                    {
+                                        <option>@option</option>
+                                    }
                                 </select>
                             </div>
                         </div>
-                    </div>
+                    </form>
                     @foreach (var product in Model.Items)
                     {
                         var url = $"/{culture}/{_loc["productUrl"]}/{product.Id}";
@@ -737,14 +738,14 @@
                                                 }
                                                 
                                                 <div class="pr-img-area">
-                                                    <a title="Ipsums Dolors Untra" href="single_product.html">
+                                                    <a title="@product.Name" href="@url">
                                                         <figure> <img class="first-img" src="@(Configuration["BaseAddress"] + product.ThumbnailImage)" alt="HTML template"> <img class="hover-img" src="@(Configuration["BaseAddress"] + product.ProductImage)" alt="HTML template"></figure>
                                                     </a>
                                                 </div>
                                             </div>
                                             <div class="item-info">
                                                 <div class="info-inner">
-                                                    <div class="item-title"> <a title="Ipsums Dolors Untra" href="single_product.html">@product.Name </a> </div>
+                                                    <div class="item-title"> <a title="@product.Name" href="@url">@product.Name </a> </div>
                                                     <div class="item-content">
                                                         <div class="item-price">
                                                             <div class="price-box"> <span class="regular-price"> <span class="price">@product.Price.ToString("N0") <span>&#8363;</span></span> </span> </div>
@@ -756,7 +757,7 @@
                                                         else
                                                         {
                                                             <div class="pro-action">
-                                                                <button type="button" class="add-to-cart add-to-cart-btn"><span> Thêm vào giỏ hàng</span> </button>
+                                                                <button type="button" class="add-to-cart add-to-cart-btn" data-id="@product.Id"><span> Thêm vào giỏ hàng</span> </button>
                                                             </div>
                                                         }
                                                     </div>

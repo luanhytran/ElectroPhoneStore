@@ -84,6 +84,16 @@ namespace eShopSolution.WebApp.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> OrderDetail(string name, int orderId)
+        {
+            var order = await _orderApiClient.GetOrderById(orderId);
+
+            order.Name = name;
+
+            return View(order);
+        }
+
+        [HttpGet]
         public IActionResult ChangePassword()
         {
             return View();
@@ -110,14 +120,15 @@ namespace eShopSolution.WebApp.Controllers
         public async Task<IActionResult> CancelOrderStatus(int orderId)
         {
             var result = await _orderApiClient.CancelOrderStatus(orderId);
+
             if (result)
             {
-                TempData["result"] = "Huỷ đơn hàng thành công";
+                TempData["SuccessMsg"] = "Huỷ đơn hàng thành công";
                 return RedirectToAction("Index", "Account");
             }
 
             //ModelState.AddModelError("", "Huỷ đơn hàng thành công");
-            TempData["resultFail"] = "Huỷ đơn hàng không thành công";
+            TempData["FailMsg"] = "Huỷ đơn hàng không thành công";
             return RedirectToAction("Index", "Account");
         }
     }

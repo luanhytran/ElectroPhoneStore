@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eShopSolution.Data.EF;
 
 namespace eShopSolution.Data.Migrations
 {
     [DbContext(typeof(EShopDbContext))]
-    partial class EShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210608222846_Order_Ship_Information_Column")]
+    partial class Order_Ship_Information_Column
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,7 +164,7 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "6aecadf4-ca0e-458b-91a5-b430f361d83e",
+                            ConcurrencyStamp = "47dbea4e-76a7-4de6-9847-320fbebec25f",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -235,14 +237,14 @@ namespace eShopSolution.Data.Migrations
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
                             Address = "123 An Dương Vương P.8 Q.5",
-                            ConcurrencyStamp = "817c936c-4367-41f1-9276-a820bb62be67",
+                            ConcurrencyStamp = "9078890b-3050-4040-9328-9db6c17570cc",
                             Email = "hytranluan@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Name = "Luan Hy",
                             NormalizedEmail = "HYTRANLUAN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIBCTVmaPePYVAX4uZjHmlUyFQ9/Z0V2hG3tOJGzLlaalzxvSyOXqZCfbGSmN0j7Jg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJWhBjWeBa8PdNTXRbRvEggjf3T3KhtHtX8SBv3j8EXxZVQN0oWzNIlfjOa8kfI8Pw==",
                             PhoneNumber = "0765006381",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
@@ -349,6 +351,9 @@ namespace eShopSolution.Data.Migrations
                     b.Property<string>("ShipAddress")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ShipEmail")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ShipName")
                         .HasColumnType("nvarchar(max)");
 
@@ -439,7 +444,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            DateCreated = new DateTime(2021, 6, 9, 5, 51, 22, 243, DateTimeKind.Local).AddTicks(3622),
+                            DateCreated = new DateTime(2021, 6, 9, 5, 28, 45, 385, DateTimeKind.Local).AddTicks(6597),
                             Description = "",
                             Details = "",
                             Name = "iPhone 12 Pro",
@@ -450,7 +455,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 2,
                             CategoryId = 2,
-                            DateCreated = new DateTime(2021, 6, 9, 5, 51, 22, 244, DateTimeKind.Local).AddTicks(1051),
+                            DateCreated = new DateTime(2021, 6, 9, 5, 28, 45, 386, DateTimeKind.Local).AddTicks(4256),
                             Description = "",
                             Details = "",
                             Name = "Samsung Galaxy S21+",
@@ -461,7 +466,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 3,
                             CategoryId = 3,
-                            DateCreated = new DateTime(2021, 6, 9, 5, 51, 22, 244, DateTimeKind.Local).AddTicks(1078),
+                            DateCreated = new DateTime(2021, 6, 9, 5, 28, 45, 386, DateTimeKind.Local).AddTicks(4285),
                             Description = "",
                             Details = "",
                             Name = "Oppo Reno 5",
@@ -472,7 +477,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 4,
                             CategoryId = 4,
-                            DateCreated = new DateTime(2021, 6, 9, 5, 51, 22, 244, DateTimeKind.Local).AddTicks(1081),
+                            DateCreated = new DateTime(2021, 6, 9, 5, 28, 45, 386, DateTimeKind.Local).AddTicks(4288),
                             Description = "",
                             Details = "",
                             Name = "Vivo V21 5G",
@@ -483,7 +488,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 5,
                             CategoryId = 5,
-                            DateCreated = new DateTime(2021, 6, 9, 5, 51, 22, 244, DateTimeKind.Local).AddTicks(1083),
+                            DateCreated = new DateTime(2021, 6, 9, 5, 28, 45, 386, DateTimeKind.Local).AddTicks(4290),
                             Description = "",
                             Details = "",
                             Name = "Xiaomi Redmi Note 10",
@@ -494,7 +499,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 6,
                             CategoryId = 6,
-                            DateCreated = new DateTime(2021, 6, 9, 5, 51, 22, 244, DateTimeKind.Local).AddTicks(1085),
+                            DateCreated = new DateTime(2021, 6, 9, 5, 28, 45, 386, DateTimeKind.Local).AddTicks(4292),
                             Description = "",
                             Details = "",
                             Name = "Nokia 5.4",

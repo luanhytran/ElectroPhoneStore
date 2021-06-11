@@ -48,7 +48,10 @@ namespace eShopSolution.Application.Catalog.Orders
                 UserId = request?.UserID,
                 OrderDate = DateTime.Now,
                 OrderDetails = orderDetails,
-                Status = (Data.Enums.OrderStatus) 1
+                Status = (Data.Enums.OrderStatus) 1,
+                ShipName = request.Name,
+                ShipAddress = request.Address,
+                ShipPhoneNumber = request.PhoneNumber
             };
 
             _context.Orders.Add(order);
@@ -108,7 +111,10 @@ namespace eShopSolution.Application.Catalog.Orders
                     PhoneNumber = x.c.PhoneNumber,
                     Email = x.c.Email,
                     OrderDate = x.o.OrderDate,
-                    Status = (OrderStatus)x.o.Status
+                    Status = (OrderStatus)x.o.Status,
+                    ShipName = x.o.ShipName,
+                    ShipAddress = x.o.ShipAddress,
+                    ShipPhoneNumber = x.o.ShipPhoneNumber,
                 }).ToListAsync();
 
             var order = data.ToList();
@@ -149,7 +155,11 @@ namespace eShopSolution.Application.Catalog.Orders
                      PhoneNumber = x.c.PhoneNumber,
                      Email = x.c.Email,
                      OrderDate = x.o.OrderDate,
-                     Status = (OrderStatus)x.o.Status
+                     Status = (OrderStatus)x.o.Status,
+                     ShipName = x.o.ShipName,
+                     ShipAddress = x.o.ShipAddress,
+                     ShipPhoneNumber = x.o.ShipPhoneNumber,
+
                  }).ToListAsync();
 
             var orderList = data.ToList();
@@ -178,10 +188,34 @@ namespace eShopSolution.Application.Catalog.Orders
                 Address = address,
                 PhoneNumber = phoneNumber,
                 Email = email,
-                Orders = orderList
+                Orders = orderList,
             };
 
             return orderByUserVM;
+        }
+
+        public OrderViewModel GetOrderById(int orderId)
+        {
+            var query = from o in _context.Orders
+                        select new { o };
+
+            var orders = query.ToList();
+
+            var order = orders.FirstOrDefault(x => x.o.Id == orderId);
+
+            var oderVM = new OrderViewModel()
+            {
+                Id = order.o.Id,
+                UserID = order.o.UserId,
+                OrderDate = order.o.OrderDate,
+                Status = (OrderStatus)order.o.Status,
+                ShipName = order.o.ShipName,
+                ShipAddress = order.o.ShipAddress,
+                ShipPhoneNumber = order.o.ShipPhoneNumber,
+                Price = GetOrderPrice(GetOrderDetails(order.o.Id))
+            };
+
+            return oderVM;
         }
 
         public List<OrderDetailViewModel> GetOrderDetails(int orderId)

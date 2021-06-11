@@ -15,5 +15,7 @@ namespace eShopSolution.Application.Catalog.Orders
         Task<ApiResult<bool>> UpdateOrderStatus(int orderId);
         Task<ApiResult<bool>> CancelOrderStatus(int orderId);
         Task<OrderByUserViewModel> GetOrderByUser(string userId);
+
+        OrderViewModel GetOrderById(int orderId);
     }
 }

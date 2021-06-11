@@ -153,6 +153,7 @@ namespace eShopSolution.Data.Extentions
                 UserName = "admin",
                 NormalizedUserName = "ADMIN",
                 Email = "hytranluan@gmail.com",
+                PhoneNumber = "0765006381",
                 Address = "123 An Dương Vương P.8 Q.5",
                 NormalizedEmail = "HYTRANLUAN@GMAIL.COM",
                 EmailConfirmed = true,

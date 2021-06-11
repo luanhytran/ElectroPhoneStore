@@ -22,6 +22,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace eShopSolution.WebApp.Controllers
 {
@@ -101,16 +102,27 @@ namespace eShopSolution.WebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ViewByCategory(int cateId, int pageIndex = 1, int pageSize = 8)
+        public async Task<IActionResult> ViewByCategory(string sortOrder, int cateId, int pageIndex = 1, int pageSize = 8)
         {
             var request = new GetManageProductPagingRequest()
             {
                 PageIndex = pageIndex,
                 PageSize = pageSize,
-                CategoryId = cateId
+                CategoryId = cateId,
+                SortOption = sortOrder
             };
 
             var data = await _productApiClient.GetPagings(request);
+
+            List<string> sortOption = new List<string>()
+            {
+                "Tên A-Z",
+                "Giá thấp đến cao",
+                "Giá cao đến thấp"
+            };
+
+            ViewBag.SortOption = sortOption;
+            ViewBag.CurrentSortOrder = sortOrder;
 
             foreach (var item in data.Items)
             {

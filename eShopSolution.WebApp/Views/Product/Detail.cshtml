@@ -92,23 +92,21 @@
                         }
 
                     </div>
-
-                    <div class="add-to-cart" style="margin-top:10px">
-                        <div class="qty-label">
-                            Qty
-                            <div class="input-number">
-                                <input type="number">
-                                <span class="qty-up">+</span>
-                                <span class="qty-down">-</span>
-                            </div>
+                    
+                    @if (Model.Product.Stock == 0) 
+                    {
+                    }
+                    else
+                    {
+                        <div class="add-to-cart" style="margin-top:10px">
+                            <button class="add-to-cart-btn" data-id="@Model.Product.Id"><i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng</button>
                         </div>
-                        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng</button>
-                    </div>
-
-
+                    }
                     <ul class="product-links">
                         <li>Danh mục:</li>
-                        @*<li><a href="#">@Model.Product.Category.Name</a></li>*@
+                        <li>
+                            @Html.ActionLink(Model.Category.Name, "ViewByCategory", "Home", new { cateId = Model.Category.Id })
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -136,6 +134,7 @@
                                         string addedTableFormat = removeLastFigure.Insert(6, " class=\"table table-bordered table-striped\"");
                                     }
                                     @Html.Raw(addedTableFormat)
+                                    @*@Html.Raw(Model.Product.Description)*@
                                 </div>
                             </div>
                         </div>
@@ -351,7 +350,6 @@
                     <h3 class="title">Sản phẩm liên quan</h3>
                 </div>
             </div>
-
             <!-- product -->
             <div class="col-md-3 col-xs-6">
                 <div class="product">
@@ -411,8 +409,6 @@
                 </div>
             </div>
             <!-- /product -->
-
-            <div class="clearfix visible-sm visible-xs"></div>
 
             <!-- product -->
             <div class="col-md-3 col-xs-6">

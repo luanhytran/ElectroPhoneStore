@@ -118,7 +118,7 @@ namespace eShopSolution.WebApp.Controllers
             var confirmationLink = Url.Action(nameof(ConfirmEmail), "Login", new { token, email = user.ResultObj.Email }, Request.Scheme);
             var message = await MailUtils.MailUtils.SendGmail("hytranluan@gmail.com", user.ResultObj.Email,
                                                               "Link xác nhận email", confirmationLink,
-                                                              "your_gmail_here", "your_password_here");
+                                                              "your_email_here", "your_password_here");
             return RedirectToAction(nameof(SuccessRegistration));
         }
 
@@ -179,7 +179,7 @@ namespace eShopSolution.WebApp.Controllers
                                     new { email = request.Email, token = token.ResultObj }, Request.Scheme);
             var message = await MailUtils.MailUtils.SendGmail("hytranluan@gmail.com", request.Email,
                                                         "Link khôi phục mật khẩu", passwordResetLink,
-                                                        "your_gmail_here", "your_password_here");
+                                                        "your_email_here", "your_password_here");
 
             return View("ForgotPasswordConfirmation");
         }

@@ -23,7 +23,6 @@ namespace eShopSolutionBackendApi.Controllers
             _orderService = orderService;
         }
 
-
         [HttpPost("createOrder")]
         [Authorize]
         public IActionResult CreateOrder([FromBody] CheckoutRequest request)
@@ -42,6 +41,14 @@ namespace eShopSolutionBackendApi.Controllers
         public async Task<IActionResult> GetOrderByUser(string id)
         {
             var result = await _orderService.GetOrderByUser(id);
+
+            return Ok(result);
+        }
+
+        [HttpGet("getOrderById/{orderId}")]
+        public IActionResult GetOrderById(int orderId)
+        {
+            var result =  _orderService.GetOrderById(orderId);
 
             return Ok(result);
         }

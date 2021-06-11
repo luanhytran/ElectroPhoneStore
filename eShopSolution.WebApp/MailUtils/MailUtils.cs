@@ -38,6 +38,7 @@ namespace eShopSolution.WebApp.MailUtils
             smtpClient.EnableSsl = true;
             smtpClient.Credentials = new NetworkCredential(_gmail, _password);
 
+
             try
             {
                 await smtpClient.SendMailAsync(message);
