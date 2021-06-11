@@ -30,6 +30,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolution.AdminApp", "e
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolution.ApiIntegration", "eShopSolution.ApiIntegration\eShopSolution.ApiIntegration.csproj", "{C2384DDB-7D76-476B-A13D-439E08BFE4DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService", "EmailService\EmailService.csproj", "{ADA1DDF3-2DAC-4FA6-B101-EFD2E77306E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{C2384DDB-7D76-476B-A13D-439E08BFE4DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2384DDB-7D76-476B-A13D-439E08BFE4DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2384DDB-7D76-476B-A13D-439E08BFE4DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADA1DDF3-2DAC-4FA6-B101-EFD2E77306E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADA1DDF3-2DAC-4FA6-B101-EFD2E77306E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADA1DDF3-2DAC-4FA6-B101-EFD2E77306E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADA1DDF3-2DAC-4FA6-B101-EFD2E77306E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{A5E82F26-7852-44F8-A415-2DD9E87A38CE} = {B0329AB4-5F2B-4637-AD0D-149F723DFEA9}
 		{F41FEE9D-8610-4FEB-8C05-9A0379D45473} = {B0329AB4-5F2B-4637-AD0D-149F723DFEA9}
 		{C2384DDB-7D76-476B-A13D-439E08BFE4DF} = {B0329AB4-5F2B-4637-AD0D-149F723DFEA9}
+		{ADA1DDF3-2DAC-4FA6-B101-EFD2E77306E3} = {B0329AB4-5F2B-4637-AD0D-149F723DFEA9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BFB10B57-1897-4834-83A6-EF4C26DC5F7D}
