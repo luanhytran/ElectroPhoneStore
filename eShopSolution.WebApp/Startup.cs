@@ -99,8 +99,7 @@ namespace eShopSolution.WebApp
             // We need to use MVC so we can use a Razor Configuration Template
             services.AddMvc()
                 // have to let MVC know we have a controller
-                .AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly)
-                .AddNewtonsoftJson();
+                .AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly);
 
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
 
