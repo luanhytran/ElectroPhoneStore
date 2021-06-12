@@ -1,4 +1,4 @@
-﻿using eShopSolution.Data.Enums;
+﻿using eShopSolution.ViewModels.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,6 +18,8 @@ namespace eShopSolution.Data.Entities
         public string ShipAddress { set; get; }
 
         public string ShipPhoneNumber { set; get; }
+
+        public PaymentMethod PaymentMethod { get; set; }
 
         public List<OrderDetail> OrderDetails { get; set; }
 

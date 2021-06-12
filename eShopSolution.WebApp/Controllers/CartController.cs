@@ -14,6 +14,10 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MimeKit;
+using Stripe;
+using System.Net.Http;
+using System.Text;
+using Stripe.Checkout;
 
 namespace eShopSolution.WebApp.Controllers
 {
@@ -22,7 +26,6 @@ namespace eShopSolution.WebApp.Controllers
         private readonly IProductApiClient _productApiClient;
         private readonly IOrderApiClient _orderApiClient;
         private readonly IUserApiClient _userApiClient;
-
 
         public CartController(IProductApiClient productApiClient, IOrderApiClient orderApiClient, IUserApiClient userApiClient)
         {
@@ -33,7 +36,6 @@ namespace eShopSolution.WebApp.Controllers
 
         public IActionResult Index()
         {
-
             return View();
         }
 
@@ -81,6 +83,9 @@ namespace eShopSolution.WebApp.Controllers
                 OrderDetails = orderDetails,
             };
 
+            // Set your secret key. Remember to switch to your live secret key in production.
+            // See your keys here: https://dashboard.stripe.com/apikeys
+
             var result = await _orderApiClient.CreateOrder(checkoutRequest);
 
             if (result)
@@ -113,13 +118,67 @@ namespace eShopSolution.WebApp.Controllers
             return View(request);
         }
 
-        private CheckoutViewModel GetCheckoutViewModel() 
+        [TempData]
+        public string TotalAmount { get; set; }
+
+        [HttpGet]
+        public IActionResult Payment()
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.CartSession);
+
+            List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
+            currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
+
+            ViewBag.cart = currentCart;
+            ViewBag.DollarAmount = currentCart.Sum(x => x.Price * x.Quantity);
+            ViewBag.total = Math.Round(ViewBag.DollarAmount, 2) * 100;
+            ViewBag.total = Convert.ToInt64(ViewBag.total);
+            long total = ViewBag.total;
+            TotalAmount = total.ToString();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Processing(string stripeToken, string stripeEmail)
+        {
+            var optionsCust = new CustomerCreateOptions
+            {
+                Email = stripeEmail,
+                Name = "Robert",
+                Phone = "04-234567"
+            };
+            var serviceCust = new CustomerService();
+            Customer customer = serviceCust.Create(optionsCust);
+            var optionsCharge = new ChargeCreateOptions
+            {
+                /*Amount = HttpContext.Session.GetLong("Amount")*/
+                Amount = Convert.ToInt64(TempData["TotalAmount"]),
+                Currency = "USD",
+                Description = "Buying Flowers",
+                Source = stripeToken,
+                ReceiptEmail = stripeEmail,
+            };
+            var service = new ChargeService();
+            Charge charge = service.Create(optionsCharge);
+            if (charge.Status == "succeeded")
+            {
+                string BalanceTransactionId = charge.BalanceTransactionId;
+                ViewBag.AmountPaid = Convert.ToDecimal(charge.Amount) % 100 / 100 + (charge.Amount) / 100;
+                ViewBag.BalanceTxId = BalanceTransactionId;
+                ViewBag.Customer = customer.Name;
+                //return View();
+            }
+
+            return View("Checkout");
+        }
+
+        private CheckoutViewModel GetCheckoutViewModel()
         {
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
 
             //var claims = ClaimsPrincipal.Current.Identities.First().Claims.ToList();
             var claims = User.Claims.ToList();
-           
+
             var name = claims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName).Value;
             var email = claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
             var address = claims.FirstOrDefault(x => x.Type == ClaimTypes.StreetAddress).Value;
@@ -170,7 +229,7 @@ namespace eShopSolution.WebApp.Controllers
 
             if (currentCart.Any(x => x.ProductId == id))
             {
-                if(currentCart.First(x => x.ProductId == id).Quantity == product.Stock)
+                if (currentCart.First(x => x.ProductId == id).Quantity == product.Stock)
                 {
                     return Ok(currentCart);
                 }
@@ -216,7 +275,8 @@ namespace eShopSolution.WebApp.Controllers
                     {
                         currentCart.Remove(item);
                         break;
-                    }else if(quantity > productStock)
+                    }
+                    else if (quantity > productStock)
                     {
                         return StatusCode(406, "Số lượng mua lớn hơn số lượng trong kho của sán phẩm !");
                     }
@@ -228,7 +288,5 @@ namespace eShopSolution.WebApp.Controllers
 
             return Ok(currentCart);
         }
-
-     
     }
 }
