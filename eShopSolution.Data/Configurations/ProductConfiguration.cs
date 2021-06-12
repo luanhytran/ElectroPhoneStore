@@ -11,9 +11,11 @@ namespace eShopSolution.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.ToTable("Product");
+            builder.ToTable("Products");
 
             builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.Id).UseIdentityColumn();
 
             builder.Property(x => x.Price).IsRequired().HasMaxLength(100000000);
 
@@ -30,7 +32,6 @@ namespace eShopSolution.Data.Configurations
             builder.Property(x => x.ProductImage).HasMaxLength(300).IsRequired(false);
 
             builder.HasOne(x => x.Category).WithMany(x => x.Products).HasForeignKey(x => x.CategoryId);
-
         }
     }
 }

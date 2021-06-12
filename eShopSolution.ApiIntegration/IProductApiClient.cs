@@ -20,12 +20,12 @@ namespace eShopSolution.ApiIntegration
 
         Task<bool> DeleteProduct(int id);
 
-        Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
-
         Task<ProductViewModel> GetById(int id);
 
         Task<List<ProductViewModel>> GetFeaturedProducts(string languageId, int take);
 
         Task<List<ProductViewModel>> GetLatestProducts(string languageId, int take);
+
+        Task<string> AddReview(ProductDetailViewModel model);
     }
 }

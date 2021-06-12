@@ -10,7 +10,7 @@ using System.Text;
 
 namespace eShopSolution.Data.EF
 {
-    public class EShopDbContext : IdentityDbContext<AppUser,AppRole,Guid>
+    public class EShopDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     {
         public EShopDbContext(DbContextOptions options) : base(options)
         {
@@ -36,6 +36,8 @@ namespace eShopSolution.Data.EF
 
             modelBuilder.ApplyConfiguration(new AppRoleConfiguration());
 
+            modelBuilder.ApplyConfiguration(new ReviewConfiguration());
+
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
 
             // những entity có HasKey là do lúc migrate báo lỗi yêu cầu thêm key
@@ -55,13 +57,12 @@ namespace eShopSolution.Data.EF
         }
 
         public DbSet<Product> Products { get; set; }
-
+        public DbSet<Review> Reviews { get; set; }
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<AppConfig> AppConfigs { get; set; }
         public DbSet<Order> Orders { get; set; }
-public DbSet<Language> Languages { get; set; }
+        public DbSet<Language> Languages { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
-
     }
 }
