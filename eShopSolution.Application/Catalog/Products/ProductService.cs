@@ -28,7 +28,7 @@ namespace eShopSolution.Application.Catalog.Products
         private const string USER_CONTENT_FOLDER_NAME = "user-content";
 
         // dependency injection, truyền context vào để thao tác CRUD
-        public ProductService(EShopDbContext context, IStorageService storageService,IConfiguration configuration)
+        public ProductService(EShopDbContext context, IStorageService storageService, IConfiguration configuration)
         {
             _context = context;
             _storageService = storageService;
@@ -78,7 +78,7 @@ namespace eShopSolution.Application.Catalog.Products
         public async Task<int> Update(ProductUpdateRequest request)
         {
             var product = await _context.Products.FindAsync(request.Id);
-            if (product == null ) throw new EShopException($"Không thể tìm sản phẩm có ID: {request.Id} ");
+            if (product == null) throw new EShopException($"Không thể tìm sản phẩm có ID: {request.Id} ");
 
             product.Name = request.Name;
             product.CategoryId = request.CategoryId;
@@ -126,6 +126,21 @@ namespace eShopSolution.Application.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
+        public async Task<int> AddReview(ProductDetailViewModel model)
+        {
+            Review review = new Review()
+            {
+                ProductId = model.ProductId,
+                Comments = model.Review,
+                Rating = model.Rating,
+                PublishedDate = DateTime.Now
+            };
+
+            _context.Reviews.Add(review);
+            await _context.SaveChangesAsync();
+            return model.ProductId;
+        }
+
         public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request)
         {
             //1. Select join
@@ -148,9 +163,11 @@ namespace eShopSolution.Application.Catalog.Products
                     case "Tên A-Z":
                         query = query.OrderBy(x => x.p.Name);
                         break;
+
                     case "Giá thấp đến cao":
                         query = query.OrderBy(x => x.p.Price);
                         break;
+
                     case "Giá cao đến thấp":
                         query = query.OrderByDescending(x => x.p.Price);
                         break;
@@ -196,18 +213,32 @@ namespace eShopSolution.Application.Catalog.Products
 
         public async Task<ProductViewModel> GetById(int productId)
         {
-            var product = await _context.Products.FindAsync(productId);
-
             // Lấy danh mục của sản phẩm
             var categories = await (from c in _context.Categories
                                     join p in _context.Products on c.Id equals p.CategoryId
                                     select p.Name).ToListAsync();
 
-            //var category = new CategoryViewModel()
-            //{
-            //    Id = product.CategoryId,
-            //    Name = product.Category.Name,
-            //};
+            var product = await _context.Products.FindAsync(productId);
+
+            // Lấy danh sách review
+            var reviews = _context.Reviews.Where(x => x.ProductId.Equals(productId)).ToList();
+
+            // Lấy danh sách star rating
+            //var ratings = _context.Reviews.Where(d => d.ProductId.Equals(productId)).ToList();
+
+            var listOfReviews = new List<ReviewViewModel>();
+            foreach (var review in reviews)
+            {
+                listOfReviews.Add(new ReviewViewModel()
+                {
+                    Id = review.Id,
+                    UserId = review.UserId,
+                    ProductId = review.ProductId,
+                    Rating = review.Rating,
+                    Comments = review.Comments,
+                    PublishedDate = review.PublishedDate
+                });
+            }
 
             var productViewModel = new ProductViewModel()
             {
@@ -220,11 +251,11 @@ namespace eShopSolution.Application.Catalog.Products
                 Price = product.Price,
                 Stock = product.Stock,
                 ThumbnailImage = product.Thumbnail != null ? product.Thumbnail : "no-image.jpg",
-                ProductImage = product.ProductImage != null ? product.ProductImage : "no-image.jpg"
+                ProductImage = product.ProductImage != null ? product.ProductImage : "no-image.jpg",
+                Reviews = listOfReviews
             };
             return productViewModel;
         }
-
 
         // giảm số lượng sản phẩm trong kho khi khách hàng tăng sl sp
         public async Task<bool> DecreaseStock(int productId, int quantity)
@@ -236,141 +267,12 @@ namespace eShopSolution.Application.Catalog.Products
             return await _context.SaveChangesAsync() > 0;
         }
 
-        #region AddViewCount
-        //public async Task AddViewCount(int productId)
-        //{
-        //    var product = await _context.Products.FindAsync(productId);
-        //    product.ViewCount += 1;
-        //    await _context.SaveChangesAsync();
-        //}
-        #endregion
-
-        #region UpdatePrice
-        //public async Task<bool> UpdatePrice(int productId, decimal newPrice)
-        //{
-        //    var product = await _context.Products.FindAsync(productId);
-
-        //    if (product == null) throw new EShopException($"Cannot find product with id: {productId} ");
-        //    product.Price = newPrice;
-        //    return await _context.SaveChangesAsync() > 0;
-        //}
-
-
-        #endregion
-
-        #region AddImage
-        //public async Task<int> AddImage(int productId, ProductImageCreateRequest request)
-        //{
-        //    var productImage = new ProductImage()
-        //    {
-        //        Caption = request.Caption,
-        //        DateCreated = DateTime.Now,
-        //        IsDefault = request.IsDefault,
-        //        ProductId = productId,
-        //        SortOrder = request.SortOrder
-        //    };
-
-        //    if (request.ImageFile != null)
-        //    {
-        //        productImage.ImagePath = await this.SaveFile(request.ImageFile);
-        //        productImage.FileSize = request.ImageFile.Length;
-        //    }
-
-        //    _context.ProductImages.Add(productImage);
-
-        //    await _context.SaveChangesAsync();
-
-        //    return productImage.Id;
-        //}
-        #endregion
-
-        #region UpdateImage
-        //public async Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request)
-        //{
-        //    var productImage = await _context.ProductImages.FindAsync(imageId);
-        //    if (productImage == null)
-        //    {
-        //        throw new EShopException($"Cannot find an image with id {imageId}");
-        //    }
-
-        //    if (request.ImageFile != null)
-        //    {
-        //        productImage.ImagePath = await this.SaveFile(request.ImageFile);
-        //        productImage.FileSize = request.ImageFile.Length;
-        //    }
-
-        //    _context.ProductImages.Update(productImage);
-
-        //    // trả về số bản ghi affected
-        //    return await _context.SaveChangesAsync();
-        //}
-        #endregion
-
-        #region RemoveImage
-        //public async Task<int> RemoveImage(int imageId)
-        //{
-        //    var productImage = await _context.ProductImages.FindAsync(imageId);
-
-        //    if (productImage == null)
-        //    {
-        //        throw new EShopException($"Cannot find an image with id {imageId}");
-        //    }
-
-        //    _context.ProductImages.Remove(productImage);
-        //    return await _context.SaveChangesAsync();
-        //}
-        #endregion
-
-        #region GetListImages
-        //public async Task<List<ProductImageViewModel>> GetListImages(int productId)
-        //{
-        //    return await _context.ProductImages.Where(x => x.ProductId == productId)
-        //        .Select(i => new ProductImageViewModel()
-        //        {
-        //            Caption = i.Caption,
-        //            DateCreated = i.DateCreated,
-        //            FileSize = i.FileSize,
-        //            Id = i.Id,
-        //            ImagePath = i.ImagePath,
-        //            IsDefault = i.IsDefault,
-        //            ProductId = i.ProductId,
-        //            SortOrder = i.SortOrder
-        //        }).ToListAsync();
-        //}
-        #endregion
-
-        #region GetImageById
-        //public async Task<ProductImageViewModel> GetImageById(int imageId)
-        //{
-        //    var image = await _context.ProductImages.FindAsync(imageId);
-
-        //    if (image == null)
-        //    {
-        //        throw new EShopException($"Cannot find an image with id {imageId}");
-        //    }
-
-        //    var viewModel = new ProductImageViewModel()
-        //    {
-        //        Caption = image.Caption,
-        //        DateCreated = image.DateCreated,
-        //        FileSize = image.FileSize,
-        //        Id = image.Id,
-        //        ImagePath = image.ImagePath,
-        //        IsDefault = image.IsDefault,
-        //        ProductId = image.ProductId,
-        //        SortOrder = image.SortOrder
-        //    };
-
-        //    return viewModel;
-        //}
-        #endregion
-
         public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request)
         {
             //1. Select join
             var query = from p in _context.Products
                         join c in _context.Categories on p.CategoryId equals c.Id
-                        select new { p};
+                        select new { p };
             //2. filter
             if (request.CategoryId.HasValue && request.CategoryId.Value > 0)
             {
@@ -405,40 +307,11 @@ namespace eShopSolution.Application.Catalog.Products
             return pagedResult;
         }
 
-        //public async Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request)
-        //{
-        //    var user = await _context.Products.FindAsync(id);
-        //    if (user == null)
-        //    {
-        //        return new ApiErrorResult<bool>($"Sản phẩm với id {id} không tồn tại");
-        //    }
-        //    foreach (var category in request.Categories)
-        //    {
-        //        var productInCategory = await _context.ProductInCategories
-        //            .FirstOrDefaultAsync(x => x.CategoryId == int.Parse(category.Id)
-        //            && x.ProductId == id);
-        //        if (productInCategory != null && category.Selected == false)
-        //        {
-        //            _context.ProductInCategories.Remove(productInCategory);
-        //        }
-        //        else if (productInCategory == null && category.Selected)
-        //        {
-        //            await _context.ProductInCategories.AddAsync(new ProductInCategory()
-        //            {
-        //                CategoryId = int.Parse(category.Id),
-        //                ProductId = id
-        //            });
-        //        }
-        //    }
-        //    await _context.SaveChangesAsync();
-        //    return new ApiSuccessResult<bool>();
-        //}
-
         public async Task<List<ProductViewModel>> GetFeaturedProducts(int take)
         {
             //1. Select join
             var query = from p in _context.Products
-                        join c in _context.Categories on p.CategoryId equals c.Id 
+                        join c in _context.Categories on p.CategoryId equals c.Id
                         select new { p };
 
             var data = await query.OrderByDescending(x => x.p.DateCreated).Take(take)
@@ -463,7 +336,7 @@ namespace eShopSolution.Application.Catalog.Products
         {
             //1. Select join
             var query = from p in _context.Products
-                        join c in _context.Categories on p.CategoryId equals c.Id 
+                        join c in _context.Categories on p.CategoryId equals c.Id
                         select new { p };
 
             var data = await query.OrderByDescending(x => x.p.DateCreated).Take(take)
@@ -483,6 +356,5 @@ namespace eShopSolution.Application.Catalog.Products
 
             return data;
         }
-
     }
 }

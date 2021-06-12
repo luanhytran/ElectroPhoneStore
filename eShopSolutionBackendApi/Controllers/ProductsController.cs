@@ -118,5 +118,16 @@ namespace eShopSolutionBackendApi.Controllers
             var products = await _productService.GetLatestProducts(take);
             return Ok(products);
         }
+
+        [HttpPost("addReview")]
+        public async Task<IActionResult> AddReview([FromBody] ProductDetailViewModel model)
+        {
+            var result = await _productService.AddReview(model);
+            if (result == 0)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
+        }
     }
 }

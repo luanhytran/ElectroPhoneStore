@@ -43,7 +43,7 @@ namespace eShopSolution.ApiIntegration
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await client.PostAsync($"/api/orders/createOrder", httpContent);
-            return true;
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<PagedResult<OrderViewModel>> GetPagings(GetManageOrderPagingRequest request)

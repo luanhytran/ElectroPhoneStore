@@ -17,7 +17,9 @@ namespace eShopSolution.ViewModels.Catalog.Products
         public string Details { set; get; }
         public string ThumbnailImage { get; set; }
         public string ProductImage { get; set; }
-
+        public int Rating { get; set; }
+        public string Review { get; set; }
         public CategoryViewModel Category { get; set; }
+        public List<ReviewViewModel> Reviews { get; set; }
     }
 }
