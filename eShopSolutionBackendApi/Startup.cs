@@ -22,10 +22,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
+using Stripe.Checkout;
+using Newtonsoft.Json.Serialization;
 
 namespace eShopSolutionBackendApi
 {
@@ -59,7 +64,7 @@ namespace eShopSolutionBackendApi
             //Declare DI
             services.AddTransient<IStorageService, FileStorageService>();
 
-            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IProductService, eShopSolution.Application.Catalog.Products.ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
 
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
@@ -68,8 +73,7 @@ namespace eShopSolutionBackendApi
             services.AddTransient<ILanguageService, LanguageService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IOrderService, OrderService>();
-            
+            services.AddTransient<IOrderService, eShopSolution.Application.Catalog.Orders.OrderService>();
 
             //fluent validator
             // ta có hai cách register validator
@@ -147,6 +151,8 @@ namespace eShopSolutionBackendApi
                     IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
                 };
             });
+
+            services.AddMvc().AddNewtonsoftJson();
         }
 
         private void UserService()
