@@ -9,13 +9,13 @@
 
 <p> Ngày nay, công nghệ thông tin đã có những bước phát triển mạnh mẽ trong mọi phương diện nói chung ví dụ như : đời sống, công việc, giải trí, truyền thông, ... Và riêng với bán hàng, so với cách bán truyền thống thì nay doanh nghiệp, cửa hàng nhỏ lẻ nào cũng có một website để quáng bá, bán hàng trực tuyến sản phẩm và tương tác với người dùng. Nắm bắt được nhu cầu đó, nhóm em quyết định thực hiện đề tài: Xây dựng Website bán điện thoại online dùng công nghệ ASP.NET Core. Khi sử dụng trang web khách hàng sẽ cảm nhận được sự mới mẻ và thuận tiện của Website mang lại . Và website cũng dễ dàng cung cấp thông tin chi tiết sản phẩm giúp khách hàng có thể thanh toán trực tiếp qua thẻ tín dụng hoặc nhận hàng rồi thanh toán.</p>
 
-## 🖋️ERD - Phân tích hệ thống - Thiết kế cơ sở dữ liêu🖋️
-### ✏️ERD✏️
+## 🖋️ERD - Phân tích hệ thống - Thiết kế cơ sở dữ liêu
+### ✏️ERD
 <img src="https://github.com/luanhytran/electro-phone-store/blob/master/image/ERD%20Electro%20Phone%20Store%20CNPM_NC%20(3).jpg" raw="true" />
 
-### ✏️Phân tích hệ thống và Thiết kế cơ sở dữ liệu✏️
+### ✏️Phân tích hệ thống và Thiết kế cơ sở dữ liệu
 
-#### 🛠️Thiết kế cơ sở dữ liệu🛠️
+#### 🛠️Thiết kế cơ sở dữ liệu
 
 - **USERS**  bao gồm: ID, Name, Email, PhoneNumber, Address, UserName, Password
   - Đây là bảng lưu các tài khoản người dùng trong hệ thống khi thuộc về mỗi một khách hàng khi khách hàng đăng ký tài khoản
@@ -109,7 +109,7 @@
   - **Describe** là mô tả khuyến mãi
   - Một Order chỉ có một Coupon nhưng một Coupon có thể thuộc về một hoặc nhiều Order
 
-#### 🛠️Phân tích hệ thống🛠️
+#### 🛠️Phân tích hệ thống
  - Authentication
     - Cho phép bất cứ khách hàng nào cũng có thể đăng ký trở thành thành viên.
     - Cho phép các thành viên khôi phục mật khẩu khi quên mật khẩu.
