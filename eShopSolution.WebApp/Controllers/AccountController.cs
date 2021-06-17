@@ -24,14 +24,16 @@ namespace eShopSolution.WebApp.Controllers
     {
         private readonly IUserApiClient _userApiClient;
         private readonly IOrderApiClient _orderApiClient;
+        private readonly IProductApiClient _productApiClient;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountController(IUserApiClient userApiClient,IOrderApiClient orderApiClient,
+        public AccountController(IUserApiClient userApiClient, IOrderApiClient orderApiClient, IProductApiClient productApiClient,
             IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _userApiClient = userApiClient;
             _orderApiClient = orderApiClient;
+            _productApiClient = productApiClient;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -76,7 +78,12 @@ namespace eShopSolution.WebApp.Controllers
             var result = await _userApiClient.UpdateUser(request.Id, request);
             if (result.IsSuccessed)
             {
-                return View("EditSuccess");
+                var claims = User.Claims.ToList();
+                Guid id = new Guid(claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+                var orders = await _orderApiClient.GetOrderByUser(id.ToString());
+
+                TempData["UpdateAccountSuccess"] = "Cập nhật thông tin cá nhân thành công";
+                return View("Index", orders);
             }
 
             ModelState.AddModelError("", result.Message);
@@ -87,8 +94,15 @@ namespace eShopSolution.WebApp.Controllers
         public async Task<IActionResult> OrderDetail(string name, int orderId)
         {
             var order = await _orderApiClient.GetOrderById(orderId);
-
             order.Name = name;
+
+            foreach (var item in order.OrderDetails)
+            {
+                var product = await _productApiClient.GetById(item.ProductId);
+                item.Name = product.Name;
+                item.Price = product.Price;
+                item.ThumbnailImage = product.ThumbnailImage;
+            }
 
             return View(order);
         }
@@ -109,7 +123,12 @@ namespace eShopSolution.WebApp.Controllers
 
             if (result.IsSuccessed)
             {
-                return View("ChangePasswordConfirmation");
+                var claims = User.Claims.ToList();
+                Guid id = new Guid(claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+                var orders = await _orderApiClient.GetOrderByUser(id.ToString());
+
+                TempData["ChangePasswordSuccess"] = "Cập nhật mật khẩu thành công";
+                return View("Index", orders);
             }
 
             ModelState.AddModelError("", result.Message);
@@ -123,12 +142,12 @@ namespace eShopSolution.WebApp.Controllers
 
             if (result)
             {
-                TempData["SuccessMsg"] = "Huỷ đơn hàng thành công";
+                TempData["CancelOrderSuccess"] = "Huỷ đơn hàng thành công";
                 return RedirectToAction("Index", "Account");
             }
 
             //ModelState.AddModelError("", "Huỷ đơn hàng thành công");
-            TempData["FailMsg"] = "Huỷ đơn hàng không thành công";
+            TempData["CancelOrderFail"] = "Huỷ đơn hàng không thành công";
             return RedirectToAction("Index", "Account");
         }
     }

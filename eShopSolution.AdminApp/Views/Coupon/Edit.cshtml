@@ -1,0 +1,58 @@
+﻿@model eShopSolution.ViewModels.Sales.CouponUpdateRequest
+@{
+
+    ViewData["Title"] = "Cập nhật khuyến mãi";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .validation-summary-valid span {
+        display: none;
+    }
+</style>
+
+<div class="container-fluid">
+    <h1 class="mt-4">Cập nhật khuyến mãi @Model.Code</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Cập nhật khuyến mãi</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <a class="btn btn-success" asp-action="Index" asp-controller="Coupon">Về danh sách</a>
+        </div>
+
+        <div class="card-body">
+            <div class="col-md-8">
+                <form asp-action="Edit" enctype="multipart/form-data" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="Id" type="hidden" name="Id" value="@Model.Id" />
+                    <div class="form-group">
+                        <label asp-for="Code" class="control-label">Mã</label>
+                        <input asp-for="Code" class="form-control" />
+                        <span asp-validation-for="Code" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Count" class="control-label">Số lượng</label>
+                        <input asp-for="Count" class="form-control" />
+                        <span asp-validation-for="Count" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Promotion" class="control-label">Phần trăm giảm</label>
+                        <input asp-for="Promotion" class="form-control" />
+                        <span asp-validation-for="Promotion" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Describe" class="control-label">Mô tả</label>
+                        <textarea id="txt_details" asp-for="Describe" rows="5" class="form-control"></textarea>
+                        <span asp-validation-for="Describe" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Cập nhật" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

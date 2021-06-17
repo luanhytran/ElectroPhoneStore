@@ -1,14 +1,11 @@
-﻿using eShopSolution.ApiIntegration;
-using eShopSolution.Application.Common;
+﻿using eShopSolution.Application.Common;
 using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
-using eShopSolution.Utilities.Constants;
 using eShopSolution.Utilities.Exceptions;
-using eShopSolution.ViewModels.Catalog.Categories;
-using eShopSolution.ViewModels.Catalog.ProductImages;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -23,16 +20,19 @@ namespace eShopSolution.Application.Catalog.Products
     public class ProductService : IProductService
     {
         private readonly EShopDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
         private readonly IStorageService _storageService;
         private readonly IConfiguration _configuration;
         private const string USER_CONTENT_FOLDER_NAME = "user-content";
 
         // dependency injection, truyền context vào để thao tác CRUD
-        public ProductService(EShopDbContext context, IStorageService storageService, IConfiguration configuration)
+        public ProductService(EShopDbContext context, IStorageService storageService, IConfiguration configuration,
+            UserManager<AppUser> userManager)
         {
             _context = context;
             _storageService = storageService;
             _configuration = configuration;
+            _userManager = userManager;
         }
 
         public async Task<int> Create(ProductCreateRequest request)
@@ -128,12 +128,14 @@ namespace eShopSolution.Application.Catalog.Products
 
         public async Task<int> AddReview(ProductDetailViewModel model)
         {
+            Guid userGuid = new Guid(model.UserCommentId.ToString());
             Review review = new Review()
             {
                 ProductId = model.ProductId,
                 Comments = model.Review,
                 Rating = model.Rating,
-                PublishedDate = DateTime.Now
+                PublishedDate = DateTime.Now,
+                UserId = userGuid
             };
 
             _context.Reviews.Add(review);
@@ -229,10 +231,12 @@ namespace eShopSolution.Application.Catalog.Products
             var listOfReviews = new List<ReviewViewModel>();
             foreach (var review in reviews)
             {
+                var user = await _userManager.FindByIdAsync(review.UserId.ToString());
                 listOfReviews.Add(new ReviewViewModel()
                 {
                     Id = review.Id,
                     UserId = review.UserId,
+                    UserName = user.Name,
                     ProductId = review.ProductId,
                     Rating = review.Rating,
                     Comments = review.Comments,

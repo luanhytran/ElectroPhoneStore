@@ -11,15 +11,19 @@ namespace eShopSolution.AdminApp.Controllers
     public class OrderController : BaseController
     {
         private readonly IOrderApiClient _orderApiClient;
-        public OrderController(IOrderApiClient orderApiClient)
+        private readonly IProductApiClient _productApiClient;
+
+        public OrderController(IOrderApiClient orderApiClient, IProductApiClient productApiClient)
         {
             _orderApiClient = orderApiClient;
+            _productApiClient = productApiClient;
         }
 
-        public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
         {
             var request = new GetManageOrderPagingRequest()
             {
+                Keyword = keyword,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
             };
@@ -41,13 +45,20 @@ namespace eShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Detail(string name, int orderId)
         {
             var order = await _orderApiClient.GetOrderById(orderId);
-
             order.Name = name;
+
+            foreach (var item in order.OrderDetails)
+            {
+                var product = await _productApiClient.GetById(item.ProductId);
+                item.Name = product.Name;
+                item.Price = product.Price;
+                item.ThumbnailImage = product.ThumbnailImage;
+            }
 
             return View(order);
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> UpdateOrderStatus(int orderId)
         {
             var result = await _orderApiClient.UpdateOrderStatus(orderId);
@@ -61,13 +72,13 @@ namespace eShopSolution.AdminApp.Controllers
             return RedirectToAction("Index", "Order");
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> CancelOrderStatus(int orderId)
         {
             var result = await _orderApiClient.CancelOrderStatus(orderId);
             if (result)
             {
-                TempData["result"] = "Huỷ đơn hàng thành công";
+                TempData["CancelOrderSuccessful"] = "Huỷ đơn hàng thành công";
                 return RedirectToAction("Index", "Order");
             }
 

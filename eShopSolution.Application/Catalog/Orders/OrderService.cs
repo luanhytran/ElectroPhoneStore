@@ -6,11 +6,9 @@ using eShopSolution.ViewModels.Sales;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using eShopSolution.ViewModels.System.Users;
 
 namespace eShopSolution.Application.Catalog.Orders
 {
@@ -32,8 +30,8 @@ namespace eShopSolution.Application.Catalog.Orders
 
             foreach (var item in request.OrderDetails)
             {
-                var product =  _context.Products.Find(item.ProductId);
-                
+                var product = _context.Products.Find(item.ProductId);
+
                 orderDetails.Add(new OrderDetail()
                 {
                     Product = product,
@@ -43,16 +41,34 @@ namespace eShopSolution.Application.Catalog.Orders
                 product.Stock -= item.Quantity;
             }
 
+            var status = (Data.Enums.OrderStatus)1;
+            var payment_method = "COD";
+
+            if (request.PaymentMethod == PaymentMethod.CreditCard)
+            {
+                payment_method = "Credit Card";
+                status = (Data.Enums.OrderStatus)3;
+            }
+
             var order = new Order()
             {
                 UserId = request?.UserID,
                 OrderDate = DateTime.Now,
                 OrderDetails = orderDetails,
-                Status = (Data.Enums.OrderStatus) 1,
+                Status = status,
                 ShipName = request.Name,
                 ShipAddress = request.Address,
-                ShipPhoneNumber = request.PhoneNumber
+                ShipPhoneNumber = request.PhoneNumber,
+                Total = request.Total,
+                PaymentMethod = payment_method,
             };
+
+            if (request.CouponId != 0)
+            {
+                var coupon = _context.Coupons.FirstOrDefault(x => x.Id == request.CouponId);
+                coupon.Count -= 1;
+                order.CouponId = request.CouponId;
+            }
 
             _context.Orders.Add(order);
             return _context.SaveChanges();
@@ -61,16 +77,18 @@ namespace eShopSolution.Application.Catalog.Orders
         public async Task<ApiResult<bool>> UpdateOrderStatus(int orderId)
         {
             var order = await _context.Orders.FindAsync(orderId);
-            var status = (int) order.Status;
+            var status = (int)order.Status;
 
             switch (status)
             {
                 case 1:
-                    order.Status = (Data.Enums.OrderStatus) 2;
+                    order.Status = (Data.Enums.OrderStatus)2;
                     break;
+
                 case 2:
                     order.Status = (Data.Enums.OrderStatus)3;
                     break;
+
                 case 3:
                     order.Status = (Data.Enums.OrderStatus)4;
                     break;
@@ -84,7 +102,7 @@ namespace eShopSolution.Application.Catalog.Orders
         {
             var order = await _context.Orders.FindAsync(orderId);
 
-            order.Status = (Data.Enums.OrderStatus) 5;
+            order.Status = (Data.Enums.OrderStatus)5;
 
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();
@@ -92,10 +110,15 @@ namespace eShopSolution.Application.Catalog.Orders
 
         public async Task<PagedResult<OrderViewModel>> GetAllPaging(GetManageOrderPagingRequest request)
         {
-            var query = from o in _context.Orders 
+            var query = from o in _context.Orders
                         join c in _userManager.Users on o.UserId equals c.Id
                         select new { o, c };
 
+            if (!string.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(x => x.c.Name.Contains(request.Keyword)
+                 || x.o.ShipPhoneNumber.Contains(request.Keyword));
+            }
 
             //3. Paging
             int totalRow = await query.CountAsync();
@@ -115,12 +138,12 @@ namespace eShopSolution.Application.Catalog.Orders
                     ShipName = x.o.ShipName,
                     ShipAddress = x.o.ShipAddress,
                     ShipPhoneNumber = x.o.ShipPhoneNumber,
+                    Price = x.o.Total
                 }).ToListAsync();
 
             var order = data.ToList();
-            foreach(var item in order)
+            foreach (var item in order)
             {
-                item.Price = GetOrderPrice(GetOrderDetails(item.Id));
                 //item.OrderDetails = GetOrderDetails(item.Id);
             }
 
@@ -159,14 +182,13 @@ namespace eShopSolution.Application.Catalog.Orders
                      ShipName = x.o.ShipName,
                      ShipAddress = x.o.ShipAddress,
                      ShipPhoneNumber = x.o.ShipPhoneNumber,
-
+                     Price = x.o.Total
                  }).ToListAsync();
 
             var orderList = data.ToList();
 
             foreach (var item in orderList)
             {
-                item.Price = GetOrderPrice(GetOrderDetails(item.Id));
                 //item.OrderDetails = GetOrderDetails(item.Id);
             }
 
@@ -212,7 +234,8 @@ namespace eShopSolution.Application.Catalog.Orders
                 ShipName = order.o.ShipName,
                 ShipAddress = order.o.ShipAddress,
                 ShipPhoneNumber = order.o.ShipPhoneNumber,
-                Price = GetOrderPrice(GetOrderDetails(order.o.Id))
+                Price = order.o.Total,
+                OrderDetails = GetOrderDetails(order.o.Id)
             };
 
             return oderVM;
@@ -220,7 +243,7 @@ namespace eShopSolution.Application.Catalog.Orders
 
         public List<OrderDetailViewModel> GetOrderDetails(int orderId)
         {
-            var order = _context.OrderDetails.Where(x=> x.OrderId == orderId);
+            var order = _context.OrderDetails.Where(x => x.OrderId == orderId);
 
             var orderDetails = new List<OrderDetailViewModel>();
 
@@ -242,12 +265,10 @@ namespace eShopSolution.Application.Catalog.Orders
             foreach (var item in orderDetails)
             {
                 var product = _context.Products.Find(item.ProductId);
-                price +=  product.Price * item.Quantity; 
+                price += product.Price * item.Quantity;
             }
 
             return price;
         }
-
-       
     }
 }

@@ -14,11 +14,13 @@ namespace eShopSolution.WebApp.Controllers
     {
         private readonly IProductApiClient _productApiClient;
         private readonly ICategoryApiClient _categoryApiClient;
+        private readonly IUserApiClient _userApiClient;
 
-        public ProductController(IProductApiClient productApiClient, ICategoryApiClient categoryApiClient)
+        public ProductController(IProductApiClient productApiClient, ICategoryApiClient categoryApiClient, IUserApiClient userApiClient)
         {
             _productApiClient = productApiClient;
             _categoryApiClient = categoryApiClient;
+            _userApiClient = userApiClient;
         }
 
         public async Task<IActionResult> Detail(int id)
@@ -52,6 +54,14 @@ namespace eShopSolution.WebApp.Controllers
                 ListOfReviews = reviews
             };
 
+            // get user review name
+            foreach (var review in productDetailViewModel.ListOfReviews)
+            {
+                Guid userId = new Guid(review.UserId.ToString());
+                var user = await _userApiClient.GetById(userId);
+                review.UserName = user.ResultObj.Name;
+            }
+
             return View(productDetailViewModel);
         }
 
@@ -59,7 +69,15 @@ namespace eShopSolution.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddReview(ProductDetailViewModel model)
         {
-            var request = await _productApiClient.AddReview(model);
+            var productDetailVM = new ProductDetailViewModel()
+            {
+                ProductId = model.ProductId,
+                Review = model.Review,
+                Rating = model.Rating,
+                UserCommentId = model.UserCommentId
+            };
+
+            var request = await _productApiClient.AddReview(productDetailVM);
 
             int Id = int.Parse(request);
 

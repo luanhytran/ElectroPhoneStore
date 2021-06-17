@@ -1,4 +1,5 @@
 ﻿using eShopSolution.ApiIntegration;
+using eShopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,9 @@ namespace eShopSolution.WebApp.Controllers.Components
     public class NavigationViewComponent : ViewComponent
     {
         private readonly ICategoryApiClient _categoryApiClient;
-        public NavigationViewComponent(ICategoryApiClient categoryApiClient) {
+
+        public NavigationViewComponent(ICategoryApiClient categoryApiClient)
+        {
             _categoryApiClient = categoryApiClient;
         }
 

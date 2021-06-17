@@ -4,6 +4,7 @@
 }
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @using Microsoft.Extensions.Options
+@using eShopSolution.ViewModels.Utilities.Enums
 @inject IOptions<eShopSolution.WebApp.Data.StripeSettings> Stripe
 @{
     var culture = CultureInfo.CurrentCulture.Name;
@@ -15,7 +16,163 @@
         var cartController = new CartController();
         cartController.initialize();
     </script>
+    <script>
+        $("#txt_name_cod").on("input", function () {
+            $('#txt_name_cc').val($('#txt_name_cod').val())
+        });
+        $("#txt_email_cod").on("input", function () {
+            $('#txt_email_cc').val($('#txt_email_cod').val())
+        });
+        $("#txt_address_cod").on("input", function () {
+            $('#txt_address_cc').val($('#txt_address_cod').val())
+        });
+        $("#txt_phoneNumber_cod").on("input", function () {
+            $('#txt_phoneNumber_cc').val($('#txt_phoneNumber_cod').val())
+        });
+    </script>
 }
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a href="/">Trang chủ</a></li>
+                    <li class="active">Thanh toán</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<section class="main-container col2-right-layout">
+    <div class="main container">
+        <div class="row">
+            <div class="col-main col-sm-12 col-xs-12">
+                <div class="page-title">
+                    <h2>Thanh toán</h2>
+                </div>
+                <div class="page-content checkout-page">
+                    @if (TempData["SuccessMsg"] != null)
+                    {
+                        <div class="alert alert-success">
+                            Cảm ơn bạn đã đặt hàng. Electro sẽ sớm xác nhận đơn đặt hàng của bạn !
+                        </div>
+                    }
+                    else
+                    {
+                        <h4 class="checkout-sep">1. Tóm tắt đơn hàng</h4>
+                        <div class="box-border">
+                            <div class="table-responsive">
+                                <table class="table table-bordered cart_summary" id="tbl_cart">
+                                    <thead>
+                                        <tr>
+                                            <th class="cart_product">Hình ảnh</th>
+                                            <th>Tên sản phẩm</th>
+                                            <th class="text-center">Tình trạng </th>
+                                            <th>Giá</th>
+                                            <th>Số lượng</th>
+                                            <th>Tổng tiền</th>
+                                            <th class="action text-center"><i class="fa fa-trash"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cart_body">
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="2"></td>
+                                            <td colspan="4"><strong>Tổng giá đơn hàng</strong></td>
+                                            <td colspan="2"><strong><span id="lbl_total"></span> <span>&#8363;</span> </strong></td>
+                                        </tr>
+                                        <tr id="discount_amount_row">
+                                            <td colspan="2"></td>
+                                            <td colspan="4"><strong>Số tiền giảm</strong></td>
+                                            <td colspan="2"><strong><span id="lbl_discount_amount"></span> <span>&#8363;</span> </strong></td>
+                                        </tr>
+                                        <tr id="total_discounted_row">
+                                            <td colspan="2"></td>
+                                            <td colspan="4"><strong>Tổng giá đơn hàng đã giảm</strong></td>
+                                            <td colspan="2"><strong><span id="lbl_total_discounted"></span> <span>&#8363;</span> </strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                        <h4 class="checkout-sep">2. Phương thức thanh toán</h4>
+                        <div class="box-border">
+                            <div style="margin: 10px 0px;font-weight:500">
+                                Thanh toán khi nhận hàng
+                            </div>
+                            <div>
+                                Hoặc
+                            </div>
+                            <form asp-action="Processing" asp-controller="Cart" method="post">
+                                <input type="hidden" asp-for="CheckoutModel.PaymentMethod" value="@PaymentMethod.CreditCard" />
+                                <input type="hidden" id="txt_name_cc" asp-for="CheckoutModel.Name" value="@Model.Name">
+                                <input type="hidden" id="txt_address_cc" asp-for="CheckoutModel.Address" value="@Model.Address">
+                                <input type="hidden" id="txt_phoneNumber_cc" asp-for="CheckoutModel.PhoneNumber" value="@Model.PhoneNumber">
+                                <div style="margin: 10px 0px">
+                                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                            data-key="@Stripe.Value.PublishableKey"
+                                            data-amount="@ViewBag.Total"
+                                            data-name="[Deveducate]"
+                                            data-description="Flower payments"
+                                            data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                                            data-locale="en"
+                                            data-zip-code="true">
+                                    </script>
+                                </div>
+                            </form>
+                        </div>
+
+                        <form asp-action="Checkout" asp-controller="Cart" method="post">
+                            <input type="hidden" asp-for="CheckoutModel.PaymentMethod" value="@PaymentMethod.COD" />
+                            <h4 class="checkout-sep">3. Thông tin giao hàng</h4>
+                            <div class="box-border">
+                                <ul>
+                                    <li class="row">
+                                        <div class="col-sm-6">
+                                            <label for="Name" class="required">Tên</label>
+                                            <input class="input form-control" id="txt_name_cod" onchange="$(" input #txt_name_cc").setAttribute('value', $("input #txt_name_cod").val());" type="text" asp-for="CheckoutModel.Name" value="@Model.Name">
+                                        </div>
+                                        <!--/ [col] -->
+                                    </li>
+                                    <!--/ .row -->
+
+                                    <li class="row">
+                                        <div class="col-xs-12">
+                                            <label for="Address" class="required">Địa chỉ</label>
+                                            <input class="input form-control" id="txt_address_cod" type="text" asp-for="CheckoutModel.Address" value="@Model.Address">
+                                        </div>
+                                        <!--/ [col] -->
+                                    </li>
+                                    <!--/ .row -->
+
+                                    <li class="row">
+                                        <div class="col-sm-6">
+                                            <label for="PhoneNumber" class="required">Số điện thoại</label>
+                                            <input class="input form-control" id="txt_phoneNumber_cod" type="text" asp-for="CheckoutModel.PhoneNumber" value="@Model.PhoneNumber">
+                                        </div>
+                                        <!--/ [col] -->
+                                    </li>
+                                    <!--/ .row -->
+                                </ul>
+                            </div>
+                            <button class="button pull-right"><span>Đặt hàng</span></button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 @*style page*@
 <style>
@@ -147,148 +304,3 @@
             border-bottom: 1px solid #e5e5e5;
         }
 </style>
-
-<!-- BREADCRUMB -->
-<div id="breadcrumb" class="section">
-    <!-- container -->
-    <div class="container">
-        <!-- row -->
-        <div class="row">
-            <div class="col-md-12">
-                <ul class="breadcrumb-tree">
-                    <li><a href="/">Trang chủ</a></li>
-                    <li class="active">Thanh toán</li>
-                </ul>
-            </div>
-        </div>
-        <!-- /row -->
-    </div>
-    <!-- /container -->
-</div>
-<!-- /BREADCRUMB -->
-
-<section class="main-container col2-right-layout">
-    <div class="main container">
-        <div class="row">
-            <div class="col-main col-sm-12 col-xs-12">
-                <div class="page-title">
-                    <h2>Thanh toán</h2>
-                </div>
-                <div class="page-content checkout-page">
-                    @if (TempData["SuccessMsg"] != null)
-                    {
-                        <div class="alert alert-success">
-                            Cảm ơn bạn đã đặt hàng. Electro sẽ sớm xác nhận đơn đặt hàng của bạn !
-                        </div>
-                    }
-                    else
-                    {
-                        <form asp-action="Checkout" asp-controller="Cart" method="post">
-                            <h4 class="checkout-sep">1. Thông tin giao hàng</h4>
-                            <div class="box-border">
-                                <ul>
-                                    <li class="row">
-                                        <div class="col-sm-6">
-                                            <label for="Name" class="required">Tên</label>
-                                            <input class="input form-control" type="text" asp-for="CheckoutModel.Name" value="@Model.Name">
-                                        </div>
-                                        <!--/ [col] -->
-
-                                        <div class="col-sm-6">
-                                            <label for="Email" class="required">Email</label>
-                                            <input class="input form-control" type="text" asp-for="CheckoutModel.Email" value="@Model.Email">
-                                        </div>
-                                        <!--/ [col] -->
-                                    </li>
-                                    <!--/ .row -->
-
-                                    <li class="row">
-                                        <div class="col-xs-12">
-                                            <label for="Address" class="required">Địa chỉ</label>
-                                            <input class="input form-control" type="text" asp-for="CheckoutModel.Address" value="@Model.Address">
-                                        </div>
-                                        <!--/ [col] -->
-                                    </li>
-                                    <!--/ .row -->
-
-                                    <li class="row">
-                                        <div class="col-sm-6">
-                                            <label for="PhoneNumber" class="required">Số điện thoại</label>
-                                            <input class="input form-control" type="text" asp-for="CheckoutModel.PhoneNumber" value="@Model.PhoneNumber">
-                                        </div>
-                                        <!--/ [col] -->
-                                    </li>
-                                    <!--/ .row -->
-                                </ul>
-                            </div>
-                            <h4 class="checkout-sep">2. Thông tin thanh toán</h4>
-                            <div class="box-border">
-                                <ul>
-                                    <li>
-                                        <label for="payment_method">
-                                            <input type="radio" checked name="payment_method" id="cod">
-                                            Thanh toán khi nhận hàng
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                                                data-key="@Stripe.Value.PublishableKey"
-                                                data-amount="@ViewBag.Total"
-                                                data-name="[Deveducate]"
-                                                data-description="Flower payments"
-                                                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                                                data-locale="en"
-                                                data-zip-code="true">
-                                        </script>
-                                    </li>
-                                </ul>
-                            </div>
-                            <h4 class="checkout-sep">3. Tóm tắt đơn hàng</h4>
-                            <div class="box-border">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered cart_summary" id="tbl_cart">
-                                        <thead>
-                                            <tr>
-                                                <th class="cart_product">Hình ảnh</th>
-                                                <th>Tên sản phẩm</th>
-                                                <th class="text-center">Tình trạng </th>
-                                                <th>Giá</th>
-                                                <th>Số lượng</th>
-                                                <th>Tổng tiền</th>
-                                                <th class="action text-center"><i class="fa fa-trash"></i></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="cart_body">
-                                            @*@foreach (var item in Model.CartItems)
-                                                {
-                                                    <tr>
-                                                        <td class="cart_product"><a href="#"><img src="@(Configuration["BaseAddress"] + item.Image)" style="width:100px;height:100px" alt="Product"></a></td>
-                                                        <td class="cart_description">
-                                                            <p class="product-name"><a href="#">@item.Name </a></p>
-                                                        </td>
-                                                        <td class="cart_avail"><span class="label label-success">In stock</span></td>
-                                                        <td class="price"><span>@(item.Price.ToString("N0")) <span>&#8363;</span> </span></td>
-                                                        <td class="qty"><input class="form-control input-sm" type="text" value="1"></td>
-                                                        <td class="price"><span>@((item.Price * item.Quantity).ToString("N0")) <span>&#8363;</span></span></td>
-                                                        <td class="action"><a href="#"><i class="fa fa-trash-o"></i></a></td>
-                                                    </tr>
-                                                }*@
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="2" rowspan="2"></td>
-                                                <td colspan="3"><strong>Tổng tiền đơn hàng</strong></td>
-                                                <td colspan="2"><strong><span id="lbl_total"></span> <span>&#8363;</span> </strong></td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                                <button class="button pull-right"><span>Đặt hàng</span></button>
-                            </div>
-                        </form>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-</section>

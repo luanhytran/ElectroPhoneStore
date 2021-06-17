@@ -1,12 +1,12 @@
 ﻿using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.Catalog.Categories;
+using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -67,6 +67,16 @@ namespace eShopSolution.ApiIntegration
         public async Task<bool> DeleteCategory(int id)
         {
             return await Delete($"/api/categories/" + id);
+        }
+
+        public async Task<PagedResult<CategoryViewModel>> GetAllPaging(GetManageProductPagingRequest request)
+        {
+            var data = await GetAsync<PagedResult<CategoryViewModel>>(
+               $"/api/categories/paging?pageIndex={request.PageIndex}" +
+               $"&pageSize={request.PageSize}" +
+               $"&keyword={request.Keyword}&sortOption={request.SortOption}");
+
+            return data;
         }
 
         public async Task<List<CategoryViewModel>> GetAll()
