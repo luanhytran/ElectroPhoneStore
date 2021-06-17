@@ -3,7 +3,7 @@
 @model eShopSolution.ViewModels.Sales.OrderViewModel
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
-    ViewData["Title"] = "Danh sách đơn hàng";
+    ViewData["Title"] = "Chi tiết đơn hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -29,8 +29,9 @@
             <h2>Thông tin người nhận</h2>
             <div class="table-responsive">
                 <table class="table table-bordered">
-                    
-                    <tbody>@*  *@
+
+                    <tbody>
+                        @*  *@
                         <tr>
                             <td class="font-weight-bold">
                                 Tên người đặt
@@ -78,7 +79,7 @@
                             <td>
                                 @{
                                     var status = "";
-                                    var statusEnum = (int) Model.Status;
+                                    var statusEnum = (int)Model.Status;
                                     switch (statusEnum)
                                     {
                                         case 1:
@@ -106,7 +107,7 @@
                         </tr>
                         <tr>
                             <td class="font-weight-bold ">
-                                Giá trị
+                                Giá trị đơn hàng
                             </td>
                             <td>
                                 @Model.Price.ToString("N0")
@@ -115,6 +116,52 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    ID
+                                </th>
+                                <th class="text-center">
+                                    Ảnh đại diện
+                                </th>
+                                <th class="text-center">
+                                    Tên
+                                </th>
+                                <th class="text-center">
+                                    Giá bán
+                                </th>
+                                <th class="text-center">
+                                    Số lượng mua
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderDetails)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        @Html.DisplayFor(item => item.Id)
+                                    </td>
+                                    <td class="text-center">
+                                        <img style="width:100px;height:100px" src="@(Configuration["BaseAddress"] + item.ThumbnailImage)" alt="Alternate Text" />
+                                    </td>
+                                    <td class="text-center">
+                                        @item.Name
+                                    </td>
+
+                                    <td class="text-center">
+                                        @item.Price.ToString("N0") <span>&#8363;</span>
+                                    </td>
+                                    <td class="text-center">
+                                        @item.Quantity
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

@@ -10,7 +10,7 @@
             type: "GET",
             url: "/" + culture + '/Cart/GetListItems',
             success: function (res) {
-                $('#lbl_number_of_items_header').text(res.length);
+                $('#lbl_number_of_items_header').text(res.cartItems.length);
             }
         });
     }
@@ -31,7 +31,14 @@
                     languageId: culture
                 },
                 success: function (res) {
-                    $('#lbl_number_of_items_header').text(res.length);
+                    $('#lbl_number_of_items_header').text(res.cartItems.length);
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Đã thêm vào giỏ hàng',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
                 },
                 error: function (err) {
                     console.log(err);
@@ -43,4 +50,7 @@
 
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+function numberWithoutCommas(x) {
+    return x.toString().replace(/,/g, "");
 }

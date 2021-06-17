@@ -71,37 +71,50 @@
 
     <dd>
         <div class="commentBox">
-            @using (Html.BeginForm("AddReview", "Product", FormMethod.Post, new { onsubmit = "return SubmitComment()" }))
+            @if (!User.Identity.IsAuthenticated)
             {
-                @Html.AntiForgeryToken()
                 <div class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">
-                            Your rating <span style="font-weight:normal;">(1 start is bad, 5 star is good)</span>
-                        </label>
-                        <div class="col-md-7">
-                            <div onmouseout="CRateSelected()">
-                                <span class="starFade" id="Rate1" onclick="CRate(1)" onmouseover="CRateOver(1)" onmouseout="CRateOut(1)"></span>
-                                <span class="starFade" id="Rate2" onclick="CRate(2)" onmouseover="CRateOver(2)" onmouseout="CRateOut(2)"></span>
-                                <span class="starFade" id="Rate3" onclick="CRate(3)" onmouseover="CRateOver(3)" onmouseout="CRateOut(3)"></span>
-                                <span class="starFade" id="Rate4" onclick="CRate(4)" onmouseover="CRateOver(4)" onmouseout="CRateOut(4)"></span>
-                                <span class="starFade" id="Rate5" onclick="CRate(5)" onmouseover="CRateOver(5)" onmouseout="CRateOut(5)"></span>
+                    <a asp-action="Login" asp-controller="Login">Đăng nhập để đánh giá sản phẩm</a>
+                </div>
+            }
+            else
+            {
+                @using (Html.BeginForm("AddReview", "Product", FormMethod.Post, new { onsubmit = "return SubmitComment()" }))
+                {
+                    var claims = User.Claims.ToList();
+                    var userId = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">
+                                Your rating <span style="font-weight:normal;">(1 start is bad, 5 star is good)</span>
+                            </label>
+                            <div class="col-md-7">
+                                <div onmouseout="CRateSelected()">
+                                    <span class="starFade" id="Rate1" onclick="CRate(1)" onmouseover="CRateOver(1)" onmouseout="CRateOut(1)"></span>
+                                    <span class="starFade" id="Rate2" onclick="CRate(2)" onmouseover="CRateOver(2)" onmouseout="CRateOut(2)"></span>
+                                    <span class="starFade" id="Rate3" onclick="CRate(3)" onmouseover="CRateOver(3)" onmouseout="CRateOut(3)"></span>
+                                    <span class="starFade" id="Rate4" onclick="CRate(4)" onmouseover="CRateOver(4)" onmouseout="CRateOut(4)"></span>
+                                    <span class="starFade" id="Rate5" onclick="CRate(5)" onmouseover="CRateOver(5)" onmouseout="CRateOut(5)"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <textarea asp-for="Review" required rows="5" style="width:100%;" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input type="hidden" asp-for="ProductId" value="@Model.Product.Id" />
+                                <input type="hidden" asp-for="UserCommentId" value="@userId" />
+                                <input type="hidden" name="Rating" id="Rating" value="0" />
+                                <input type="submit" id="btnRegister" name="btnRegister" value="Submit Comment" class="btn btn-warning" />
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <textarea asp-for="Review" required rows="5" style="width:100%;" class="form-control"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <input type="hidden" asp-for="ProductId" value="@Model.Product.Id" />
-                            <input type="hidden" name="Rating" id="Rating" value="0" />
-                            <input type="submit" id="btnRegister" name="btnRegister" value="Submit Comment" class="btn btn-warning" />
-                        </div>
-                    </div>
-                </div>
+                }
+
             }
         </div>
     </dd>

@@ -30,7 +30,7 @@ namespace eShopSolution.WebApp.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public LoginController(IUserApiClient userApiClient, IOrderApiClient orderApiClient,
-            IConfiguration configuration, IHttpContextAccessor httpContextAccessor )
+            IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _userApiClient = userApiClient;
             _orderApiClient = orderApiClient;
@@ -41,7 +41,6 @@ namespace eShopSolution.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Login()
         {
-            
             return View();
         }
 
@@ -81,7 +80,6 @@ namespace eShopSolution.WebApp.Controllers
                         userPrincipal,
                         authProperties);
 
-
             return RedirectToAction("Index", "Home");
         }
 
@@ -107,7 +105,7 @@ namespace eShopSolution.WebApp.Controllers
                 return View(registerRequest);
 
             var result = await _userApiClient.RegisterUser(registerRequest);
-          
+
             if (!result.IsSuccessed)
             {
                 ModelState.AddModelError("", "Login failure");
@@ -122,7 +120,7 @@ namespace eShopSolution.WebApp.Controllers
             //                                                  "your_email_here", "your_password_here");
 
             var email = new EmailService.EmailService();
-            email.Send("hytranluan@gmail.com", user.ResultObj.Email, "Link khôi phục mật khẩu", confirmationLink);
+            email.Send("hytranluan@gmail.com", user.ResultObj.Email, "XÁC NHẬN TÀI KHOẢN", confirmationLink);
             return RedirectToAction(nameof(SuccessRegistration));
         }
 
@@ -140,7 +138,7 @@ namespace eShopSolution.WebApp.Controllers
             return View(result.IsSuccessed ? nameof(ConfirmEmail) : "Error");
         }
 
-        [HttpGet] 
+        [HttpGet]
         public IActionResult SuccessRegistration()
         {
             return View();
@@ -184,6 +182,7 @@ namespace eShopSolution.WebApp.Controllers
             //var message = await MailUtils.MailUtils.SendGmail("hytranluan@gmail.com", request.Email,
             //                                            "Link khôi phục mật khẩu", passwordResetLink,
             //                                            "your_email_here", "your_password_here");
+
             var email = new EmailService.EmailService();
             email.Send("hytranluan@gmail.com", request.Email, "Link khôi phục mật khẩu", passwordResetLink);
 
@@ -194,7 +193,7 @@ namespace eShopSolution.WebApp.Controllers
         [AllowAnonymous]
         public IActionResult ResetPassword(string token, string email)
         {
-            if(token == null || email == null)
+            if (token == null || email == null)
             {
                 ModelState.AddModelError("", "Token khôi phục mật khẩu không phù hợp");
             }

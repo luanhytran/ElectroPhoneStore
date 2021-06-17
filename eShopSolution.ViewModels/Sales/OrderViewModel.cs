@@ -17,10 +17,8 @@ namespace eShopSolution.ViewModels.Sales
         public string PhoneNumber { get; set; }
         public decimal Price { get; set; }
         public string ShipName { set; get; }
-
         public string ShipAddress { set; get; }
-
         public string ShipPhoneNumber { set; get; }
-        //public List<OrderDetailViewModel> OrderDetails { get; set; } = new List<OrderDetailViewModel>();
+        public List<OrderDetailViewModel> OrderDetails { get; set; }
     }
 }

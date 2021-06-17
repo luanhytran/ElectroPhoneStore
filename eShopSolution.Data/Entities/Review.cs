@@ -7,7 +7,7 @@ namespace eShopSolution.Data.Entities
     public class Review
     {
         public int Id { get; set; }
-        public Guid? UserId { set; get; }
+        public Guid UserId { set; get; }
         public int ProductId { get; set; }
         public int Rating { get; set; }
         public string Comments { get; set; }

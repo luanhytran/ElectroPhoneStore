@@ -31,6 +31,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
 using Newtonsoft.Json.Serialization;
+using eShopSolution.Application.Catalog.Coupons;
 
 namespace eShopSolutionBackendApi
 {
@@ -63,10 +64,8 @@ namespace eShopSolutionBackendApi
 
             //Declare DI
             services.AddTransient<IStorageService, FileStorageService>();
-
             services.AddTransient<IProductService, eShopSolution.Application.Catalog.Products.ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
-
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
@@ -74,6 +73,7 @@ namespace eShopSolutionBackendApi
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IOrderService, eShopSolution.Application.Catalog.Orders.OrderService>();
+            services.AddTransient<ICouponService, eShopSolution.Application.Catalog.Coupons.CouponService>();
 
             //fluent validator
             // ta có hai cách register validator
