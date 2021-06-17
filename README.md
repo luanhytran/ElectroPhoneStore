@@ -56,7 +56,7 @@
   - Một Category thuộc về một hoặc nhiều Product và một Product có một Category
   - Phân tích quản lý danh mục phía admin ở #138
 
-- **ORDERS** bao gồm: ID, UserID, OrderDate, Status, ShipAddress, ShipName và ShipPhoneNumber
+- **ORDERS** bao gồm: ID, UserID, OrderDate, Status, ShipAddress, ShipName, ShipPhoneNumber, PaymentMethod, CouponId và Total
   - Đây là bảng lưu các đơn đặt hàng của user được phát sinh khi user đặt hàng
   - **UserID** là ID của user đặt hàng
   - **OrderDate** là ngày đặt hàng
@@ -64,11 +64,17 @@
   - **ShipAddress** là địa chỉ nhận hàng
   - **ShipName** là tên người nhận hàng
   - **ShipPhoneNumber** là số điện thoại người nhận hàng
+  - PaymentMethod là phương thức thanh toán
+  - CouponId là mã khuyến mãi được áp dụng
+  - Total là giá trị đơn hàng
   - ShipAddress, ShipName, ShipPhoneNumber là thông tin giao hàng và có thể được thay đổi bởi người đặt hàng khi muốn giao đến cho địa chỉ cụ thể nào đó hoặc người nào đó 
   - Một Order thuộc về một Customer và một Customer có một hoặc nhiều Order
     - Mỗi Customer được định danh bằng UserID
   - Một Order có một hoặc nhiều Order detail và một Order detail chỉ thuộc về một Order
   - Đơn hàng có các trạng thái: Đang chờ duyệt, Đã duyệt, Đang giao, Đã giao và Đã hủy
+  - Cần có cột total để lưu giá trị đơn hàng khi không áp dụng mã khuyến mãi và khi có áp dụng mã khuyến mãi
+  - Một đơn hàng nếu không dùng mã khuyến mãi thì couponId là null
+  - Phương thức thanh toán mặc định là tiền mặt
   - Phân tích quá trình đặt hàng ở #137 
   - Phân tích quản lý đơn hàng phía admin ở #130 
 
