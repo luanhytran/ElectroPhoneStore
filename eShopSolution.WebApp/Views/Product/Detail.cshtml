@@ -1,0 +1,365 @@
+﻿@model ProductDetailViewModel
+@using eShopSolution.ViewModels.Catalog.Products
+@{
+    ViewData["Title"] = "Detail";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    var culture = CultureInfo.CurrentCulture;
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+@inject LazZiya.ExpressLocalization.ISharedCultureLocalizer _loc;
+
+@{
+    //ViewBag.Title = Model.Title;
+    var comments = (IEnumerable<ReviewViewModel>)ViewBag.Comments;
+    var ratingSum = ViewBag.RatingSum;
+    var ratingCount = ViewBag.RatingCount;
+
+    decimal rating = 0;
+    if (ratingCount > 0)
+    {
+        rating = (ratingSum / ratingCount);
+    }
+    var totalRating = decimal.Parse(rating.ToString());
+}
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a href="/">Trang chủ</a></li>
+                    @*<li><a href="#">@Model.Product.Category.Name</a></li>*@
+                    <li class="active">@Model.Product.Name</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <!-- Product main img -->
+            <div class="col-md-5 col-md-push-2">
+                <div id="product-main-img">
+                    <div class="product-preview">
+                        <img src="@(Configuration["BaseAddress"] + Model.Product.ProductImage)" alt="">
+                    </div>
+
+                    <div class="product-preview">
+                        <img src="@(Configuration["BaseAddress"] + Model.Product.ProductImage)" alt="">
+                    </div>
+
+                    <div class="product-preview">
+                        <img src="@(Configuration["BaseAddress"] + Model.Product.ProductImage)" alt="">
+                    </div>
+
+                    <div class="product-preview">
+                        <img src="@(Configuration["BaseAddress"] + Model.Product.ProductImage)" alt="">
+                    </div>
+                </div>
+            </div>
+            <!-- /Product main img -->
+            <!-- Product thumb imgs -->
+            <div class="col-md-2  col-md-pull-5">
+                <div id="product-imgs">
+                    <div class="product-preview">
+                        <img src="@(Configuration["BaseAddress"] + Model.Product.ProductImage)" alt="">
+                    </div>
+
+                    <div class="product-preview">
+                        <img src="@(Configuration["BaseAddress"] + Model.Product.ProductImage)" alt="">
+                    </div>
+
+                    <div class="product-preview">
+                        <img src="@(Configuration["BaseAddress"] + Model.Product.ProductImage)" alt="">
+                    </div>
+
+                    <div class="product-preview">
+                        <img src="@(Configuration["BaseAddress"] + Model.Product.ProductImage)" alt="">
+                    </div>
+                </div>
+            </div>
+            <!-- /Product thumb imgs -->
+            <!-- Product details -->
+            <div class="col-md-5">
+                <div class="product-details">
+                    <h2 class="product-name">@Model.Product.Name</h2>
+
+                    <div>
+                        <h3 class="product-price">@Model.Product.Price.ToString("N0") <span>&#8363;</span> <del class="product-old-price">$990.00</del></h3>
+                        @if (Model.Product.Stock <= 0)
+                        {
+                            <span class="product-available">Hết hàng</span>
+                        }
+                        else
+                        {
+                            <span class="product-available">Còn hàng</span>
+                        }
+                    </div>
+
+                    @if (Model.Product.Stock == 0)
+                    {
+                    }
+                    else
+                    {
+                        <div class="add-to-cart" style="margin-top:10px">
+                            <button class="add-to-cart-btn" data-id="@Model.Product.Id"><i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng</button>
+                        </div>
+                    }
+                    <ul class="product-links">
+                        <li>Danh mục:</li>
+                        <li>
+                            @Html.ActionLink(Model.Category.Name, "ViewByCategory", "Home", new { cateId = Model.Category.Id })
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /Product details -->
+            <!-- Product tab -->
+            <div class="col-md-12">
+                <div id="product-tab">
+                    <!-- product tab nav -->
+                    <ul class="tab-nav">
+                        <li class="active"><a data-toggle="tab" href="#tab1">Thông số kỹ thuật</a></li>
+                        <li><a data-toggle="tab" href="#tab2">Chi tiết sản phẩm</a></li>
+                        <li><a data-toggle="tab" href="#tab3">Đánh giá (3)</a></li>
+                    </ul>
+                    <!-- /product tab nav -->
+                    <!-- product tab content -->
+                    <div class="tab-content">
+                        <!-- tab1  -->
+                        <div id="tab1" class="tab-pane fade in active">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @{
+                                        string html = @Model.Product.Description;
+                                        string removeFirstFigure = html.Remove(0, 22);
+                                        string removeLastFigure = removeFirstFigure.Remove(removeFirstFigure.Length - 9);
+                                        string addedTableFormat = removeLastFigure.Insert(6, " class=\"table table-bordered table-striped\"");
+                                    }
+                                    @Html.Raw(addedTableFormat)
+                                    @*@Html.Raw(Model.Product.Description)*@
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /tab1  -->
+                        <!-- tab2  -->
+                        <div id="tab2" class="tab-pane fade in">
+                            <div class="row">
+                                <style>
+                                    #more {
+                                        display: none;
+                                    }
+                                </style>
+                                <div class="col-md-12">
+                                    @Html.Raw(Model.Product.Details)
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /tab2  -->
+                        <!-- tab3  -->
+                        <div id="tab3" class="tab-pane fade in">
+                            <div class="row">
+                                @foreach (var c in comments)
+                                {
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <i>@c.PublishedDate</i>
+                                            <br />
+                                            @for (var i = 1; i <= c.Rating; i++)
+                                            {
+                                                <span class="starGlowN"></span>
+                                            }
+                                            @for (var i = (c.Rating + 1); i <= 5; i++)
+                                            {
+                                                <span class="starFadeN"></span>
+                                            }
+                                        </div>
+                                        <div class="col-md-9">
+                                            @Html.Raw(c.Comments.Replace("\n", "<br />"))
+                                        </div>
+                                    </div>
+                                }
+                                <hr />
+                                <partial name="_CommentBox" />
+                            </div>
+                        </div>
+                        <!-- /tab3  -->
+                    </div>
+                    <!-- /product tab content  -->
+                </div>
+            </div>
+            <!-- /product tab -->
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /SECTION -->
+<!-- Section -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="section-title text-center">
+                    <h3 class="title">Sản phẩm liên quan</h3>
+                </div>
+            </div>
+            <!-- product -->
+            <div class="col-md-3 col-xs-6">
+                <div class="product">
+                    <div class="product-img">
+                        <img src="./img/product01.png" alt="">
+                        <div class="product-label">
+                            <span class="sale">-30%</span>
+                        </div>
+                    </div>
+                    <div class="product-body">
+                        <p class="product-category">Category</p>
+                        <h3 class="product-name"><a href="#">product name goes here</a></h3>
+                        <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                        <div class="product-rating">
+                        </div>
+                        <div class="product-btns">
+                            <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+                            <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+                            <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+                        </div>
+                    </div>
+                    <div class="add-to-cart">
+                        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /product -->
+            <!-- product -->
+            <div class="col-md-3 col-xs-6">
+                <div class="product">
+                    <div class="product-img">
+                        <img src="./img/product02.png" alt="">
+                        <div class="product-label">
+                            <span class="new">NEW</span>
+                        </div>
+                    </div>
+                    <div class="product-body">
+                        <p class="product-category">Category</p>
+                        <h3 class="product-name"><a href="#">product name goes here</a></h3>
+                        <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                        <div class="product-rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product-btns">
+                            <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+                            <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+                            <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+                        </div>
+                    </div>
+                    <div class="add-to-cart">
+                        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /product -->
+            <!-- product -->
+            <div class="col-md-3 col-xs-6">
+                <div class="product">
+                    <div class="product-img">
+                        <img src="./img/product03.png" alt="">
+                    </div>
+                    <div class="product-body">
+                        <p class="product-category">Category</p>
+                        <h3 class="product-name"><a href="#">product name goes here</a></h3>
+                        <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                        <div class="product-rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                        </div>
+                        <div class="product-btns">
+                            <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+                            <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+                            <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+                        </div>
+                    </div>
+                    <div class="add-to-cart">
+                        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /product -->
+            <!-- product -->
+            <div class="col-md-3 col-xs-6">
+                <div class="product">
+                    <div class="product-img">
+                        <img src="./img/product04.png" alt="">
+                    </div>
+                    <div class="product-body">
+                        <p class="product-category">Category</p>
+                        <h3 class="product-name"><a href="#">product name goes here</a></h3>
+                        <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                        <div class="product-rating">
+                        </div>
+                        <div class="product-btns">
+                            <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+                            <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+                            <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+                        </div>
+                    </div>
+                    <div class="add-to-cart">
+                        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /product -->
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /Section -->
+
+<script>
+    function myFunction() {
+        var dots = document.getElementById("dots");
+        var moreText = document.getElementById("more");
+        var btnText = document.getElementById("myBtn");
+
+        if (dots.style.display === "none") {
+            dots.style.display = "inline";
+            btnText.innerHTML = "Read more";
+            moreText.style.display = "none";
+        } else {
+            dots.style.display = "none";
+            btnText.innerHTML = "Read less";
+            moreText.style.display = "inline";
+        }
+    }
+
+    function SCRate() {
+    for (var i = 1; i <= @totalRating; i++) {
+        $("#sRate" + i).attr('class', 'starGlowN');
+    }
+    }
+    $(function(){
+        SCRate();
+    });
+</script>

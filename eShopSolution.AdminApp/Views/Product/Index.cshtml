@@ -1,0 +1,119 @@
+﻿@using eShopSolution.ViewModels.Common;
+@model PagedResult<eShopSolution.ViewModels.Catalog.Products.ProductViewModel>
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{
+    <script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 2000);
+    </script>
+}
+<div class="container-fluid">
+    <h1 class="mt-4">Danh sách sản phẩm</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Danh sách sản phẩm</li>
+    </ol>
+    <div class="card mb-12">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-5 col-xs-12">
+                    <a class="btn btn-success" asp-action="Create" asp-controller="Product">Tạo mới</a>
+                </div>
+                <div class="col-md-7 col-xs-12">
+                    <form asp-action="Index" asp-controller="Product" method="get">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <select name="categoryId" onchange="this.form.submit()" asp-items="@ViewBag.Categories" class="form-control">
+                                    <option>Chọn danh mục</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                @*name: là tên tham số*@
+                                <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary">Tìm</button>
+                                <button type="button" onclick="window.location.href='/Product/Index'" class="btn btn-dark">Đặt lại</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+                @if (ViewBag.SuccessMsg != null)
+                {
+                    <div id="msgAlert" class="alert alert-success" role="alert">
+                        @ViewBag.SuccessMsg
+                    </div>
+                }
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                ID
+                            </th>
+                            <th class="text-center">
+                                Ảnh đại diện
+                            </th>
+                            <th>
+                                Tên
+                            </th>
+                            <th class="text-center">
+                                Giá bán
+                            </th>
+                            <th class="text-center">
+                                Số lượng tồn
+                            </th>
+                            <th class="text-center">
+                               Thao tác
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td class="text-center">
+                                    <img style="width:100px;height:100px" src="@(Configuration["BaseAddress"] + item.ThumbnailImage)" alt="Alternate Text" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td class="text-center">
+                                    @item.Price.ToString("N0") <span>&#8363;</span>
+                                </td >
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.Stock)
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-success">@Html.ActionLink("Xem chi tiết", "Details", new { id = item.Id })</button>
+                                    <button class="btn btn-primary">@Html.ActionLink("Cập nhật", "Edit", new { id = item.Id })</button>
+                                    <button class="btn btn-danger">@Html.ActionLink("Xóa", "Delete", new { id = item.Id })</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @*truyền Model vào hàm InvokeAsync của class PagerViewComponent để phân trang *@
+        <div>
+      
+            @await Component.InvokeAsync("Pager", Model)
+
+        </div>
+        </div>
+    </div>
+</div>

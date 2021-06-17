@@ -1,0 +1,285 @@
+﻿@model int
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@section scripts{
+    <script src="~/js/cart.js"></script>
+    <script>
+        var cartController = new CartController();
+        cartController.initialize();
+    </script>
+}
+
+@{
+    var culture = CultureInfo.CurrentCulture.Name;
+}
+
+
+<style>
+    /******************************************
+29. shopping cart
+******************************************/
+
+    .page-order ul.step {
+        width: 100%;
+        clear: both;
+        overflow: hidden
+    }
+
+        .page-order ul.step li {
+            display: inline;
+            line-height: 30px;
+            width: 19%;
+            float: left;
+            text-align: center;
+            border: 1px solid #ccc;
+            margin-right: 12px;
+            background: #fff;
+            text-transform: uppercase
+        }
+
+            .page-order ul.step li:last-child {
+                margin-right: 0px
+            }
+
+            .page-order ul.step li.current-step {
+                border: 1px solid #e99544
+            }
+
+    .page-order .heading-counter {
+        margin: 30px 0;
+        padding: 15px;
+        border: 1px solid #e8e6e2;
+        background: #fff
+    }
+
+    .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+        border-bottom-width: 0px
+    }
+
+    .page-order .cart_navigation a.continue-btn {
+        padding: 10px 20px;
+        border: 0px solid #e8e6e2;
+        background: #f9f9f9;
+        font-weight: 500;
+        display: inline-block;
+        margin-bottom: 10px;
+        border-radius: 3px;
+        text-transform: uppercase;
+    }
+
+    .page-order .availability {
+        text-align: center
+    }
+
+    .page-order .product-name {
+        font-size: 13px;
+        margin-bottom: 0px;
+        font-weight: 600;
+    }
+
+    .page-order .cart_description {
+        font-size: 14px
+    }
+
+    .page-order .cart_navigation a.checkout-btn {
+        float: right;
+        background: #e83f33;
+        color: #fff;
+        border: 1px solid #e83f33;
+        font-size: 16px;
+        font-weight: 600;
+        padding: 8px 30px;
+        border-radius: 3px;
+        text-transform: uppercase;
+    }
+
+        .page-order .cart_navigation a.checkout-btn:hover {
+            border: 1px solid #222;
+            background: #222;
+        }
+
+    .cart_summary > thead, .cart_summary > tfoot {
+        background: #f8f8f8;
+        font-size: 16px
+    }
+
+        .cart_summary > tfoot strong {
+            color: #e74c3c
+        }
+
+        .cart_summary > thead > th {
+            border-bottom-width: 1px;
+            padding: 20px
+        }
+
+    .cart_summary td {
+        vertical-align: middle !important;
+        padding: 20px
+    }
+
+    .cart_summary .table > tbody > tr > td, .table > tbody > tr > th, .cart_summary .table > tfoot > tr > td, .table > tfoot > tr > th, .cart_summary .table > thead > tr > td, .table > thead > tr > th {
+        padding: 10px
+    }
+
+    .cart_summary img {
+        max-width: 100px
+    }
+
+    .cart_summary td.cart_product {
+        width: 120px;
+        padding: 15px
+    }
+
+    .cart_summary .price {
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .cart_summary .qty {
+        text-align: center;
+        width: 100px
+    }
+
+        .cart_summary .qty input {
+            text-align: center;
+            max-width: 64px;
+            margin: 0 auto;
+            border-radius: 3px;
+            border: 1px solid #e5e5e5;
+            box-shadow: none;
+            width: 50px;
+        }
+
+        .cart_summary .qty a {
+            padding: 8px 10px 5px 10px;
+            border: 1px solid #e8e6e2;
+            display: inline-block;
+            width: auto;
+            margin-top: 5px
+        }
+
+            .cart_summary .qty a:hover {
+                background: #e83f33;
+                color: #fff
+            }
+
+    .cart_summary .action {
+        text-align: center
+    }
+
+        .cart_summary .action a {
+            font-size: 12px;
+            display: inline-block;
+            line-height: 24px
+        }
+
+    .cart_summary tfoot {
+        text-align: right
+    }
+
+    .cart_navigation {
+        margin-top: 10px;
+        float: left;
+        width: 100%;
+    }
+
+    .table-bordered {
+        border: 0px solid #ddd;
+    }
+
+        .table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+            border: none;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+    .availability.in-stock span {
+        color: #fff;
+        background-color: #5cb85c;
+        padding: 5px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 3px;
+    }
+
+    .availability.out-of-stock span {
+        color: #fff;
+        background-color: #d9534f;
+        padding: 5px 12px;
+        font-size: 12px;
+        font-weight: 600
+    }
+</style>
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a href="/">Trang chủ</a></li>
+                    <li>Giỏ hàng</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<section class="main-container col1-layout">
+    <div class="main container">
+        <div class="cart">
+
+            <div class="page-content page-order">
+                <div class="page-title">
+                    <h2>Giỏ hàng</h2>
+                </div>
+
+
+                <div class="order-detail-content">
+                    <div class="table-responsive">
+                        <table class="table table-bordered cart_summary" id="tbl_cart">
+                            <thead >
+                                <tr>
+                                    <th class="cart_product">Product</th>
+                                    <th>Name</th>
+                                    <th class="text-center">Avail.</th>
+                                    <th>Unit price</th>
+                                    <th>Qty</th>
+                                    <th>Total</th>
+                                    <th class="action"><i class="fa fa-trash"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody id="cart_body">
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" rowspan="2"></td>
+                                    <td colspan="3"><strong>Total</strong></td>
+                                    <td colspan="2"><strong><span id="lbl_total"></span> <span>&#8363;</span> </strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="cart_navigation">
+                        <a class="continue-btn" href="/"><i class="fa fa-arrow-left"> </i>&nbsp; Tiếp tục mua hàng</a>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a class="checkout-btn" href="/@culture/Cart/Checkout"><i class="fa fa-check"></i> Tiến hành thanh toán</a>
+                            }
+                            else
+                            {
+                                <a class="checkout-btn" asp-action="Login" asp-controller="Login"><i class="fa fa-check"></i> Tiến hành thanh toán</a>
+                            }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

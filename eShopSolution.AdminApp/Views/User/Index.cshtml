@@ -1,0 +1,97 @@
+﻿@using eShopSolution.ViewModels.Common;
+@model PagedResult<eShopSolution.ViewModels.System.Users.UserViewModel>
+
+@{
+    ViewData["Title"] = "Danh sách khách hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{ 
+    <script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 2000);
+    </script>
+}
+<div class="container-fluid">
+    <h1 class="mt-4">Danh sách khách hàng</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Danh sách khách hàng</li>
+    </ol>
+    <div class="card mb-12">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <form asp-action="Index" method="get">
+                        <div class="row">
+                            <div class="col-md-8">
+                                @*name: là tên tham số*@
+                                <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary">Tìm</button>
+                                <button type="button" onclick="window.location.href='/User/Index'" class="btn btn-dark">Đặt lại</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+                @if (ViewBag.SuccessMsg != null)
+                {
+                    <div id="msgAlert" class="alert alert-success" role="alert">
+                        @ViewBag.SuccessMsg
+                    </div>
+                }
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                Tên
+                            </th>
+                            <th>
+                                Số điện thoại
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th class="text-center">
+                                Thao tác
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+
+                            if (item.UserName != "admin")
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td class="text-center">
+                                        <button class="btn btn-success">@Html.ActionLink("Xem chi tiết", "Details", new { id = item.Id })</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @*truyền Model PagedResult vào vì hàm InvokeAsync của class PagerViewComponent nhận 1 
+                tham số object PagedResult*@
+            @await Component.InvokeAsync("Pager",Model) 
+        </div>
+    </div>
+</div>

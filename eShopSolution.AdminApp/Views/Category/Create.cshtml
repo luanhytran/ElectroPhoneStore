@@ -1,0 +1,46 @@
+﻿@model eShopSolution.ViewModels.Catalog.Categories.CategoryCreateRequest
+
+@{
+
+    ViewData["Title"] = "Tạo mới danh mục";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .validation-summary-valid span {
+        display: none;
+    }
+</style>
+
+<div class="container-fluid">
+    <h1 class="mt-4">Tạo mới danh mục</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Tạo mới danh mục</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <a class="btn btn-success" asp-action="Index" asp-controller="Category">Về danh sách</a>
+        </div>
+
+        <div class="card-body">
+            <div class="col-md-8">
+                <form asp-action="Create" asp-controller="Category" enctype="multipart/form-data" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Tạo mới" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+

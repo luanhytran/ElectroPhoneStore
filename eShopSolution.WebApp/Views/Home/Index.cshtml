@@ -1,8 +1,266 @@
-﻿@{
+﻿@model HomeViewModel
+@using eShopSolution.ViewModels.Catalog.Products;
+@inject LazZiya.ExpressLocalization.ISharedCultureLocalizer _loc;
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+@{
+    var culture = CultureInfo.CurrentCulture.Name;
+}
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <!-- shop -->
+            <div class="col-md-4 col-xs-6">
+                <div class="shop">
+                    <div class="shop-img">
+                        <img style="width:260px; height:300px; margin-left: 50px; margin-top: -20px" src="https://lebaostore.com/storage/iphone-12-64gb-new-0i4smeu0.png" alt="">
+                    </div>
+                    <div class="shop-body">
+                        <h3>iPhone<br></h3>
+                        <a href="#" class="cta-btn">Mua ngay <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- /shop -->
+            <!-- shop -->
+            <div class="col-md-4 col-xs-6">
+                <div class="shop">
+                    <div class="shop-img">
+                        <img style="width:260px; height:220px; margin-left: 50px; margin-top:30px; margin-bottom:30px" src="https://hoanghamobile.com/i/productlist/dsp/Uploads/2021/03/10/image-removebg-preview_637509826551438442.png" alt="">
+                    </div>
+                    <div class="shop-body">
+                        <h3>Samsung<br></h3>
+                        <a href="#" class="cta-btn">Mua ngay <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- /shop -->
+            <!-- shop -->
+            <div class="col-md-4 col-xs-6">
+                <div class="shop">
+                    <div class="shop-img">
+                        <img style="width:190px; height:220px; margin-left: 85px; margin-top:30px; margin-bottom:30px" src="https://image.oppo.com/content/dam/oppo/common/mkt/v2-2/a53/navigation/A53-navigation-blue-v2.png" alt="">
+                    </div>
+                    <div class="shop-body">
+                        <h3>Oppo<br></h3>
+                        <a href="#" class="cta-btn">Mua ngay <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- /shop -->
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
 </div>
+<!-- /SECTION -->
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+
+            <!-- section title -->
+            <div class="col-md-12">
+                <div class="section-title">
+                    <h3 class="title">Sản phẩm mới</h3>
+                    <div class="section-nav">
+                        <ul class="section-tab-nav tab-nav">
+                            <li class="active"><a data-toggle="tab" href="#tab1">Smartphones</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /section title -->
+            <!-- Products tab & slick -->
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="products-tabs">
+                        <!-- tab -->
+                        <div id="tab1" class="tab-pane active">
+                            <div class="products-slick" data-nav="#slick-nav-1">
+                                <!-- product -->
+                                @foreach (var item in Model.LatestProducts)
+                                {
+                                    var url = $"/{culture}/{_loc["productUrl"]}/{item.Id}";
+                                    <div class="product">
+                                        <div class="product-img">
+                                            <a style="height:214px;" href="@url">
+                                                <img style="margin-left:auto;margin-right:auto;display:block" height="214" src="@(Configuration["BaseAddress"] + item.ThumbnailImage)" alt="@item.Name">
+                                            </a>
+                                            <div class="product-label">
+                                                @if (item.Stock == 0)
+                                                {
+                                                    <span class="sale">Hết hàng</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="new">Mới</span>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="product-body">
+                                            <p class="product-category">@item.Category.Name</p>
+                                            <h3 class="product-name"><a href="#">@item.Name</a></h3>
+                                            <h4 class="product-price">@item.Price.ToString("N0") <span>&#8363;</span></h4>
+                                        </div>
+                                        @if (item.Stock == 0)
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            <div class="add-to-cart">
+                                                <button class="add-to-cart-btn" data-id="@item.Id"><i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng</button>
+                                            </div>
+                                        }
+
+                                    </div>
+                                }
+                                <!-- /product -->
+                            </div>
+                            <div id="slick-nav-1" class="products-slick-nav"></div>
+                        </div>
+                        <!-- /tab -->
+                    </div>
+                </div>
+            </div>
+            <!-- Products tab & slick -->
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /SECTION -->
+<!-- HOT DEAL SECTION -->
+<div id="hot-deal" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="hot-deal">
+                    <ul class="hot-deal-countdown">
+                        <li>
+                            <div>
+                                <h3>02</h3>
+                                <span>Ngày</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <h3>10</h3>
+                                <span>Tiếng</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <h3>34</h3>
+                                <span>Phút</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <h3>60</h3>
+                                <span>Giây</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <h2 class="text-uppercase">Ưu đãi hot tuần này</h2>
+                    <p>Giảm lên đến 50%</p>
+                    <a class="primary-btn cta-btn" href="#">Mua ngay</a>
+                </div>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /HOT DEAL SECTION -->
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+
+            <!-- section title -->
+            <div class="col-md-12">
+                <div class="section-title">
+                    <h3 class="title">Bán chạy</h3>
+                    <div class="section-nav">
+                        <ul class="section-tab-nav tab-nav">
+                            <li><a data-toggle="tab" href="#tab2">Smartphones</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /section title -->
+            <!-- Products tab & slick -->
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="products-tabs">
+                        <!-- tab -->
+                        <div id="tab1" class="tab-pane active">
+                            <div class="products-slick" data-nav="#slick-nav-1">
+                                <!-- product -->
+                                @foreach (var item in Model.LatestProducts)
+                                {
+                                    var url = $"/{culture}/{_loc["productUrl"]}/{item.Id}";
+                                    <div class="product">
+                                        <div class="product-img">
+                                            <a style="height:214px;" href="@url">
+                                                <img style="margin-left:auto;margin-right:auto;display:block" height="214" src="@(Configuration["BaseAddress"] + item.ThumbnailImage)" alt="@item.Name">
+                                            </a>
+                                            <div class="product-label">
+                                                @if (item.Stock == 0)
+                                                {
+                                                    <span class="sale">Hết hàng</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="new">Mới</span>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="product-body">
+                                            <p class="product-category">@item.Category.Name</p>
+                                            <h3 class="product-name"><a href="#">@item.Name</a></h3>
+                                            <h4 class="product-price">@item.Price.ToString("N0") <span>&#8363;</span></h4>
+                                        </div>
+                                        @if (item.Stock == 0)
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            <div class="add-to-cart">
+                                                <button class="add-to-cart-btn" data-id="@item.Id"><i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng</button>
+                                            </div>
+                                        }
+
+                                    </div>
+                                }
+                                <!-- /product -->
+                            </div>
+                            <div id="slick-nav-1" class="products-slick-nav"></div>
+                        </div>
+                        <!-- /tab -->
+                    </div>
+                </div>
+            </div>
+            <!-- /Products tab & slick -->
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /SECTION -->

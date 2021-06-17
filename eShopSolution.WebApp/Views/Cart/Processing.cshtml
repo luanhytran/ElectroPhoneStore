@@ -1,0 +1,27 @@
+﻿@*@using Microsoft.Extensions.Options
+    @inject IOptions<ECommerceShoppingCartASPNet5.Data.StripeSettings> Stripe*@
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="text-center">
+    <form asp-action="Processing" asp-controller="Checkout" method="post">
+
+        <label class="text-info">Your Payment has been successfully processed</label>
+        <br />
+        <br />
+        <p class="blockquote text-center">
+            The details of the transaction are  <br />
+            Customer : @ViewBag.Customer <br /> <br />
+            Amount : $ @ViewBag.AmountPaid
+        </p>
+
+        @*@if (TempData.Peek("TotalAmount") != null)
+            {
+                var result = Convert.ToInt64(TempData.Peek("TotalAmount"));
+                result /= 100;
+                <h3>Amount: @result USD has been processed successfully.</h3>
+            }*@
+    </form>
+</div>

@@ -1,0 +1,120 @@
+﻿@model eShopSolution.ViewModels.Catalog.Products.ProductViewModel
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Chi tiết sản phẩm @Model.Name</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Chi tiết sản phẩm</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <a class="btn btn-success" asp-action="Index" asp-controller="Product">Về danh sách</a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td class="font-weight-bold">
+                                Tên sản phẩm
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Name)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">
+                                Danh mục
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Category.Name)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">
+                                Giá tiền
+                            </td>
+                            <td>
+                                @Model.Price.ToString("N0") <span>&#8363;</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">
+                                Số lượng
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Stock)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">
+                                Thông số kỹ thuật
+                            </td>
+                            <td>
+                                @{
+                                    string html = @Model.Description;
+                                    string removeFirstFigure = html.Remove(0, 22);
+                                    string removeLastFigure = removeFirstFigure.Remove(removeFirstFigure.Length - 9);
+                                    string addedTableFormat = removeLastFigure.Insert(6, " class=\"table table-bordered table-striped\"");
+                                }
+                                @Html.Raw(addedTableFormat)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">
+                                Chi tiết sản phẩm
+                            </td>
+                            <td>
+                                <style>
+                                    #more {
+                                        display: none;
+                                    }
+                                </style>
+                                @Html.Raw(Model.Details)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">
+                                Ảnh đại diện
+                            </td>
+                            <td>
+                                <img style="width:150px;height:150px" src="@(Configuration["BaseAddress"] + Model.ThumbnailImage)" alt="Alternate Text" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">
+                                Ảnh đầy đủ
+                            </td>
+                            <td>
+                                <img style="width:250px;height:250px" src="@(Configuration["BaseAddress"] + Model.ProductImage)" alt="Alternate Text" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function myFunction() {
+  var dots = document.getElementById("dots");
+  var moreText = document.getElementById("more");
+  var btnText = document.getElementById("myBtn");
+
+  if (dots.style.display === "none") {
+    dots.style.display = "inline";
+    btnText.innerHTML = "Read more";
+    moreText.style.display = "none";
+  } else {
+    dots.style.display = "none";
+    btnText.innerHTML = "Read less";
+    moreText.style.display = "inline";
+  }
+}
+</script>

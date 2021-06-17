@@ -1,48 +1,268 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var culture = CultureInfo.CurrentCulture.Name;
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - eShopSolution.WebApp</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <!-- favicon -->
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" />
+
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="/css/slick.css" />
+    <link type="text/css" rel="stylesheet" href="/css/slick-theme.css" />
+
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="/css/nouislider.min.css" />
+
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <!-- Custom stlylesheet -->
+    <link type="text/css" rel="stylesheet" href="/css/style.css" />
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
 </head>
 <body>
+    <input type="hidden" id="hidCulture" value="@culture" />
+    <input type="hidden" id="hidBaseAddress" value="@Configuration["BaseAddress"]" />
+    <!-- HEADER -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <!-- TOP HEADER -->
+        <div id="top-header">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">eShopSolution.WebApp</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <ul class="header-links pull-left">
+                        @{
+                            var claims = User.Claims.ToList();
+                            var name = claims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName).Value;
+                        }
+                        <li><a href="#">Xin chào <strong>@name</strong></a></li>
                     </ul>
+                }
+                else
+                {
+                    <ul class="header-links pull-left">
+                        <li><a href="#">Xin chào <strong>quý khách!</strong></a></li>
+                    </ul>
+                }
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <style>
+                        #logout-button {
+                            padding: 0;
+                            border: none;
+                            background-color: transparent;
+                        }
+
+                        #logout_label {
+                            color: #FFF;
+                        }
+
+                            #logout_label:hover {
+                                color: #D10024;
+                            }
+                    </style>
+                    <ul class="header-links pull-right">
+                        <li><a asp-action="Index" asp-controller="Account"><i class="fa fa-user-o"></i> Tài khoản</a></li>
+                        <li><button form="logout_form" id="logout-button" type="submit"><span id="logout_label">Đăng xuất</span></button></li>
+                    </ul>
+                    <form id="logout_form" action="/@culture/Login/Logout" method="post">
+                    </form>
+                }
+                else
+                {
+                    <ul class="header-links pull-right">
+                        <li><a asp-action="Login" asp-controller="Login"> Đăng nhập</a></li>
+                        <li><a asp-action="Register" asp-controller="Login"> Đăng ký</a></li>
+                    </ul>
+                }
+            </div>
+        </div>
+        <!-- /TOP HEADER -->
+        <!-- MAIN HEADER -->
+        <div id="header">
+            <!-- container -->
+            <div class="container">
+                <!-- row -->
+                <div class="row">
+                    <!-- LOGO -->
+                    <div class="col-md-3">
+                        <div class="header-logo">
+                            <a href="/" class="logo">
+                                <img src="/img/logo.png" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <!-- /LOGO -->
+                    <!-- SEARCH BAR -->
+                    <div class="col-md-6">
+                        <div class="header-search">
+                            <form asp-action="ViewBySearchProduct" asp-controller="Home" method="get">
+                                    <input type="text" value="@ViewBag.Keyword" name="keyword" class="input" placeholder="Tìm kiếm ở đây" style="border-radius: 20px 0px 0px 20px  ;" />
+                                    <button type="submit" class="search-btn">Tìm</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /SEARCH BAR -->
+                    <!-- ACCOUNT -->
+                    <div class="col-md-3 clearfix">
+                        <div class="header-ctn">
+                            <!-- Cart -->
+                            <div class="dropdown">
+                                <a href="/@culture/cart"">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    <span>Giỏ hàng</span>
+                                    <div class="qty" id="lbl_number_of_items_header">0</div>
+                                </a>
+                                </div>
+                            </div>
+                            <!-- /Cart -->
+                        </div>
+                    </div>
+                    <!-- /ACCOUNT -->
+                </div>
+                <!-- row -->
+            </div>
+            <!-- container -->
+        </div>
+        <!-- /MAIN HEADER -->
+    </header>
+    <!-- /HEADER -->
+    @await Component.InvokeAsync("Navigation")
+    @RenderBody()
+    <!-- NEWSLETTER -->
+    <div id="newsletter" class="section">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="newsletter">
+                        <ul class="newsletter-follow">
+                            <li>
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-pinterest"></i></a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - eShopSolution.WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <!-- /row -->
         </div>
+        <!-- /container -->
+    </div>
+    <!-- /NEWSLETTER -->
+    <!-- FOOTER -->
+    <footer id="footer">
+        <!-- top footer -->
+        <div class="section">
+            <!-- container -->
+            <div class="container">
+                <!-- row -->
+                <div class="row">
+                    <div class="col-md-3 col-xs-6">
+                        <div class="footer">
+                            <h3 class="footer-title">Về chúng tôi</h3>
+                            <p>Hệ thống bán lẻ điện thoại di động, smartphone, iPad, laptop, phụ kiện chính hãng, giá tốt nhất. Kèm theo nhiều khuyến mãi hấp dẫn.</p>
+                            <ul class="footer-links">
+                                <li><a href="#"><i class="fa fa-map-marker"></i>123 An Dương Vương P.8 Q.5</a></li>
+                                <li><a href="#"><i class="fa fa-phone"></i>0765006381</a></li>
+                                <li><a href="#"><i class="fa fa-envelope-o"></i>hytranluan@gmail.com</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-xs-6">
+                        <div class="footer">
+                            <h3 class="footer-title">Danh mục</h3>
+                            <ul class="footer-links">
+                                <li><a href="#">iPhone</a></li>
+                                <li><a href="#">Samsung</a></li>
+                                <li><a href="#">Oppo</a></li>
+                                <li><a href="#">Vivo</a></li>
+                                <li><a href="#">Xiaomi</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="clearfix visible-xs"></div>
+
+                    <div class="col-md-3 col-xs-6">
+                        <div class="footer">
+                            <h3 class="footer-title">Thông tin</h3>
+                            <ul class="footer-links">
+                                <li><a href="#">Về chúng tôi</a></li>
+                                <li><a href="#">Liên hệ</a></li>
+                                <li><a href="#">Chính sách bảo mật</a></li>
+                                <li><a href="#">Điều khoản và điều kiện</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-xs-6">
+                        <div class="footer">
+                            <h3 class="footer-title">Dịch vụ</h3>
+                            <ul class="footer-links">
+                                <li><a href="#">Tài khoản</a></li>
+                                <li><a href="#">Giỏ hàng</a></li>
+                                <li><a href="#">Trạng thái đơn hàng</a></li>
+                                <li><a href="#">Hỗ trợ</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /top footer -->
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
+    <!-- /FOOTER -->
+    <!-- jQuery Plugins -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/slick.min.js"></script>
+    <script src="/js/nouislider.min.js"></script>
+    <script src="/js/jquery.zoom.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="~/js/cart.js"></script>
+    <script>
+        var siteController = new SiteController();
+        siteController.initialize();
+    </script>
+    <script>
+        var cartController = new CartController();
+        cartController.initialize();
+    </script>
+    @RenderSection("scripts", required: false)
+
 </body>
 </html>

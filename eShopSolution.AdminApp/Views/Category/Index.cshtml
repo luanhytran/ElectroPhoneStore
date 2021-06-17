@@ -1,0 +1,77 @@
+﻿@using eShopSolution.ViewModels.Common;
+@model IEnumerable<eShopSolution.ViewModels.Catalog.Categories.CategoryViewModel>
+
+@{
+    ViewData["Title"] = "Danh sách danh mục";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{
+    <script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 2000);
+    </script>
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Danh sách danh mục</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Danh sách danh mục</li>
+    </ol>
+    <div class="card mb-12">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-5 col-xs-12">
+                    <a class="btn btn-success" asp-action="Create" asp-controller="Category">Tạo mới</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+                @if (ViewBag.SuccessMsg != null)
+                {
+                    <div id="msgAlert" class="alert alert-success" role="alert">
+                        @ViewBag.SuccessMsg
+                    </div>
+                }
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr >
+                            <th class="text-center">
+                                ID
+                            </th>
+                            <th>
+                                Tên
+                            </th>
+                            <th class="text-center">
+                                Thao tác
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td >
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-primary">@Html.ActionLink("Cập nhật", "Edit", new { id = item.Id })</button>
+                                    <button class="btn btn-danger">@Html.ActionLink("Xóa", "Delete", new { id = item.Id })</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @*truyền Model vào hàm InvokeAsync của class PagerViewComponent để phân trang *@
+            @*await Component.InvokeAsync("Pager", Model)*@
+        </div>
+    </div>
+</div>
