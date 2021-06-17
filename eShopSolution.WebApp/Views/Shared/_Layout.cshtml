@@ -37,7 +37,8 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+    <!--sweet aler 2-->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <input type="hidden" id="hidCulture" value="@culture" />
@@ -117,8 +118,8 @@
                     <div class="col-md-6">
                         <div class="header-search">
                             <form asp-action="ViewBySearchProduct" asp-controller="Home" method="get">
-                                    <input type="text" value="@ViewBag.Keyword" name="keyword" class="input" placeholder="Tìm kiếm ở đây" style="border-radius: 20px 0px 0px 20px  ;" />
-                                    <button type="submit" class="search-btn">Tìm</button>
+                                <input type="text" value="@ViewBag.Keyword" name="keyword" class="input" placeholder="Tìm kiếm ở đây" style="border-radius: 20px 0px 0px 20px  ;" />
+                                <button type="submit" class="search-btn">Tìm</button>
                             </form>
                         </div>
                     </div>
@@ -128,21 +129,21 @@
                         <div class="header-ctn">
                             <!-- Cart -->
                             <div class="dropdown">
-                                <a href="/@culture/cart"">
+                                <a href="/@culture/cart" ">
                                     <i class="fa fa-shopping-cart"></i>
                                     <span>Giỏ hàng</span>
                                     <div class="qty" id="lbl_number_of_items_header">0</div>
                                 </a>
-                                </div>
                             </div>
-                            <!-- /Cart -->
                         </div>
+                        <!-- /Cart -->
                     </div>
-                    <!-- /ACCOUNT -->
                 </div>
-                <!-- row -->
+                <!-- /ACCOUNT -->
             </div>
-            <!-- container -->
+            <!-- row -->
+        </div>
+        <!-- container -->
         </div>
         <!-- /MAIN HEADER -->
     </header>
@@ -258,11 +259,6 @@
         var siteController = new SiteController();
         siteController.initialize();
     </script>
-    <script>
-        var cartController = new CartController();
-        cartController.initialize();
-    </script>
     @RenderSection("scripts", required: false)
-
 </body>
 </html>

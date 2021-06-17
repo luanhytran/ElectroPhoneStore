@@ -22,16 +22,18 @@
     <div class="card mb-12">
         <div class="card-header">
             <div class="row">
-                <div class="col-md-6 col-xs-12">
+                <div class="col-md-7 col-xs-12">
+                </div>
+                <div class="col-md-5 col-xs-12">
                     <form asp-action="Index" method="get">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 @*name: là tên tham số*@
                                 <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
                             </div>
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-primary">Tìm</button>
-                                <button type="button" onclick="window.location.href='/User/Index'" class="btn btn-dark">Đặt lại</button>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-info"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                <button type="button" onclick="window.location.href='/User/Index'" class="btn btn-secondary">Đặt lại</button>
                             </div>
                         </div>
                     </form>
@@ -81,7 +83,7 @@
                                         @Html.DisplayFor(modelItem => item.Email)
                                     </td>
                                     <td class="text-center">
-                                        <button class="btn btn-success">@Html.ActionLink("Xem chi tiết", "Details", new { id = item.Id })</button>
+                                        <button class="btn btn-primary">@Html.ActionLink("Xem chi tiết", "Details", new { id = item.Id })</button>
                                     </td>
                                 </tr>
                             }

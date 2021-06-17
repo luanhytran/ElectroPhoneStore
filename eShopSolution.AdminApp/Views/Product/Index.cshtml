@@ -22,24 +22,24 @@
     <div class="card mb-12">
         <div class="card-header">
             <div class="row">
-                <div class="col-md-5 col-xs-12">
+                <div class="col-md-7 col-xs-12">
                     <a class="btn btn-success" asp-action="Create" asp-controller="Product">Tạo mới</a>
                 </div>
-                <div class="col-md-7 col-xs-12">
+                <div class="col-md-5 col-xs-12">
                     <form asp-action="Index" asp-controller="Product" method="get">
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-4">
                                 <select name="categoryId" onchange="this.form.submit()" asp-items="@ViewBag.Categories" class="form-control">
                                     <option>Chọn danh mục</option>
                                 </select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 @*name: là tên tham số*@
                                 <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
                             </div>
                             <div class="col-md-3">
-                                <button type="submit" class="btn btn-primary">Tìm</button>
-                                <button type="button" onclick="window.location.href='/Product/Index'" class="btn btn-dark">Đặt lại</button>
+                                <button type="submit" class="btn btn-info"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                <button type="button" onclick="window.location.href='/Product/Index'" class="btn btn-secondary">Đặt lại</button>
                             </div>
                         </div>
                     </form>
@@ -48,12 +48,30 @@
         </div>
 
         <div class="card-body">
-                @if (ViewBag.SuccessMsg != null)
-                {
-                    <div id="msgAlert" class="alert alert-success" role="alert">
-                        @ViewBag.SuccessMsg
-                    </div>
-                }
+            @if (TempData["CreateProductSuccessful"] != null)
+            {
+                <script>
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Thêm sản phẩm thành công',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                </script>
+            }
+            else if (TempData["UpdateProductSuccessful"] != null)
+            {
+                <script>
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Cập nhật sản phẩm thành công',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                </script>
+            }
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>
@@ -74,12 +92,12 @@
                                 Số lượng tồn
                             </th>
                             <th class="text-center">
-                               Thao tác
+                                Thao tác
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                         @foreach (var item in Model.Items)
                         {
                             <tr>
@@ -94,13 +112,13 @@
                                 </td>
                                 <td class="text-center">
                                     @item.Price.ToString("N0") <span>&#8363;</span>
-                                </td >
+                                </td>
                                 <td class="text-center">
                                     @Html.DisplayFor(modelItem => item.Stock)
                                 </td>
                                 <td class="text-center">
-                                    <button class="btn btn-success">@Html.ActionLink("Xem chi tiết", "Details", new { id = item.Id })</button>
-                                    <button class="btn btn-primary">@Html.ActionLink("Cập nhật", "Edit", new { id = item.Id })</button>
+                                    <button class="btn btn-primary">@Html.ActionLink("Xem chi tiết", "Details", new { id = item.Id })</button>
+                                    <button class="btn btn-success">@Html.ActionLink("Cập nhật", "Edit", new { id = item.Id })</button>
                                     <button class="btn btn-danger">@Html.ActionLink("Xóa", "Delete", new { id = item.Id })</button>
                                 </td>
                             </tr>
@@ -109,11 +127,11 @@
                 </table>
             </div>
             @*truyền Model vào hàm InvokeAsync của class PagerViewComponent để phân trang *@
-        <div>
-      
-            @await Component.InvokeAsync("Pager", Model)
+            <div>
 
-        </div>
+                @await Component.InvokeAsync("Pager", Model)
+
+            </div>
         </div>
     </div>
 </div>

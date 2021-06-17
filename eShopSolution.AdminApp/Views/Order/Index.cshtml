@@ -13,6 +13,11 @@
             $('#msgAlert').fadeOut('slow');
         }, 2000);
     </script>
+    <script src="~/js/order.js"></script>
+    <script>
+        var orderController = new OrderController();
+        orderController.initialize();
+    </script>
 }
 
 <div class="container-fluid">
@@ -22,19 +27,27 @@
         <li class="breadcrumb-item active">Danh sách đơn hàng</li>
     </ol>
     <div class="card mb-12">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-7 col-xs-12">
+                </div>
+                <div class="col-md-5 col-xs-12">
+                    <form asp-action="Index" asp-controller="Order" method="get">
+                        <div class="row">
+                            <div class="col-md-9">
+                                @*name: là tên tham số*@
+                                <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-info"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                <button type="button" onclick="window.location.href='/Order/Index'" class="btn btn-secondary">Đặt lại</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <div class="card-body">
-            @if (ViewBag.SuccessMsg != null)
-            {
-                <div id="msgAlert" class="alert alert-success" role="alert">
-                    @ViewBag.SuccessMsg
-                </div>
-            }
-            else if (ViewBag.FailMsg != null)
-            {
-                <div id="msgAlert" class="alert alert-danger" role="alert">
-                    @ViewBag.FailMsg
-                </div>
-            }
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>
@@ -111,23 +124,21 @@
 
                                     @if (item.Status == (OrderStatus)1)
                                     {
-                                        <button class="btn btn btn-primary">@Html.ActionLink("Duyệt đơn", "UpdateOrderStatus", new { orderId = item.Id })</button>
-                                        <button class="btn btn btn-danger">@Html.ActionLink("Huỷ đơn", "CancelOrderStatus", new { orderId = item.Id })</button>
+                                        <button class="btn btn-success btn-update-status" data-id="@item.Id">@Html.ActionLink("Duyệt đơn", "UpdateOrderStatus", new { orderId = item.Id })</button>
+                                        <button class="btn btn-danger btn-cancel" data-id="@item.Id">Hủy đơn</button>
                                     }
                                     else if (item.Status == (OrderStatus)2)
                                     {
-                                        <button class="btn btn btn-primary">@Html.ActionLink("Giao hàng", "UpdateOrderStatus", new { orderId = item.Id })</button>
-                                        <button class="btn btn btn-danger">@Html.ActionLink("Huỷ đơn", "CancelOrderStatus", new { orderId = item.Id })</button>
+                                        <button class="btn btn-success btn-update-status" data-id="@item.Id">@Html.ActionLink("Giao hàng", "UpdateOrderStatus", new { orderId = item.Id })</button>
+                                        <button class="btn btn-danger btn-cancel" data-id="@item.Id">Hủy đơn</button>
                                     }
                                     else if (item.Status == (OrderStatus)3)
                                     {
-                                        <button class="btn btn btn-primary">@Html.ActionLink("Xác nhận thanh toán", "UpdateOrderStatus", new { orderId = item.Id })</button>
+                                        <button class="btn btn btn-success btn-update-status" data-id="@item.Id">@Html.ActionLink("Xác nhận thanh toán", "UpdateOrderStatus", new { orderId = item.Id })</button>
                                     }
-
-
                                 </td>
                                 <td class="text-center">
-                                    <button class="btn btn-success">@Html.ActionLink("Xem chi tiết", "Detail", new { orderId = item.Id, name = item.Name  })</button>
+                                    <button class="btn btn-primary">@Html.ActionLink("Xem chi tiết", "Detail", new { orderId = item.Id, name = item.Name })</button>
                                 </td>
                             </tr>
                         }
@@ -139,3 +150,4 @@
         </div>
     </div>
 </div>
+

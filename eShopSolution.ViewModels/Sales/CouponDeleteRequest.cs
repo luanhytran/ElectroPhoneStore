@@ -4,7 +4,8 @@ using System.Text;
 
 namespace eShopSolution.ViewModels.Sales
 {
-    public class PayModel
+    public class CouponDeleteRequest
     {
+        public int Id { get; set; }
     }
 }

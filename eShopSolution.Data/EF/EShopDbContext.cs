@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace eShopSolution.Data.EF
 {
@@ -38,6 +36,8 @@ namespace eShopSolution.Data.EF
 
             modelBuilder.ApplyConfiguration(new ReviewConfiguration());
 
+            modelBuilder.ApplyConfiguration(new CouponConfiguration());
+
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
 
             // những entity có HasKey là do lúc migrate báo lỗi yêu cầu thêm key
@@ -59,7 +59,7 @@ namespace eShopSolution.Data.EF
         public DbSet<Product> Products { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Category> Categories { get; set; }
-
+        public DbSet<Coupon> Coupons { get; set; }
         public DbSet<AppConfig> AppConfigs { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Language> Languages { get; set; }
