@@ -110,6 +110,45 @@
   - Một Order chỉ có một Coupon nhưng một Coupon có thể thuộc về một hoặc nhiều Order
 
 #### 🛠️Phân tích hệ thống🛠️
+ - Authentication
+    - Cho phép bất cứ khách hàng nào cũng có thể đăng ký trở thành thành viên.
+    - Cho phép các thành viên khôi phục mật khẩu khi quên mật khẩu.
+    - Hệ thống sẽ gửi mail cho thành viên khi đăng ký thành công, đặt hàng thành công và yêu cầu khôi phục mật khẩu.
+    - Khi khách hàng và admin đã đăng nhập nhưng không hoạt động 30p thì sẽ bị đăng xuất.
+ 
+- Thông tin cá nhân của thành viên
+  - Cho phép thành viên cập nhật thông tin cá nhân.
+  - Cho phép các thành viên thay đổi mật khẩu.
+
+  
+- Sản phẩm
+  - Hiển thị các sản phẩm hiện có trong hệ thống.
+  - Cho phép khách hàng có thể xem chi tiết sản phẩm, thêm sản phẩm vào giỏ hàng.
+  - Cho phép khách hàng xem sản phẩm theo danh mục.
+  - Cho phép khách hàng sắp xếp sản phẩm theo tên, giá để dễ dàng tìm kiếm hơn.
+  - Cho phép khách hàng tìm kiếm theo tên sản phẩm.
+  - Cho phép khách hàng đã đăng nhập đánh giá sản phẩm.
+  - Xem chi tiết sản phẩm sẽ hiển thị các thông tin: tên sản phẩm, giá, hình ảnh, mô tả, các đánh giá ...
+  
+- Giỏ hàng
+  - Bất cứ ai cũng có thể thêm một hoặc nhiều sản phẩm vào giỏ hàng.
+  - Khách hàng có thể tăng / giảm số lượng sản phẩm trong giỏ hàng.
+  - Khách hàng có thể áp dụng mã khuyến mãi vào đơn hàng.
+  - Một đơn hàng chỉ có thể áp dụng một mã khuyến mãi.
+  - Giá trị khuyến mãi là số phần trăm được giảm áp dụng lên một đơn hàng.
+  - Các giá trị khuyến mãi do admin tạo.
+  
+- Đặt hàng
+  - Chỉ khách hàng đã đăng nhập mới có thể thanh toán.
+  - Khách hàng khi đặt hàng có thể thay đổi thông tin nhận hàng.
+
+- Thanh toán
+  - Người dùng có thể chọn 2 phương thức thanh toán là: thẻ tín dụng và nhận hàng rồi thanh toán (tiền mặt).
+  
+- Theo dõi đơn hàng
+  - Cho phép các thành viên xem lịch sử các đơn hàng đã và đang đặt cũng như trạng thái của chúng.
+  - Cho phép các thành viên hủy đơn hàng khi đơn hàng chưa giao.
+  - Cho phép khách hàng xem chi tiết đơn hàng, gồm các thông tin: tên người đặt, tên người nhận, địa chỉ, số điện thoại, ngày đặt, sản phẩm đã mua ...
 
 ## II. Công nghệ sử dụng
 - ASP.NET Core 3.1
