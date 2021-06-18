@@ -1,11 +1,8 @@
 ﻿using eShopSolution.Application.Catalog.Categories;
 using eShopSolution.ViewModels.Catalog.Categories;
+using eShopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace eShopSolutionBackendApi.Controllers
@@ -25,10 +22,16 @@ namespace eShopSolutionBackendApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var products = await _categoryService.GetAll();
-            return Ok(products);
+            var categories = await _categoryService.GetAll();
+            return Ok(categories);
         }
 
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductPagingRequest request)
+        {
+            var categories = await _categoryService.GetAllPaging(request);
+            return Ok(categories);
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
@@ -51,8 +54,7 @@ namespace eShopSolutionBackendApi.Controllers
 
             var category = await _categoryService.GetById(categoryId);
 
-            return CreatedAtAction(nameof(GetById), new { id = categoryId }, category );
-
+            return CreatedAtAction(nameof(GetById), new { id = categoryId }, category);
         }
 
         // HttpPut: update toàn phần

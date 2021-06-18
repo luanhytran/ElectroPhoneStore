@@ -30,7 +30,7 @@ namespace eShopSolution.ApiIntegration
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<bool> CreateOrder(CheckoutRequest request)
+        public async Task<string> CreateOrder(CheckoutRequest request)
         {
             var sessions = _httpContextAccessor
                             .HttpContext
@@ -43,7 +43,11 @@ namespace eShopSolution.ApiIntegration
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await client.PostAsync($"/api/orders/createOrder", httpContent);
-            return response.IsSuccessStatusCode;
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
+            return "Failed";
         }
 
         public async Task<PagedResult<OrderViewModel>> GetPagings(GetManageOrderPagingRequest request)

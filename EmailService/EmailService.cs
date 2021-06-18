@@ -20,7 +20,15 @@ namespace EmailService
             email.From.Add(MailboxAddress.Parse(from));
             email.To.Add(MailboxAddress.Parse(to));
             email.Subject = subject;
-            email.Body = new TextPart(TextFormat.Plain) { Text = text };
+
+            // Send text format
+            //email.Body = new TextPart(TextFormat.Plain) { Text = text };
+
+            // Send html format
+            email.Body = new TextPart(TextFormat.Html)
+            {
+                Text = string.Format(text)
+            };
 
             // send email
             using var smtp = new SmtpClient();

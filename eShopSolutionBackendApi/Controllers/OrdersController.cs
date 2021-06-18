@@ -34,7 +34,7 @@ namespace eShopSolutionBackendApi.Controllers
 
             var result = _orderService.Create(request);
 
-            return Ok();
+            return Ok(result);
         }
 
         [HttpGet("userOrders/{id}")]
@@ -48,7 +48,7 @@ namespace eShopSolutionBackendApi.Controllers
         [HttpGet("getOrderById/{orderId}")]
         public IActionResult GetOrderById(int orderId)
         {
-            var result =  _orderService.GetOrderById(orderId);
+            var result = _orderService.GetOrderById(orderId);
 
             return Ok(result);
         }
@@ -72,8 +72,8 @@ namespace eShopSolutionBackendApi.Controllers
         [HttpPatch("cancelOrderStatus/{id}")]
         public async Task<IActionResult> CancelOrderStatus([FromBody] int id)
         {
-            var result =  await _orderService.CancelOrderStatus(id);
-            if(result.IsSuccessed)
+            var result = await _orderService.CancelOrderStatus(id);
+            if (result.IsSuccessed)
                 return Ok();
             return BadRequest("Không huỷ được đơn hàng");
         }

@@ -60,7 +60,7 @@ namespace eShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Create()
         {
             // Lấy ra danh sách các category
-            var categories =  await _categoryApiClient.GetAll();
+            var categories = await _categoryApiClient.GetAll();
             var productVM = new ProductCreateRequest()
             {
                 Categories = categories
@@ -82,7 +82,7 @@ namespace eShopSolution.AdminApp.Controllers
             var result = await _productApiClient.CreateProduct(request);
             if (result)
             {
-                TempData["result"] = "Thêm mới sản phẩm thành công";
+                TempData["CreateProductSuccessful"] = "Thêm mới sản phẩm thành công";
                 return RedirectToAction("Index");
             }
 
@@ -126,7 +126,7 @@ namespace eShopSolution.AdminApp.Controllers
             var result = await _productApiClient.UpdateProduct(request);
             if (result)
             {
-                TempData["result"] = "Cập nhật sản phẩm thành công";
+                TempData["UpdateProductSuccessful"] = "Cập nhật sản phẩm thành công";
                 return RedirectToAction("Index");
             }
 

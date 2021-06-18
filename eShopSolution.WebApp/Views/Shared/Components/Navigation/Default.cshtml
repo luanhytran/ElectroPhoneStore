@@ -12,9 +12,11 @@
                 @foreach (var category in Model)
                 {
                     <li>
-                        @Html.ActionLink(category.Name, "ViewByCategory", "Home", new { cateId = category.Id })
+                            @*@Html.ActionLink(category.Name, "ViewByCategory", "Home", new { cateId = category.Id })*@
+                        <a asp-action="ViewByCategory" asp-controller="Home" asp-route-cateId="@category.Id" >@category.Name</a>
                     </li>
                 }
+                <li><a asp-action="Index" asp-controller="Coupon">Khuyến mãi</a></li>
             </ul>
             <!-- /NAV -->
         </div>
