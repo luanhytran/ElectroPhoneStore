@@ -120,7 +120,7 @@ namespace eShopSolution.WebApp.Controllers
                 // mail admin when have new email
                 var email1 = new EmailService.EmailService();
                 email1.Send("hytranluan@gmail.com", "hytranluan@gmail.com",
-                    "ĐƠN HÀNG MỚI", $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://localhost:5002/Order/Detail?orderId=" + result +"'>đây</a> để đến trang quản lý đơn hàng này.");
+                    "ĐƠN HÀNG MỚI", $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://localhost:5002/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
 
                 var orderSummaryHtml = "<table border='1' style='border-collapse:collapse'>"
                         + "<thead>"
@@ -239,11 +239,12 @@ namespace eShopSolution.WebApp.Controllers
             var currentCart = new CartViewModel();
             currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
             long price = 0;
+            float sub_price = 0f;
 
             if (currentCart.Promotion != 0)
             {
                 var promotion = currentCart.Promotion;
-                var sub_price = (currentCart.CartItems.Sum(x => x.Price * x.Quantity));
+                sub_price = (float)(currentCart.CartItems.Sum(x => x.Price * x.Quantity));
                 price = (long)((long)sub_price * (100f - promotion) / 100f);
             }
             else
@@ -344,13 +345,85 @@ namespace eShopSolution.WebApp.Controllers
                 // mail admin when have new email
                 var email1 = new EmailService.EmailService();
                 email1.Send("hytranluan@gmail.com", "hytranluan@gmail.com",
-                    "ĐƠN HÀNG MỚI", $"Đơn đặt hàng mới từ khách hàng có số điện thoại là {checkoutRequest.PhoneNumber} và email là {checkoutRequest.Email} cần duyệt");
+                    "ĐƠN HÀNG MỚI", $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://localhost:5002/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
 
+                var orderSummaryHtml = "<table border='1' style='border-collapse:collapse'>"
+                        + "<thead>"
+                        + "<tr>"
+                        + "<th>Tên sản phẩm</th>"
+                        + "<th>Đơn giá</th>"
+                        + "<th>Số lượng mua</th>"
+                        + "<th>Tổng cộng</th>"
+                        + "</tr>"
+                        + "</thead>"
+                        + "<tbody>";
+                decimal total = 0;
+                decimal amount = 0;
                 // mail client when placed order successfully
-                var email2 = new EmailService.EmailService();
-                email2.Send("hytranluan@gmail.com", stripeEmail,
-                    "ĐẶT HÀNG THÀNH CÔNG", $"Quý khách đã đặt hàng thành công ! Electro xin cảm ơn quý khách hàng.");
+                foreach (var product in currentCart.CartItems)
+                {
+                    amount = product.Price * product.Quantity;
+                    orderSummaryHtml +=
+                        "<tr>"
+                        + "<td>" + product.Name + "</td>"
+                        + "<td>" + product.Price.ToString("N0") + " <span>&#8363;</span>" + "</td>"
+                        + "<td>" + product.Quantity
+                        + "</td>"
+                        + "<td>" + amount.ToString("N0") + " <span>&#8363;</span>" + "</td>"
+                        + "</tr>"
+                        + "</tbody>";
 
+                    total += amount;
+                };
+
+                if (currentCart.Promotion != 0)
+                {
+                    orderSummaryHtml +=
+                        "<tfoot>"
+                        + "<tr>"
+                        + "<td><strong>Tổng giá đơn hàng</strong></td>"
+                        + $"<td><strong> {sub_price:N0} <span> &#8363;</span></strong></td>"
+                        + "</tr>"
+                        + "<tr>"
+                        + "<td><strong>Số tiền giảm</strong></td>"
+                        + $"<td><strong> {sub_price - (sub_price * ((100f - model.Promotion) / 100f)):N0} <span> &#8363;</span></strong></td>"
+                        + "</tr>"
+                        + "<tr>"
+                        + "<td><strong>Tổng giá đơn hàng đã giảm</strong></td>"
+                        + $"<td><strong> {price:N0} <span> &#8363;</span></strong></td>"
+                        + "</tr>"
+                        + "</tfoot>"
+                        + "</table>";
+                }
+                else
+                {
+                    orderSummaryHtml +=
+                        "<tfoot>"
+                        + "<tr>"
+                        + "<td><strong>Tổng giá đơn hàng</strong></td>"
+                        + $"<td><strong> {price:N0} <span> &#8363;</span></strong></td>"
+                        + "</tr>"
+                        + "</tfoot>"
+                        + "</table>";
+                }
+
+                var templateHtml = "<h1>Electro Phone Store</h1>" + "<br>"
+                            + $"<h2>Quý khách đã đặt hàng thành công ! Đơn hàng của quý khách sẽ được duyệt sớm"
+                            + "<br>"
+                            + $"Mã đơn là {result}"
+                            + "<br>"
+                            + "<h3>Danh sách sản phẩm đã đặt</h3>"
+                            + "<br>";
+
+                var userMail = claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
+                var email2 = new EmailService.EmailService();
+                email2.Send("hytranluan@gmail.com", userMail,
+                                "ĐẶT HÀNG THÀNH CÔNG",
+                                templateHtml
+                                + orderSummaryHtml
+                                );
+
+                currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
                 currentCart.CartItems.Clear();
                 currentCart.Promotion = 0;
                 HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
