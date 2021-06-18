@@ -70,8 +70,9 @@ namespace eShopSolution.Application.Catalog.Orders
                 order.CouponId = request.CouponId;
             }
 
-            _context.Orders.Add(order);
-            return _context.SaveChanges();
+            var result = _context.Orders.Add(order);
+            _context.SaveChanges();
+            return result.Entity.Id;
         }
 
         public async Task<ApiResult<bool>> UpdateOrderStatus(int orderId)

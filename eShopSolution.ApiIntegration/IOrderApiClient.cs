@@ -12,7 +12,7 @@ namespace eShopSolution.ApiIntegration
 {
     public interface IOrderApiClient
     {
-        Task<bool> CreateOrder(CheckoutRequest request);
+        Task<string> CreateOrder(CheckoutRequest request);
 
         Task<PagedResult<OrderViewModel>> GetPagings(GetManageOrderPagingRequest request);
 

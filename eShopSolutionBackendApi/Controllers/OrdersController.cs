@@ -34,7 +34,7 @@ namespace eShopSolutionBackendApi.Controllers
 
             var result = _orderService.Create(request);
 
-            return Ok();
+            return Ok(result);
         }
 
         [HttpGet("userOrders/{id}")]
