@@ -725,7 +725,7 @@
                                     <div class="product-item">
                                         <div class="item-inner">
                                             <div class="product-thumbnail">
-                                                @if (product.Stock == 0)
+                                                @if (product.Stock <= 0)
                                                 {
                                                     <div class="icon-new-label new-right">Hết hàng</div>
 
@@ -747,7 +747,7 @@
                                                         <div class="item-price">
                                                             <div class="price-box"> <span class="regular-price"> <span class="price">@product.Price.ToString("N0") <span>&#8363;</span></span> </span> </div>
                                                         </div>
-                                                        @if (product.Stock == 0)
+                                                        @if (product.Stock <= 0)
                                                         {
 
                                                         }

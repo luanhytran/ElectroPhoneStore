@@ -134,7 +134,7 @@
                                     }
                                     else if (item.Status == (OrderStatus)3)
                                     {
-                                        <button class="btn btn btn-success btn-update-status" data-id="@item.Id">@Html.ActionLink("Xác nhận thanh toán", "UpdateOrderStatus", new { orderId = item.Id })</button>
+                                        <button class="btn btn btn-success btn-update-status" data-id="@item.Id">@Html.ActionLink("Xác nhận đã giao hàng", "UpdateOrderStatus", new { orderId = item.Id })</button>
                                     }
                                 </td>
                                 <td class="text-center">

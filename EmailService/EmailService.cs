@@ -33,7 +33,7 @@ namespace EmailService
             // send email
             using var smtp = new SmtpClient();
             smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-            smtp.Authenticate("your_email_here", "your_password_here");
+            smtp.Authenticate("your email here", "your password here");
 
             try
             {

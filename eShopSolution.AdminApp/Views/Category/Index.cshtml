@@ -60,6 +60,18 @@
                     })
                 </script>
             }
+            else if (TempData["DeleteCategorySuccessful"] != null)
+            {
+                <script>
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Xóa danh mục thành công',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                </script>
+            }
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>

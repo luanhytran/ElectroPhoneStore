@@ -45,7 +45,7 @@ namespace eShopSolution.WebApp.Controllers
             var coupons = await _couponApiClient.GetAll();
             var coupon = coupons.FirstOrDefault(x => x.Code == code);
 
-            if (coupon.Count == 0)
+            if (coupon.Count <= 0)
                 return -1;
 
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
