@@ -119,16 +119,17 @@ namespace eShopSolution.WebApp
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             StripeConfiguration.ApiKey = "sk_test_51J1AvDHFAMiU1Xo0pTiqpCoiiJUR2BkaM3gXq8HhT2n8Kxw85pn9SmoIPFwt1xrbAMZyCq1d8JSw9oTE0vsW6tC900QHnZYNz5";
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
+            //else
+            //{
+            //    app.UseExceptionHandler("/Home/Error");
+            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            //    app.UseHsts();
+            //}
+            app.UseHsts();
             // This is your real test secret API key.
             app.UseHttpsRedirection();
             app.UseMarkdown();

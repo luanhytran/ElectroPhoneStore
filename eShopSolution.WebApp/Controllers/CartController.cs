@@ -120,7 +120,7 @@ namespace eShopSolution.WebApp.Controllers
                 // mail admin when have new email
                 var email1 = new EmailService.EmailService();
                 email1.Send("hytranluan@gmail.com", "hytranluan@gmail.com",
-                    "ĐƠN HÀNG MỚI", $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://localhost:5002/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
+                    "ĐƠN HÀNG MỚI", $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://electroadminapp.azurewebsites.net/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
 
                 var orderSummaryHtml = "<table border='1' style='border-collapse:collapse'>"
                         + "<thead>"
@@ -345,7 +345,7 @@ namespace eShopSolution.WebApp.Controllers
                 // mail admin when have new email
                 var email1 = new EmailService.EmailService();
                 email1.Send("hytranluan@gmail.com", "hytranluan@gmail.com",
-                    "ĐƠN HÀNG MỚI", $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://localhost:5002/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
+                    "ĐƠN HÀNG MỚI", $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://electroadminapp.azurewebsites.net/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
 
                 var orderSummaryHtml = "<table border='1' style='border-collapse:collapse'>"
                         + "<thead>"

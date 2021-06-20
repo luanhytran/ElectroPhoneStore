@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\eShopSolution.AdminApp\eShopSolution.AdminApp.csproj" />
     <ProjectReference Include="..\eShopSolution.Application\eShopSolution.Application.csproj" />
     <ProjectReference Include="..\eShopSolution.Data\eShopSolution.Data.csproj" />
     <ProjectReference Include="..\eShopSolution.Utilities\eShopSolution.Utilities.csproj" />

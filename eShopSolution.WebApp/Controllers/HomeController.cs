@@ -33,14 +33,13 @@ namespace eShopSolution.WebApp.Controllers
         private readonly ICategoryApiClient _categoryApiClient;
         private readonly IConfiguration _configuration;
 
-        public HomeController(ILogger<HomeController> logger, 
+        public HomeController(ILogger<HomeController> logger,
             IProductApiClient productApiClient, ICategoryApiClient categoryApiClient, IConfiguration configuration)
         {
             _logger = logger;
             _productApiClient = productApiClient;
             _categoryApiClient = categoryApiClient;
             _configuration = configuration;
-
         }
 
         public async Task<IActionResult> Index()
@@ -66,7 +65,6 @@ namespace eShopSolution.WebApp.Controllers
                     // Set key token trong session bằng token nhận được khi authenticate
                     HttpContext.Session.SetString(SystemConstants.AppSettings.Token, cookie);
 
-
                     await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         userPrincipal,
@@ -75,7 +73,7 @@ namespace eShopSolution.WebApp.Controllers
                     return RedirectToAction("Index", "Home");
                 }
             }
-           
+
             var culture = CultureInfo.CurrentCulture.Name;
 
             var viewModel = new HomeViewModel
@@ -84,7 +82,6 @@ namespace eShopSolution.WebApp.Controllers
                 LatestProducts = await _productApiClient.GetLatestProducts(culture, SystemConstants.ProductSettings.NumberOfLatestProducts),
                 //Categories = await _categoryApiClient.GetAll()
             };
-
 
             foreach (var item in viewModel.LatestProducts)
             {
@@ -170,6 +167,7 @@ namespace eShopSolution.WebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
         public IActionResult SetCultureCookie(string cltr, string returnUrl)
         {
             Response.Cookies.Append(
@@ -194,7 +192,6 @@ namespace eShopSolution.WebApp.Controllers
             validationParameters.ValidAudience = _configuration["Tokens:Issuer"];
             validationParameters.ValidIssuer = _configuration["Tokens:Issuer"];
             validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
-
 
             // Giải mã thông tin claim mà ta đã gắn cho token ấy ( định nghĩa claim trong UserService.cs )
             ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);

@@ -95,7 +95,7 @@
                     <h2 class="product-name">@Model.Product.Name</h2>
 
                     <div>
-                        <h3 class="product-price">@Model.Product.Price.ToString("N0") <span>&#8363;</span> <del class="product-old-price">$990.00</del></h3>
+                        <h3 class="product-price">@Model.Product.Price.ToString("N0") <span>&#8363;</span> </h3>
                         @if (Model.Product.Stock <= 0)
                         {
                             <span class="product-available">Hết hàng</span>
@@ -207,7 +207,6 @@
     <!-- /container -->
 </div>
 <!-- /SECTION -->
-
 @*Read more button*@
 <script>
     function myFunction() {
