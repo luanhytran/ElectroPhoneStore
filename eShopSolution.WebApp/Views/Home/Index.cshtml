@@ -97,7 +97,7 @@
                                                 <img style="margin-left:auto;margin-right:auto;display:block" height="214" src="@(Configuration["BaseAddress"] + item.ThumbnailImage)" alt="@item.Name">
                                             </a>
                                             <div class="product-label">
-                                                @if (item.Stock == 0)
+                                                @if (item.Stock <= 0)
                                                 {
                                                     <span class="sale">Hết hàng</span>
                                                 }
@@ -112,7 +112,7 @@
                                             <h3 class="product-name"><a href="#">@item.Name</a></h3>
                                             <h4 class="product-price">@item.Price.ToString("N0") <span>&#8363;</span></h4>
                                         </div>
-                                        @if (item.Stock == 0)
+                                        @if (item.Stock <= 0)
                                         {
 
                                         }

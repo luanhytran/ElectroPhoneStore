@@ -704,38 +704,42 @@
                 <div class="shop-inner">
                     @foreach (var coupon in Model.Items)
                     {
-                        <div class="product-grid-area">
-                            <ul class="products-grid">
-                                <li class="item col-lg-3 col-md-4 col-sm-6 col-xs-6 ">
-                                    <div class="product-item">
-                                        <div class="item-inner">
-                                            <div class="product-thumbnail">
-                                                <div class="pr-img-area">
-                                                    <a title="@coupon.Describe" asp-action="Detail" asp-controller="Coupon" asp-route-couponId="@coupon.Id">
-                                                        <figure><img class="first-img" src="https://image.freepik.com/free-vector/mega-sale-banner_23-2147987220.jpg" alt="HTML template"></figure>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="item-info">
-                                                <div class="info-inner">
-                                                    <div class="item-title">
+                        if (coupon.Count > 0)
+                        {
+                            <div class="product-grid-area">
+                                <ul class="products-grid">
+                                    <li class="item col-lg-3 col-md-4 col-sm-6 col-xs-6 ">
+                                        <div class="product-item">
+                                            <div class="item-inner">
+                                                <div class="product-thumbnail">
+                                                    <div class="pr-img-area">
                                                         <a title="@coupon.Describe" asp-action="Detail" asp-controller="Coupon" asp-route-couponId="@coupon.Id">
-                                                            @coupon.Describe
+                                                            <figure><img class="first-img" src="https://image.freepik.com/free-vector/mega-sale-banner_23-2147987220.jpg" alt="HTML template"></figure>
                                                         </a>
                                                     </div>
-                                                    <span style="background-color:#FE316C;" class="badge badge-pill badge-success">Khuyến mãi</span>
-                                                    <div class="item-content">
-                                                        <div class="item-price">
-                                                            <div class="price-box"> <span class="regular-price"> Còn lại: <span style="color:#EF7E16;font-weight:bold">@coupon.Count lần</span>   </span> </div>
+                                                </div>
+                                                <div class="item-info">
+                                                    <div class="info-inner">
+                                                        <div class="item-title">
+                                                            <a title="@coupon.Describe" asp-action="Detail" asp-controller="Coupon" asp-route-couponId="@coupon.Id">
+                                                                @Html.Raw(coupon.Describe)
+                                                            </a>
+                                                        </div>
+                                                        <span style="background-color:#FE316C;" class="badge badge-pill badge-success">Khuyến mãi</span>
+                                                        <div class="item-content">
+                                                            <div class="item-price">
+                                                                <div class="price-box"> <span class="regular-price"> Còn lại: <span style="color:#EF7E16;font-weight:bold">@coupon.Count lần</span>   </span> </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        }
                     }
                     <div class="pagination-area ">
                         @await Component.InvokeAsync("Pager", Model)

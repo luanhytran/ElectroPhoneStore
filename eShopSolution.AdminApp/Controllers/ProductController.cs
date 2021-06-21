@@ -154,7 +154,7 @@ namespace eShopSolution.AdminApp.Controllers
             var result = await _productApiClient.DeleteProduct(request.Id);
             if (result)
             {
-                TempData["result"] = "Xóa sản phẩm thành công";
+                TempData["DeleteProductSuccessful"] = "Xóa sản phẩm thành công";
                 return RedirectToAction("Index");
             }
 

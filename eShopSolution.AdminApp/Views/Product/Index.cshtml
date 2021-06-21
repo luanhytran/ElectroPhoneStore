@@ -72,6 +72,18 @@
                     })
                 </script>
             }
+            else if (TempData["DeleteProductSuccessful"] != null)
+            {
+                <script>
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Xóa sản phẩm thành công',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                </script>
+            }
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>

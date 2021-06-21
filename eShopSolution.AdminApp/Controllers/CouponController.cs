@@ -113,7 +113,7 @@ namespace eShopSolution.AdminApp.Controllers
             var result = await _couponApiClient.DeleteCoupon(request.Id);
             if (result)
             {
-                TempData["result"] = "Xóa coupon thành công";
+                TempData["DeleteCouponSuccessful"] = "Xóa coupon thành công";
                 return RedirectToAction("Index");
             }
 

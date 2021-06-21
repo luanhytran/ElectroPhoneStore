@@ -110,7 +110,7 @@ namespace eShopSolution.AdminApp.Controllers
             var result = await _categoryApiClient.DeleteCategory(request.Id);
             if (result)
             {
-                TempData["result"] = "Xóa danh mục thành công";
+                TempData["DeleteCategorySuccessful"] = "Xóa danh mục thành công";
                 return RedirectToAction("Index");
             }
 
