@@ -114,6 +114,7 @@
                                 Hoặc
                             </div>
                             <form asp-action="Processing" asp-controller="Cart" method="post">
+                                <div asp-validation-summary="All" class="text-danger"></div>
                                 <input type="hidden" asp-for="CheckoutModel.PaymentMethod" value="@PaymentMethod.CreditCard" />
                                 <input type="hidden" id="txt_name_cc" asp-for="CheckoutModel.Name" value="@Model.Name">
                                 <input type="hidden" id="txt_address_cc" asp-for="CheckoutModel.Address" value="@Model.Address">
@@ -141,6 +142,7 @@
                                         <div class="col-sm-6">
                                             <label for="Name" class="required">Tên</label>
                                             <input class="input form-control" id="txt_name_cod" onchange="$(" input #txt_name_cc").setAttribute('value', $("input #txt_name_cod").val());" type="text" asp-for="CheckoutModel.Name" value="@Model.Name">
+                                            <span asp-validation-for="CheckoutModel.Name" class="text-danger"></span>
                                         </div>
                                         <!--/ [col] -->
                                     </li>
@@ -150,6 +152,7 @@
                                         <div class="col-xs-12">
                                             <label for="Address" class="required">Địa chỉ</label>
                                             <input class="input form-control" id="txt_address_cod" type="text" asp-for="CheckoutModel.Address" value="@Model.Address">
+                                            <span asp-validation-for="CheckoutModel.Address" class="text-danger"></span>
                                         </div>
                                         <!--/ [col] -->
                                     </li>
@@ -159,6 +162,8 @@
                                         <div class="col-sm-6">
                                             <label for="PhoneNumber" class="required">Số điện thoại</label>
                                             <input class="input form-control" id="txt_phoneNumber_cod" type="text" asp-for="CheckoutModel.PhoneNumber" value="@Model.PhoneNumber">
+                                            <span asp-validation-for="CheckoutModel.PhoneNumber" class="text-danger"></span>
+
                                         </div>
                                         <!--/ [col] -->
                                     </li>

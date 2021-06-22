@@ -234,6 +234,11 @@ namespace eShopSolution.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Processing(string stripeToken, string stripeEmail, CheckoutViewModel request)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
 
             var currentCart = new CartViewModel();
