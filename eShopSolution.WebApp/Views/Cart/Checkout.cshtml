@@ -114,7 +114,6 @@
                                 Hoặc
                             </div>
                             <form asp-action="Processing" asp-controller="Cart" method="post">
-                                <div asp-validation-summary="All" class="text-danger"></div>
                                 <input type="hidden" asp-for="CheckoutModel.PaymentMethod" value="@PaymentMethod.CreditCard" />
                                 <input type="hidden" id="txt_name_cc" asp-for="CheckoutModel.Name" value="@Model.Name">
                                 <input type="hidden" id="txt_address_cc" asp-for="CheckoutModel.Address" value="@Model.Address">
@@ -163,7 +162,6 @@
                                             <label for="PhoneNumber" class="required">Số điện thoại</label>
                                             <input class="input form-control" id="txt_phoneNumber_cod" type="text" asp-for="CheckoutModel.PhoneNumber" value="@Model.PhoneNumber">
                                             <span asp-validation-for="CheckoutModel.PhoneNumber" class="text-danger"></span>
-
                                         </div>
                                         <!--/ [col] -->
                                     </li>
