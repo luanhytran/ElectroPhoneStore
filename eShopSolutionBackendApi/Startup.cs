@@ -53,9 +53,11 @@ namespace eShopSolutionBackendApi
             // Cần thêm service này khi viết API đăng ký đăng nhập
             services.AddIdentity<AppUser, AppRole>(options =>
                 {
-                    options.Password.RequiredLength = 7;
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireUppercase = false;
+                    options.Password.RequiredLength = 8;
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = true;
+                    options.Password.RequireLowercase = true;
                     options.SignIn.RequireConfirmedEmail = true;
                     options.User.RequireUniqueEmail = true;
                 })

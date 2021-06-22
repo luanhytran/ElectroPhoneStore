@@ -8,8 +8,8 @@
 <style>
 
     /******************************************
-35. Login page
-******************************************/
+    35. Login page
+    ******************************************/
     .account-login {
         display: inline-block;
         width: 100%;
@@ -121,7 +121,6 @@
     <!-- /container -->
 </div>
 <!-- /BREADCRUMB -->
-
 <!-- Main Container -->
 <section class="main-container col1-layout">
     <div class="main container">
@@ -133,17 +132,18 @@
                     <div>
                         <label for="emmail_login">Tài khoản<span class="required">*</span></label>
                         <input asp-for="UserName" type="text" class="form-control">
-                        <span asp-validation-for="UserName" class="text-danger"></span>
                     </div>
                     <div>
                         <label for="password_login">Mật khẩu<span class="required">*</span></label>
                         <input asp-for="Password" type="password" class="form-control">
-                        <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                    <span class="text-danger">@Html.ValidationSummary(true)</span>
                     <p class="forgot-pass"><a asp-action="ForgotPassword">Bạn quên mật khẩu?</a></p>
                     <button class="button" style="margin-right:10px"><i class="fa fa-lock"></i>&nbsp; <span>Đăng nhập</span></button>
                     <label class="inline" for="rememberme">
-                        <input asp-for="RememberMe" type="checkbox" >
+                        <input asp-for="RememberMe" type="checkbox">
                         Ghi nhớ đăng nhập
                     </label>
                 </form>

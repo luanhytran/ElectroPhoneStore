@@ -234,6 +234,11 @@ namespace eShopSolution.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Processing(string stripeToken, string stripeEmail, CheckoutViewModel request)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
 
             var currentCart = new CartViewModel();
@@ -569,10 +574,10 @@ namespace eShopSolution.WebApp.Controllers
                     }
                     else if (quantity > productStock)
                     {
-                        return StatusCode(406, "Số lượng mua lớn hơn số lượng trong kho của sán phẩm !");
+                        return Content("quantity is greater than stock");
                     }
-                    item.Quantity = quantity;
                 }
+                item.Quantity = quantity;
             }
 
             HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
