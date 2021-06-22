@@ -52,10 +52,10 @@ namespace eShopSolution.WebApp.Controllers
 
             var result = await _userApiClient.Authenticate(request);
 
-            if (result.ResultObj == null)
+            if (!result.IsSuccessed)
             {
-                ModelState.AddModelError("", "Đăng nhập thất bại");
-                return View();
+                ModelState.AddModelError("", result.Message);
+                return View(request);
             }
 
             if (request.RememberMe == true)
@@ -108,8 +108,8 @@ namespace eShopSolution.WebApp.Controllers
 
             if (!result.IsSuccessed)
             {
-                ModelState.AddModelError("", "Login failure");
-                return View();
+                ModelState.AddModelError("", result.Message);
+                return View(registerRequest);
             }
 
             var token = result.ResultObj;

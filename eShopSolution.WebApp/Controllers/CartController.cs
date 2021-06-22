@@ -234,6 +234,11 @@ namespace eShopSolution.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Processing(string stripeToken, string stripeEmail, CheckoutViewModel request)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
             var session = HttpContext.Session.GetString(SystemConstants.CartSession);
 
             var currentCart = new CartViewModel();
@@ -561,7 +566,7 @@ namespace eShopSolution.WebApp.Controllers
                         currentCart.CartItems.Remove(item);
                         break;
                     }
-                    else if (quantity == 0 && currentCart.CartItems.Count == 1)
+                    else if (quantity == 0 && currentCart.CartItems.Count == 1) // for what ?
                     {
                         currentCart.CartItems.Remove(item);
                         currentCart.Promotion = 0;
@@ -569,7 +574,7 @@ namespace eShopSolution.WebApp.Controllers
                     }
                     else if (quantity > productStock)
                     {
-                        return StatusCode(406, "Số lượng mua lớn hơn số lượng trong kho của sán phẩm !");
+                        return Content("quantity is greater than stock");
                     }
                     item.Quantity = quantity;
                 }
