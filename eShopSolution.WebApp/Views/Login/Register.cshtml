@@ -138,50 +138,53 @@
                                     <label>Tên người dùng <span class="required" style="color:red">*</span></label>
                                     <div class="input-text">
                                         <input type="text" asp-for="Name" class="form-control">
-                                        <span asp-validation-for="Name" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-xs-12" style="margin-top:15px">
                                     <label>Địa chỉ <span class="required" style="color:red">*</span></label>
                                     <div class="input-text">
                                         <input type="text" asp-for="Address" class="form-control">
-                                        <span asp-validation-for="Address" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-sm-6" style="margin-top:15px">
                                     <label>Email <span class="required" style="color:red">*</span></label>
                                     <div class="input-text">
                                         <input type="text" asp-for="Email" class="form-control">
-                                        <span asp-validation-for="Email" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-sm-6" style="margin-top:15px">
                                     <label>Số điện thoại <span class="required" style="color:red">*</span></label>
                                     <div class="input-text">
                                         <input type="text" asp-for="PhoneNumber" class="form-control">
-                                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-xs-12" style="margin-top:15px">
                                     <label>Tên tài khoản <span class="required" style="color:red">*</span></label>
                                     <div class="input-text">
                                         <input type="text" asp-for="UserName" class="form-control">
-                                        <span asp-validation-for="UserName" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-xs-12" style="margin-top:15px">
                                     <label>Mật khẩu <span class="required" style="color:red">*</span></label>
                                     <div class="input-text">
                                         <input type="password" asp-for="Password" class="form-control">
-                                        <span asp-validation-for="Password" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-xs-12" style="margin-top:15px">
                                     <label>Xác nhận mật khẩu <span class="required" style="color:red">*</span></label>
                                     <div class="input-text">
                                         <input type="password" asp-for="ConfirmPassword" class="form-control">
-                                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                                     </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                    <span class="text-danger">@Html.ValidationSummary(true)</span>
                                 </div>
                                 <div class="col-xs-12" style="margin-top:15px">
                                     <div class="submit-text">

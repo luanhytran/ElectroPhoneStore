@@ -20,7 +20,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace eShopSolution.Application.System.Users
 {
     public class UserService : IUserService
@@ -48,21 +47,21 @@ namespace eShopSolution.Application.System.Users
         {
             // Tìm xem tên user có tồn tại hay không
             var user = await _userManager.FindByNameAsync(request.UserName);
-        
-            if (user == null) return new ApiErrorResult<string>("Tài khoản không tồn tại");
+
+            if (user == null) return new ApiErrorResult<string>(new string("Tài khoản không tồn tại"));
 
             // Trả về một SignInResult, tham số cuối là IsPersistent kiểu bool
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, false);
             if (!result.Succeeded)
             {
-                return new ApiErrorResult<string>("Đăng nhập không thành công");
+                return new ApiErrorResult<string>(new string("Mật khẩu không đúng"));
             }
 
             var roles = await _userManager.GetRolesAsync(user);
             if (roles.Count == 0)
             {
                 var claims = new[]
-                {  
+                {
                 new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
                 new Claim(ClaimTypes.Email,user.Email),
                 new Claim(ClaimTypes.GivenName,user.Name),
@@ -79,7 +78,7 @@ namespace eShopSolution.Application.System.Users
 
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-                // 1 SecurityToken ( cần cài jwt ) 
+                // 1 SecurityToken ( cần cài jwt )
                 var token = new JwtSecurityToken(_config["Tokens:Issuer"],
                     _config["Tokens:Issuer"],
                     claims,
@@ -103,14 +102,13 @@ namespace eShopSolution.Application.System.Users
 
                 // Lưu ý khi claim mà các thông tin bị null sẽ báo lỗi
 
-
                 // Sau khi có được claim thì ta cần mã hóa nó
                 // Tokens key và issuer nằm ở appsettings.json và truy cập được thông qua DI 1 Iconfig
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
 
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-                // 1 SecurityToken ( cần cài jwt ) 
+                // 1 SecurityToken ( cần cài jwt )
                 var token = new JwtSecurityToken(_config["Tokens:Issuer"],
                     _config["Tokens:Issuer"],
                     claims,
@@ -128,13 +126,21 @@ namespace eShopSolution.Application.System.Users
             // Kiểm tra tài khoản đã tồn tại chưa
             if (user != null)
             {
-                return new ApiErrorResult<string>("Tài khoản đã tồn tại");
+                return new ApiErrorResult<string>(new string("Tên tài khoản đã tồn tại"));
             }
 
             // Kiểm tra email đã tồn tại chưa
             if (await _userManager.FindByEmailAsync(request.Email) != null)
             {
-                return new ApiErrorResult<string>("Email đã tồn tại");
+                return new ApiErrorResult<string>(new string("Email đã tồn tại"));
+            }
+
+            var usersList = await _userManager.Users.ToListAsync();
+            var userPhoneNumber = usersList.FirstOrDefault(x => x.PhoneNumber == request.PhoneNumber);
+
+            if (userPhoneNumber != null)
+            {
+                return new ApiErrorResult<string>(new string("Số điện thoại đã tồn tại"));
             }
 
             user = new AppUser()
@@ -153,7 +159,7 @@ namespace eShopSolution.Application.System.Users
                 return new ApiSuccessResult<string>(token);
             }
 
-            return new ApiErrorResult<string>("Đăng ký không thành công");
+            return new ApiErrorResult<string>(new string("Đăng ký không thành công"));
         }
 
         public async Task<ApiResult<bool>> Delete(Guid id)
@@ -235,7 +241,7 @@ namespace eShopSolution.Application.System.Users
                 Id = user.Id,
             };
 
-            if(roles.Count == 0)
+            if (roles.Count == 0)
             {
                 userVm.Roles = "customer";
             }
@@ -290,7 +296,7 @@ namespace eShopSolution.Application.System.Users
             }
 
             //3. Paging
-            int totalRow = await query.CountAsync(); 
+            int totalRow = await query.CountAsync();
 
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
@@ -336,7 +342,6 @@ namespace eShopSolution.Application.System.Users
                 }
             }
             await _userManager.RemoveFromRolesAsync(user, removedRoles);
-
 
             /* Khi gán quyền, người dùng bấm lưu lại thì kiểm tra xem role nào đã được chọn
             * Sau đó lấy ra danh sách role đã được chọn ( selected == true )

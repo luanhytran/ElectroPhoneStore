@@ -35,10 +35,11 @@ namespace eShopSolution.BackendApi.Controllers
             // Truyền request vào hàm Authencate của UserService bên Domain và trả về một JWT
             var result = await _userService.Authencate(request);
 
-            if (string.IsNullOrEmpty(result.ResultObj))
+            if (!result.IsSuccessed)
             {
                 return BadRequest(result);
             }
+
             return Ok(result);
         }
 
@@ -129,9 +130,9 @@ namespace eShopSolution.BackendApi.Controllers
             var result = await _userService.Delete(id);
             return Ok(result);
         }
-        
+
         [HttpPost("changePassword")]
-        public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordViewModel model)
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordViewModel model)
         {
             var result = await _userService.ChangePassword(model);
             if (!result.IsSuccessed)

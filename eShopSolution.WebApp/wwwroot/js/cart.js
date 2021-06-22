@@ -45,6 +45,16 @@
                 quantity: quantity
             },
             success: function (res) {
+                if (res == "quantity is greater than stock") {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: 'Số lượng mua đã lớn hơn số lượng trong kho của sản phẩm',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    })
+                }
+
                 $('#lbl_number_of_items_header').text(res.cartItems.length);
                 loadData();
             },
@@ -79,7 +89,7 @@
                         + "<td>" + item.name + "</td>"
                         + "<td class=\"availability in-stock text-center\"><span class=\"label\">In stock</span></td>"
                         + "<td>" + numberWithCommas(item.price) + " <span>&#8363;</span>" + "</td>"
-                        + "<td><div class=\"input-append\"><input class=\"span1\" style=\"max-width: 34px\" placeholder=\"1\" id=\"txt_quantity_" + item.productId + "\" value=\"" + item.quantity + "\" size=\"16\" type=\"text\">"
+                        + "<td><div class=\"input-append\"><input disabled class=\"span1\" style=\"max-width: 34px\" placeholder=\"1\" id=\"txt_quantity_" + item.productId + "\" value=\"" + item.quantity + "\" size=\"16\" type=\"text\">"
                         + "<button class=\"btn-minus\" data-id=\"" + item.productId + "\" type =\"button\"> <i class=\"fa fa-minus\"></i></button>"
                         + "<button class=\"btn-plus\" data-id=\"" + item.productId + "\" type=\"button\"><i class=\"fa fa-plus\"></i></button>"
                         + "</div>"
@@ -132,6 +142,15 @@
                         position: 'top-end',
                         icon: 'error',
                         title: 'Mã coupon này đã hết lượt sử dụng',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    })
+                    return res;
+                } else if (res === -2) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: 'Mã coupon không tồn tại',
                         showConfirmButton: false,
                         timer: 1500,
                     })
