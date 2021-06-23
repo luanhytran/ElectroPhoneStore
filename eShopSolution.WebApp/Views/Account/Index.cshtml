@@ -84,39 +84,39 @@
 
                         @if (TempData["CancelOrderSuccess"] != null)
                         {
-                            <script>
-                                Swal.fire({
-                                    position: 'top-end',
-                                    icon: 'success',
-                                    title: 'Hủy đơn thành công',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
-                            </script>
+                        <script>
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Hủy đơn thành công',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        </script>
                         }
                         else if (TempData["UpdateAccountSuccess"] != null)
                         {
-                            <script>
-                                Swal.fire({
-                                    position: 'top-end',
-                                    icon: 'success',
-                                    title: 'Cập nhật thông tin cá nhân thành công',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
-                            </script>
+                        <script>
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Cập nhật thông tin cá nhân thành công',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        </script>
                         }
                         else if (TempData["ChangePasswordSuccess"] != null)
                         {
-                            <script>
-                                Swal.fire({
-                                    position: 'top-end',
-                                    icon: 'success',
-                                    title: 'Cập nhật mật khẩu thành công',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
-                            </script>
+                        <script>
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Cập nhật mật khẩu thành công',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        </script>
                         }
 
                         <div class="title-buttons"><strong>Đơn hàng gần đây</strong> <a href="#">View All </a> </div>
@@ -159,12 +159,12 @@
                                 <tbody>
                                     @foreach (var item in Model.Orders)
                                     {
-                                        <tr class="first odd">
-                                            <td>@item.Id</td>
-                                            <td>@item.Name</td>
-                                            <td class="text-center">@item.OrderDate</td>
-                                            <td class="text-center">
-                                                @{
+                                    <tr class="first odd">
+                                        <td>@item.Id</td>
+                                        <td>@item.Name</td>
+                                        <td class="text-center">@item.OrderDate</td>
+                                        <td class="text-center">
+                                            @{
                                                     var status = "";
                                                     var statusEnum = (int)item.Status;
                                                     switch (statusEnum)
@@ -188,33 +188,33 @@
                                                             status = "...";
                                                             break;
                                                     }
-                                                }
-                                                <i>@status</i>
-                                            </td>
-                                            <td class="text-center">
+                                            }
+                                            <i>@status</i>
+                                        </td>
+                                        <td class="text-center">
 
-                                                <strong>
-                                                    @item.Price.ToString("N0")
-                                                    <span>&#8363;</span>
-                                                </strong>
-                                            </td>
-                                            <td class="text-center">
+                                            <strong>
+                                                @item.Price.ToString("N0")
+                                                <span>&#8363;</span>
+                                            </strong>
+                                        </td>
+                                        <td class="text-center">
 
-                                                @if (item.Status == (OrderStatus)1)
+                                            @if (item.Status == (OrderStatus)1)
                                                 {
-                                                    @*@Html.ActionLink("Huỷ đơn", "CancelOrderStatus", new { orderId = item.Id })*@
-                                                    <a asp-action="CancelOrderStatus" asp-route-orderId="@item.Id">Hủy đơn</a>
+                                            @*@Html.ActionLink("Huỷ đơn", "CancelOrderStatus", new { orderId = item.Id })*@
+                                            <a asp-action="CancelOrderStatus" asp-route-orderId="@item.Id">Hủy đơn</a>
                                                 }
                                                 else if (item.Status == (OrderStatus)2)
                                                 {
-                                                    @*@Html.ActionLink("Huỷ đơn", "CancelOrderStatus", new { orderId = item.Id })*@
-                                                    <a asp-action="CancelOrderStatus" asp-route-orderId="@item.Id">Hủy đơn</a>
+                                            @*@Html.ActionLink("Huỷ đơn", "CancelOrderStatus", new { orderId = item.Id })*@
+                                            <a asp-action="CancelOrderStatus" asp-route-orderId="@item.Id">Hủy đơn</a>
                                                 }
-                                            </td>
-                                            <td class="text-center">
-                                                @Html.ActionLink("Xem chi tiết", "OrderDetail", new { orderId = item.Id, name = item.Name })
-                                            </td>
-                                        </tr>
+                                        </td>
+                                        <td class="text-center">
+                                            @Html.ActionLink("Xem chi tiết", "OrderDetail", new { orderId = item.Id, name = item.Name })
+                                        </td>
+                                    </tr>
                                     }
                                 </tbody>
                             </table>

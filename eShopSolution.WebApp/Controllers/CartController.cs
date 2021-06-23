@@ -566,7 +566,7 @@ namespace eShopSolution.WebApp.Controllers
                         currentCart.CartItems.Remove(item);
                         break;
                     }
-                    else if (quantity == 0 && currentCart.CartItems.Count == 1)
+                    else if (quantity == 0 && currentCart.CartItems.Count == 1) // for what ?
                     {
                         currentCart.CartItems.Remove(item);
                         currentCart.Promotion = 0;
@@ -576,8 +576,8 @@ namespace eShopSolution.WebApp.Controllers
                     {
                         return Content("quantity is greater than stock");
                     }
+                    item.Quantity = quantity;
                 }
-                item.Quantity = quantity;
             }
 
             HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));

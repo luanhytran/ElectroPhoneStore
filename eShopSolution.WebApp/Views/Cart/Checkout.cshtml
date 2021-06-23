@@ -30,6 +30,28 @@
             $('#txt_phoneNumber_cc').val($('#txt_phoneNumber_cod').val())
         });
     </script>
+    <script>
+        $("#stripe_api").hide();
+
+        $('input.required').on('keyup', function () {
+            var showBtn = true;
+
+            // Check all inputs
+            $('input.required').each(function () {
+                showBtn = showBtn && ($(this).val() !== "")
+
+            }); //Edited
+
+            showBtn = showBtn && ($("#txt_name_cod").val().length <= 200)
+                && ($("#txt_address_cod").val().length <= 500)
+                && ($("#txt_phoneNumber_cod").val().length >= 10)
+                && ($("#txt_phoneNumber_cod").val().length <= 12)
+                && $.isNumeric($("#txt_phoneNumber_cod").val())
+
+            // Hide or show the button according to the boolean value
+            $("#stripe_api").toggle(showBtn);
+        });
+    </script>
 }
 
 <!-- BREADCRUMB -->
@@ -79,10 +101,10 @@
                                             <th>Giá</th>
                                             <th>Số lượng</th>
                                             <th>Tổng tiền</th>
-                                            <th class="action text-center"><i class="fa fa-trash"></i></th>
+                                            <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody id="cart_body">
+                                    <tbody id="cart_body_checkout">
                                     </tbody>
                                     <tfoot>
                                         <tr>
@@ -110,11 +132,11 @@
                             <div style="margin: 10px 0px;font-weight:500">
                                 Thanh toán khi nhận hàng
                             </div>
-                            <div>
-                                Hoặc
-                            </div>
-                            <form asp-action="Processing" asp-controller="Cart" method="post">
-                                <div asp-validation-summary="All" class="text-danger"></div>
+
+                            <form id="stripe_api" asp-action="Processing" asp-controller="Cart" method="post">
+                                <div>
+                                    Hoặc
+                                </div>
                                 <input type="hidden" asp-for="CheckoutModel.PaymentMethod" value="@PaymentMethod.CreditCard" />
                                 <input type="hidden" id="txt_name_cc" asp-for="CheckoutModel.Name" value="@Model.Name">
                                 <input type="hidden" id="txt_address_cc" asp-for="CheckoutModel.Address" value="@Model.Address">
@@ -141,7 +163,7 @@
                                     <li class="row">
                                         <div class="col-sm-6">
                                             <label for="Name" class="required">Tên</label>
-                                            <input class="input form-control" id="txt_name_cod" onchange="$(" input #txt_name_cc").setAttribute('value', $("input #txt_name_cod").val());" type="text" asp-for="CheckoutModel.Name" value="@Model.Name">
+                                            <input class="input form-control required" id="txt_name_cod" onchange="$(" input #txt_name_cc").setAttribute('value', $("input #txt_name_cod").val());" type="text" asp-for="CheckoutModel.Name" value="@Model.Name">
                                             <span asp-validation-for="CheckoutModel.Name" class="text-danger"></span>
                                         </div>
                                         <!--/ [col] -->
@@ -151,7 +173,7 @@
                                     <li class="row">
                                         <div class="col-xs-12">
                                             <label for="Address" class="required">Địa chỉ</label>
-                                            <input class="input form-control" id="txt_address_cod" type="text" asp-for="CheckoutModel.Address" value="@Model.Address">
+                                            <input class="input form-control required" id="txt_address_cod" type="text" asp-for="CheckoutModel.Address" value="@Model.Address">
                                             <span asp-validation-for="CheckoutModel.Address" class="text-danger"></span>
                                         </div>
                                         <!--/ [col] -->
@@ -161,7 +183,7 @@
                                     <li class="row">
                                         <div class="col-sm-6">
                                             <label for="PhoneNumber" class="required">Số điện thoại</label>
-                                            <input class="input form-control" id="txt_phoneNumber_cod" type="text" asp-for="CheckoutModel.PhoneNumber" value="@Model.PhoneNumber">
+                                            <input class="input form-control required" id="txt_phoneNumber_cod" type="text" asp-for="CheckoutModel.PhoneNumber" value="@Model.PhoneNumber">
                                             <span asp-validation-for="CheckoutModel.PhoneNumber" class="text-danger"></span>
                                         </div>
                                         <!--/ [col] -->

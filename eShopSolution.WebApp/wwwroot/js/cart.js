@@ -2,6 +2,7 @@
     this.initialize = function () {
         loadData();
         registerEvents();
+        loadDataCheckout();
     }
 
     function registerEvents() {
@@ -54,6 +55,7 @@
                         timer: 1500,
                     })
                 }
+
                 $('#lbl_number_of_items_header').text(res.cartItems.length);
                 loadData();
             },
@@ -103,6 +105,64 @@
                 });
 
                 $('#cart_body').html(html);
+                $('#lbl_number_of_items').text(cartItemsList.length);
+                $('#lbl_total').text(numberWithCommas(total));
+
+                if (promotion !== 0) {
+                    var discountAmount = total - (total * ((100 - promotion) / 100));
+                    $('#discount_amount_row').show();
+                    $('#total_discounted_row').show();
+                    $('#lbl_discount_amount').text(numberWithCommas(discountAmount));
+                    $('#lbl_total_discounted').text(numberWithCommas(total * ((100 - promotion) / 100)));
+                } else {
+                    $('#discount_amount_row').hide();
+                    $('#total_discounted_row').hide();
+                }
+            }
+        });
+    }
+
+    function loadDataCheckout() {
+        const culture = $('#hidCulture').val();
+        $.ajax({  // xử lý khi click thêm Product vào Cart
+            type: "GET",
+            url: "/" + culture + '/Cart/GetListItems',
+            success: function (res) {
+                var cartItemsList = res.cartItems;
+                var promotion = res.promotion;
+
+                if (cartItemsList.length === 0) {
+                    $('.checkout-btn').hide();
+                    $('#tbl_cart').hide();
+                    $('#coupon-input').hide();
+                }
+
+                if ($("#txt_name_cod").val() === "" || $("#txt_address_cod").val() === "" || $("#txt_phoneNumber_cod").val() === "") {
+                    $("#stripe_api").hide();
+                } else {
+                    $("#stripe_api").show();
+                }
+
+                var html = '';
+                var total = 0;
+
+                $.each(cartItemsList, function (i, item) {
+                    var amount = item.price * item.quantity;
+                    html += "<tr>"
+                        + "<td> <img width=\"60\" src=\"" + $('#hidBaseAddress').val() + item.image + "\" alt=\"\" /></td>"
+                        + "<td>" + item.name + "</td>"
+                        + "<td class=\"availability in-stock text-center\"><span class=\"label\">In stock</span></td>"
+                        + "<td>" + numberWithCommas(item.price) + " <span>&#8363;</span>" + "</td>"
+                        + "<td><div class=\"input-append\"><input disabled class=\"span1\" style=\"max-width: 34px\" placeholder=\"1\" id=\"txt_quantity_" + item.productId + "\" value=\"" + item.quantity + "\" size=\"16\" type=\"text\">"
+                        + "</div>"
+                        + "</td>"
+                        + "<td>" + numberWithCommas(amount) + " <span>&#8363;</span>" + "</td>"
+                        + "<td></td>"
+                        + "</tr>";
+                    total += amount;
+                });
+
+                $('#cart_body_checkout').html(html);
                 $('#lbl_number_of_items').text(cartItemsList.length);
                 $('#lbl_total').text(numberWithCommas(total));
 
