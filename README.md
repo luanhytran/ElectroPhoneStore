@@ -1,4 +1,5 @@
 # Web bán hàng điện thoại online (Electro Phone Store)
+Demo clip: https://youtu.be/NY3cEaOQ_3o
 
 ## Thành viên
 - Trần Luân Hy: 18DH110413
