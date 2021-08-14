@@ -1,6 +1,8 @@
 # Electro Phone Store 
 ## Demo: 
-https://youtu.be/NY3cEaOQ_3o
+- Front End: https://electroshop.azurewebsites.net/
+- Admin area: https://electroadmin.azurewebsites.net/
+- Video: https://youtu.be/NY3cEaOQ_3o
 
 ## Contributors
 - Tran Luan Hy
