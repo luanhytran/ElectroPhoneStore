@@ -4,11 +4,6 @@
 - Admin area: https://electroadmin.azurewebsites.net/
 - Video: https://youtu.be/NY3cEaOQ_3o
 
-## Contributors
-- Tran Luan Hy
-- Le Quoc Anh
-- Hoang Tran An Thien
-
 ## Technologies
 - ASP.NET Core 3.1
 - Entity Framework Core 3.1
