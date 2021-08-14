@@ -7,31 +7,38 @@ https://youtu.be/NY3cEaOQ_3o
 - Le Quoc Anh
 - Hoang Tran An Thien
 
-## Get Started
-### Install Entity Framework package
-```
-dotnet add package Microsoft.EntityFrameworkCore --version 3.1.15
-```
-```
-dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 3.1.15
-```
-```
-dotnet add package Microsoft.EntityFrameworkCore.Tools --version 3.1.15
-```
+## Technologies
+- ASP.NET Core 3.1
+- Entity Framework Core 3.1
+- 
+## Install Tools
+- .NET Core SDK 3.1
+- Git client
+- Visual Studio 2019
+- SQL Server 2019
 
-### Set lauch setting for each project
-<img src="https://github.com/luanhytran/web-ban-dien-thoai-cnpmnc/blob/master/image/1.set%20launch%20setting%20for%20each%20project.gif">
+## How to configure and run
+- Clone code from Github: git clone https://github.com/luanhytran/asp-electro-phone-store.git
+- Open solution eShopSolution.sln in Visual Studio 2019
+- Set startup project is eShopSolution.Data
+- Change connection string in Appsetting.json in eShopSolution.Data project
+- Open Tools --> Nuget Package Manager -->  Package Manager Console in Visual Studio
+- Run Update-database and Enter.
+- After migrate database successful, set Startup Project is eShopSolution.WebApp
+- Change database connection in appsettings.Development.json in eShopSolution.WebApp project.
+- You need to change 3 projects to self-host profile.
 
-### Start multiple project
-<img src="https://github.com/luanhytran/web-ban-dien-thoai-cnpmnc/blob/master/image/2.%20start%20multiple%20project.gif"> 
+  <img src="https://github.com/luanhytran/web-ban-dien-thoai-cnpmnc/blob/master/image/1.set%20launch%20setting%20for%20each%20project.gif">
+  
+- Set multiple run project: Right click to Solution and choose Properties and set Multiple Project, choose Start for 3 Projects: BackendApi, WebApp and AdminApp.
+- Choose profile to run or press F5
 
-### Run Entity Framework Core command
-- After this step, SQL Server will appear your database
-<img src="https://github.com/luanhytran/web-ban-dien-thoai-cnpmnc/blob/master/image/3.%20setup%20database.gif" >
+## How to contribute
+- Fork and create your branch
+- Create Pull request to us.
 
-### Add user-content folder
-- Add this folder to store your product image
-<img src="https://github.com/luanhytran/electro-phone-store/blob/master/image/4.png">
+## Reference
+https://github.com/teduinternational/eShopSolution
 
 
 
