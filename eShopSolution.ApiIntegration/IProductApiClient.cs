@@ -14,6 +14,8 @@ namespace eShopSolution.ApiIntegration
 
         Task<PagedResult<ProductViewModel>> GetAllByCategoryPaging(GetPublicProductPagingRequest request);
 
+        Task<List<ProductViewModel>> GetAll();
+
         Task<bool> CreateProduct(ProductCreateRequest request);
 
         Task<bool> UpdateProduct(ProductUpdateRequest request);

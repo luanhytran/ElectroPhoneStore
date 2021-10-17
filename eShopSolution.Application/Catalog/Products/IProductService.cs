@@ -34,5 +34,7 @@ namespace eShopSolution.Application.Catalog.Products
         Task<bool> DecreaseStock(int productId, int quantity);
 
         Task<int> AddReview(ProductDetailViewModel model);
+
+        Task<List<ProductViewModel>> GetAll();
     }
 }

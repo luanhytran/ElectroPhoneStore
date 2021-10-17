@@ -23,5 +23,7 @@ namespace eShopSolution.ApiIntegration
         Task<OrderByUserViewModel> GetOrderByUser(string id);
 
         Task<OrderViewModel> GetOrderById(int orderId);
+
+        Task<List<OrderViewModel>> GetAll();
     }
 }

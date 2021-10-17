@@ -2,11 +2,8 @@
 using eShopSolution.Data.Entities;
 using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -17,8 +14,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
 
 
 namespace eShopSolution.Application.System.Users
@@ -48,21 +43,23 @@ namespace eShopSolution.Application.System.Users
         {
             // Tìm xem tên user có tồn tại hay không
             var user = await _userManager.FindByNameAsync(request.UserName);
-        
+
             if (user == null) return new ApiErrorResult<string>("Tài khoản không tồn tại");
 
             // Trả về một SignInResult, tham số cuối là IsPersistent kiểu bool
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, false);
+
             if (!result.Succeeded)
             {
                 return new ApiErrorResult<string>("Đăng nhập không thành công");
             }
 
             var roles = await _userManager.GetRolesAsync(user);
+
             if (roles.Count == 0)
             {
                 var claims = new[]
-                {  
+                {
                 new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
                 new Claim(ClaimTypes.Email,user.Email),
                 new Claim(ClaimTypes.GivenName,user.Name),
@@ -146,11 +143,20 @@ namespace eShopSolution.Application.System.Users
                 PhoneNumber = request.PhoneNumber,
             };
 
-            var result = await _userManager.CreateAsync(user, request.Password);
-            if (result.Succeeded)
+            //var result = await _userManager.CreateAsync(user, request.Password);
+
+            ProxyAppUser proxyAppUser = new ProxyAppUser(user);
+
+            var result = await proxyAppUser.UpdateDatabase(_userManager, request.Password);
+
+            if (result == RegisterState.Valid)
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 return new ApiSuccessResult<string>(token);
+            }
+            else if (result == RegisterState.InvalidName)
+            {
+                return new ApiErrorResult<string>("Tên người dùng không hợp lệ");
             }
 
             return new ApiErrorResult<string>("Đăng ký không thành công");
@@ -235,7 +241,7 @@ namespace eShopSolution.Application.System.Users
                 Id = user.Id,
             };
 
-            if(roles.Count == 0)
+            if (roles.Count == 0)
             {
                 userVm.Roles = "customer";
             }
@@ -290,7 +296,7 @@ namespace eShopSolution.Application.System.Users
             }
 
             //3. Paging
-            int totalRow = await query.CountAsync(); 
+            int totalRow = await query.CountAsync();
 
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)

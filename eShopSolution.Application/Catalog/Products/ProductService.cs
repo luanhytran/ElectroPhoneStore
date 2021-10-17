@@ -33,6 +33,7 @@ namespace eShopSolution.Application.Catalog.Products
             _storageService = storageService;
             _configuration = configuration;
             _userManager = userManager;
+            //ProductSingleton.Instance.Init(_context);
         }
 
         public async Task<int> Create(ProductCreateRequest request)
@@ -85,6 +86,7 @@ namespace eShopSolution.Application.Catalog.Products
             product.Description = request.Description;
             product.Details = request.Details;
             product.Stock = request.Stock;
+            product.Price = request.Price;
 
             //Save thumbnail image
             if (request.ThumbnailImage != null)
@@ -203,6 +205,24 @@ namespace eShopSolution.Application.Catalog.Products
                 Items = data
             };
             return pagedResult;
+        }
+
+        public async Task<List<ProductViewModel>> GetAll()
+        {
+            var query = from p in _context.Products
+                        select new { p };
+
+            return await query.Select(x => new ProductViewModel()
+            {
+                Id = x.p.Id,
+                Price = x.p.Price,
+                Stock = x.p.Stock,
+                Details = x.p.Details,
+                Description = x.p.Description,
+                CategoryId = x.p.CategoryId,
+                ThumbnailImage = x.p.Thumbnail,
+                ProductImage = x.p.ProductImage
+            }).ToListAsync();
         }
 
         private async Task<string> SaveFile(IFormFile file)

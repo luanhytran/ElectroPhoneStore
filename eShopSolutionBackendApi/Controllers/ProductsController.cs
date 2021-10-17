@@ -48,6 +48,13 @@ namespace eShopSolutionBackendApi.Controllers
             return Ok(product);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var products = await _productService.GetAll();
+            return Ok(products);
+        }
+
         [HttpPost]
         [Consumes("multipart/form-data")]
         [Authorize]

@@ -29,6 +29,7 @@ namespace eShopSolution.AdminApp.Controllers
             };
 
             var data = await _orderApiClient.GetPagings(request);
+            ViewBag.Keyword = keyword;
 
             if (TempData["result"] != null)
             {
@@ -51,7 +52,7 @@ namespace eShopSolution.AdminApp.Controllers
             {
                 var product = await _productApiClient.GetById(item.ProductId);
                 item.Name = product.Name;
-                item.Price = product.Price;
+                item.Price = item.Price;
                 item.ThumbnailImage = product.ThumbnailImage;
             }
 

@@ -54,7 +54,8 @@ namespace eShopSolution.ApiIntegration
         {
             var data = await GetAsync<PagedResult<OrderViewModel>>(
                 $"/api/orders/paging?pageIndex={request.PageIndex}" +
-                $"&pageSize={request.PageSize}");
+                $"&pageSize={request.PageSize}" +
+                $"&keyword={request.Keyword}");
 
             return data;
         }
@@ -73,6 +74,11 @@ namespace eShopSolution.ApiIntegration
                 $"/api/orders/getOrderById/{orderId}");
 
             return data;
+        }
+
+        public async Task<List<OrderViewModel>> GetAll()
+        {
+            return await GetListAsync<OrderViewModel>("/api/orders");
         }
 
         public async Task<bool> UpdateOrderStatus(int id)

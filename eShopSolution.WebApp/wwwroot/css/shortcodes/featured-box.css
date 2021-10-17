@@ -1,0 +1,204 @@
+/*------------------------------------------------------------------
+    featured border boxes
+-------------------------------------------------------------------*/
+
+
+.featured-item .icon {
+	padding: 0 0 30px 0;
+}
+.featured-item .icon i {
+	font-size: 36px;
+	color: #04ace2;
+}
+.featured-item .title h4 {
+	margin-bottom: 10px;
+	letter-spacing: 3px;
+	font-weight: normal;
+}
+.featured-item .desc {
+	color: #7e7e7e;
+	margin-bottom: 15px;
+}
+.featured-item.border-box {
+	border: 1px solid #f2f2f2;
+	padding: 50px;
+	margin-left: -1px;
+	margin-bottom: -1px;
+}
+.featured-item.border-box:hover {
+	border: 1px solid transparent;
+	background: #222222;
+	color: #7e7e7e;
+}
+.featured-item.border-box:hover h4 {
+	color: #fff;
+}
+.featured-item.border-box, .featured-item.border-box:hover, .featured-item.border-box h4, .featured-item.border-box:hover h4, .featured-item.border-box .icon i .featured-item.border-box:hover .icon i {
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+.feature-box-grid { margin:15px 0px; display:inline-block;
+}
+.price-table-row{ margin-bottom:20px;}
+.feature-box-grid .col-lg-1, .feature-box-grid .col-lg-10, .feature-box-grid .col-lg-11, .feature-box-grid .col-lg-12, .feature-box-grid .col-lg-2, .feature-box-grid .col-lg-3, .feature-box-grid .col-lg-4, .feature-box-grid .col-lg-5, .feature-box-grid .col-lg-6, .feature-box-grid .col-lg-7, .feature-box-grid .col-lg-8, .feature-box-grid .col-lg-9, .feature-box-grid .col-md-1, .feature-box-grid .col-md-10, .feature-box-grid .col-md-11, .feature-box-grid .col-md-12, .feature-box-grid .col-md-2, .feature-box-grid .col-md-3, .feature-box-grid .col-md-4, .feature-box-grid .col-md-5, .feature-box-grid .col-md-6, .feature-box-grid .col-md-7, .feature-box-grid .col-md-8, .feature-box-grid .col-md-9, .feature-box-grid .col-sm-1, .feature-box-grid .col-sm-10, .feature-box-grid .col-sm-11, .feature-box-grid .col-sm-12, .feature-box-grid .col-sm-2, .feature-box-grid .col-sm-3, .feature-box-grid .col-sm-4, .feature-box-grid .col-sm-5, .feature-box-grid .col-sm-6, .feature-box-grid .col-sm-7, .feature-box-grid .col-sm-8, .feature-box-grid .col-sm-9, .feature-box-grid .col-xs-1, .feature-box-grid .col-xs-10, .feature-box-grid .col-xs-11, .feature-box-grid .col-xs-12, .feature-box-grid .col-xs-2, .feature-box-grid .col-xs-3, .feature-box-grid .col-xs-4, .feature-box-grid .col-xs-5, .feature-box-grid .col-xs-6, .feature-box-grid .col-xs-7, .feature-box-grid .col-xs-8, .feature-box-grid .col-xs-9 {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+/* ----------------------------------------------------------------
+    feature parallax
+-----------------------------------------------------------------*/
+
+.feature-parallax {
+	background-image: url(../../images/coming_soon_bg.jpg);
+	background-size: cover;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+}
+.feature-parallax .featured-box {
+	padding: 100px 0;
+}
+.feature-parallax.dark, .feature-parallax.dark .featured-item .title h4, .feature-parallax.dark .featured-item .desc {
+	color: #fff;
+}
+.featured-item .bottom-border i {
+	border-bottom: 2px solid;
+	padding-bottom: 30px;
+	display: inline-block;
+	color: #04ace2;
+}
+/* ----------------------------------------------------------------
+    feature outline
+-----------------------------------------------------------------*/
+
+.featured-item.feature-outline {
+	position: relative;
+	padding: 0 0 0 80px;
+}
+.featured-item.feature-outline .icon {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+/* ----------------------------------------------------------------
+    feature border box
+-----------------------------------------------------------------*/
+
+.feature-border-box {
+	border: 1px solid #e9e9e9;
+	padding: 30px;
+	position: relative;
+	border-radius: 4px;
+}
+.feature-border-box, .feature-border-box:hover .icon {
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+.feature-border-box .icon {
+	position: absolute;
+	top: -30px;
+	left: 30px;
+	width: 60px;
+	height: 60px;
+	line-height: 60px;
+	background: #04ace2;
+	border-radius: 4px;
+	text-align: center;
+	box-shadow: 0 0 0px 10px #fff;
+}
+.featured-item.feature-border-box .icon i {
+	color: #fff;
+	font-size: 30px;
+	line-height: 60px;
+}
+.feature-border-box .title {
+	margin-top: 30px;
+	display: inline-block;
+}
+/* ----------------------------------------------------------------
+    feature bg box
+-----------------------------------------------------------------*/
+
+.feature-bg-box {
+	padding: 30px;
+	position: relative;
+	border-radius: 4px;
+	margin-bottom: 100px;
+}
+.gray-bg {
+	background: #f6f6f6;
+}
+.feature-bg-box, .feature-bg-box:hover .icon {
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+.feature-bg-box .icon {
+	position: absolute;
+	top: -40px;
+	left: 50%;
+	width: 80px;
+	height: 80px;
+	margin-left: -40px;
+	line-height: 80px;
+	background: #fff;
+	border-radius: 50%;
+	text-align: center;
+	box-shadow: 0 0 0px 5px #f6f6f6;
+}
+.featured-item.feature-bg-box .icon i {
+	color: #808184;
+	font-size: 30px;
+	line-height: 80px;
+}
+.feature-bg-box .title {
+	margin-top: 40px;
+	display: inline-block;
+}
+/**/
+
+.featured-box .one-third {
+	width: 33.3333333%;
+	float: left;
+	padding: 10px 0px;
+}
+.featured-box .one-third:nth-child(2) {
+	padding: 10px 10px;
+}
+.featured-box .one-third .featured-item {
+	padding: 15% 20%;
+	min-height: 360px;
+}
+.featured-box .one-third .featured-item, .featured-box .one-third .featured-item h4, .featured-box .one-third .featured-item .desc {
+	color: #fff;
+}
+.color-1 {
+	background: #a8babc;
+}
+.color-2 {
+	background: #a0aa95;
+}
+.color-3 {
+	background: #c5c2be;
+}
+.height-fix {
+	height: 300px;
+}
+.featured-item .number {
+	color: #e1e1e1;
+	font-size: 36px;
+	font-family: 'Abel', sans-serif;
+	font-weight: normal;
+}
+.featured-item.feature-outline.right {
+	position: relative;
+	padding: 0 80px 0 0;
+}
+.featured-item.feature-outline.right .icon {
+	display: block;
+	position: absolute;
+	top: 0;
+	right: 0;
+}

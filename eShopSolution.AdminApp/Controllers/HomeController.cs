@@ -1,5 +1,8 @@
 ﻿using eShopSolution.AdminApp.Models;
+using eShopSolution.ApiIntegration;
 using eShopSolution.Utilities.Constants;
+using eShopSolution.ViewModels.Catalog.Products;
+using eShopSolution.ViewModels.Sales;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,18 +21,40 @@ namespace eShopSolution.AdminApp.Controllers
     public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IProductApiClient productApiClient;
+        private readonly IUserApiClient userApiClient;
+        private readonly IOrderApiClient orderApiClient;
+        private readonly ICouponApiClient couponApiClient;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IProductApiClient productApiClient, IUserApiClient userApiClient,
+            IOrderApiClient orderApiClient, ICouponApiClient couponApiClient)
         {
             _logger = logger;
+            this.productApiClient = productApiClient;
+            this.userApiClient = userApiClient;
+            this.orderApiClient = orderApiClient;
+            this.couponApiClient = couponApiClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            // lấy user name đăng nhập
-            var user = User.Identity.Name;
-            var expireTime = HttpContext.Items["ExpiresUTC"];
-            return View();
+            var products = await productApiClient.GetAll();
+
+            var customers = await userApiClient.GetAll();
+
+            var orders = await orderApiClient.GetAll();
+
+            var coupons = await couponApiClient.GetAll();
+
+            var statisViewModel = new StatisViewModel()
+            {
+                Products = products.Count(),
+                Customers = customers.Count(),
+                Orders = orders.Count(),
+                Coupons = coupons.Count()
+            };
+
+            return View(statisViewModel);
         }
 
         public IActionResult Privacy()

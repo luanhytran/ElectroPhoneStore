@@ -1,0 +1,107 @@
+/*------------------------------------------------------------------
+    pricing table
+-------------------------------------------------------------------*/
+
+
+.price-col {
+	background: #fff;
+	border: 1px solid #e8e8e8;
+	padding: 50px;
+	text-align: center;
+}
+.price-col.feature {
+	background: #04ace2;
+	border: 1px solid #04ace2;
+}
+.price-col h1 {
+	font-size: 16px;
+	text-transform: uppercase;
+	margin-bottom: 30px;
+}
+.price-col.feature h1 {
+	color: #fff;
+	font-weight: bold;
+}
+.price-col .p-value {
+	border-top: 1px solid #e5e5e5;
+	border-bottom: 1px solid #e5e5e5;
+	padding: 25px 0;
+	margin-bottom: 40px;
+}
+.price-col.feature .p-value {
+	border-top: 1px solid rgba(255,255,255,.2);
+	border-bottom: 1px solid rgba(255,255,255,.2);
+	padding: 25px 0;
+	margin-bottom: 40px;
+}
+.price-col .dollar {
+	font-size: 42px;
+	font-weight: normal;
+}
+.price-col .dollar span {
+	font-size: 16px;
+	margin-left: -10px;
+}
+.price-col .duration {
+	font-size: 12px;
+	text-transform: uppercase;
+}
+.price-col ul {
+	list-style: none;
+	padding: 0;
+	margin-bottom: 40px;
+	display: block;
+}
+.price-col ul li {
+	margin-bottom: 15px;
+	color: #222222;
+}
+.price-col.feature ul li {
+	color: #eee;
+}
+.price-col .p-btn {
+	border: 1px solid #e8e8e8;
+	padding: 15px 20px;
+	display: inline-block;
+	color: #222222;
+	text-transform: uppercase;
+	display: inherit;
+	font-weight: normal;
+	letter-spacing: 2px;
+}
+.price-col .p-btn:hover {
+	border: 1px solid #222;
+	background: #222;
+}
+.price-col.feature .p-btn, .price-col.feature .p-btn:hover {
+	background: #fff;
+	color: #222;
+}
+.price-col.feature {
+	color: #fff;
+	background: #04ace2;
+}
+.price-col.feature .p-btn:hover, .price-col .p-btn:hover {
+	background: #222;
+	color: #fff;
+}
+.p-table-gutter-less .col-lg-1, .p-table-gutter-less .col-lg-10, .p-table-gutter-less .col-lg-11, .p-table-gutter-less .col-lg-12, .p-table-gutter-less .col-lg-2, .p-table-gutter-less .col-lg-3, .p-table-gutter-less .col-lg-4, .p-table-gutter-less .col-lg-5, .p-table-gutter-less .col-lg-6, .p-table-gutter-less .col-lg-7, .p-table-gutter-less .col-lg-8, .p-table-gutter-less .col-lg-9, .p-table-gutter-less .col-md-1, .p-table-gutter-less .col-md-10, .p-table-gutter-less .col-md-11, .p-table-gutter-less .col-md-12, .p-table-gutter-less .col-md-2, .p-table-gutter-less .col-md-3, .p-table-gutter-less .col-md-4, .p-table-gutter-less .col-md-5, .p-table-gutter-less .col-md-6, .p-table-gutter-less .col-md-7, .p-table-gutter-less .col-md-8, .p-table-gutter-less .col-md-9, .p-table-gutter-less .col-sm-1, .p-table-gutter-less .col-sm-10, .p-table-gutter-less .col-sm-11, .p-table-gutter-less .col-sm-12, .p-table-gutter-less .col-sm-2, .p-table-gutter-less .col-sm-3, .p-table-gutter-less .col-sm-4, .p-table-gutter-less .col-sm-5, .p-table-gutter-less .col-sm-6, .p-table-gutter-less .col-sm-7, .p-table-gutter-less .col-sm-8, .p-table-gutter-less .col-sm-9, .p-table-gutter-less .col-xs-1, .p-table-gutter-less .col-xs-10, .p-table-gutter-less .col-xs-11, .p-table-gutter-less .col-xs-12, .p-table-gutter-less .col-xs-2, .p-table-gutter-less .col-xs-3, .p-table-gutter-less .col-xs-4, .p-table-gutter-less .col-xs-5, .p-table-gutter-less .col-xs-6, .p-table-gutter-less .col-xs-7, .p-table-gutter-less .col-xs-8, .p-table-gutter-less .col-xs-9, .price-table-row .p-table-gutter-less .col-lg-1, .price-table-row .p-table-gutter-less .col-lg-10, .price-table-row .p-table-gutter-less .col-lg-11, .price-table-row .p-table-gutter-less .col-lg-12, .price-table-row .p-table-gutter-less .col-lg-2, .price-table-row .p-table-gutter-less .col-lg-3, .price-table-row .p-table-gutter-less .col-lg-4, .price-table-row .p-table-gutter-less .col-lg-5, .price-table-row .p-table-gutter-less .col-lg-6, .price-table-row .p-table-gutter-less .col-lg-7, .price-table-row .p-table-gutter-less .col-lg-8, .price-table-row .p-table-gutter-less .col-lg-9, .price-table-row .p-table-gutter-less .col-md-1, .price-table-row .p-table-gutter-less .col-md-10, .price-table-row .p-table-gutter-less .col-md-11, .price-table-row .p-table-gutter-less .col-md-12, .price-table-row .p-table-gutter-less .col-md-2, .price-table-row .p-table-gutter-less .col-md-3, .price-table-row .p-table-gutter-less .col-md-4, .price-table-row .p-table-gutter-less .col-md-5, .price-table-row .p-table-gutter-less .col-md-6, .price-table-row .p-table-gutter-less .col-md-7, .price-table-row .p-table-gutter-less .col-md-8, .price-table-row .p-table-gutter-less .col-md-9, .price-table-row .p-table-gutter-less .col-sm-1, .price-table-row .p-table-gutter-less .col-sm-10, .price-table-row .p-table-gutter-less .col-sm-11, .price-table-row .p-table-gutter-less .col-sm-12, .price-table-row .p-table-gutter-less .col-sm-2, .price-table-row .p-table-gutter-less .col-sm-3, .price-table-row .p-table-gutter-less .col-sm-4, .price-table-row .p-table-gutter-less .col-sm-5, .price-table-row .p-table-gutter-less .col-sm-6, .price-table-row .p-table-gutter-less .col-sm-7, .price-table-row .p-table-gutter-less .col-sm-8, .price-table-row .p-table-gutter-less .col-sm-9, .price-table-row .p-table-gutter-less .col-xs-1, .price-table-row .p-table-gutter-less .col-xs-10, .price-table-row .p-table-gutter-less .col-xs-11, .price-table-row .p-table-gutter-less .col-xs-12, .price-table-row .p-table-gutter-less .col-xs-2, .price-table-row .p-table-gutter-less .col-xs-3, .price-table-row .p-table-gutter-less .col-xs-4, .price-table-row .p-table-gutter-less .col-xs-5, .price-table-row .p-table-gutter-less .col-xs-6, .price-table-row .p-table-gutter-less .col-xs-7, .price-table-row .p-table-gutter-less .col-xs-8, .price-table-row .p-table-gutter-less .col-xs-9 {
+	padding: 0;
+}
+.p-table-gutter-less .price-col {
+	margin-right: -1px;
+}
+.price-table-parallax {
+	background-image: url(../../images/coming_soon_bg.jpg);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-attachment: fixed;
+	background-size: cover;
+	padding: 50px 0;
+}
+.price-table-row .col-lg-1, .price-table-row .col-lg-10, .price-table-row .col-lg-11, .price-table-row .col-lg-12, .price-table-row .col-lg-2, .price-table-row .col-lg-3, .price-table-row .col-lg-4, .price-table-row .col-lg-5, .price-table-row .col-lg-6, .price-table-row .col-lg-7, .price-table-row .col-lg-8, .price-table-row .col-lg-9, .price-table-row .col-md-1, .price-table-row .col-md-10, .price-table-row .col-md-11, .price-table-row .col-md-12, .price-table-row .col-md-2, .price-table-row .col-md-3, .price-table-row .col-md-4, .price-table-row .col-md-5, .price-table-row .col-md-6, .price-table-row .col-md-7, .price-table-row .col-md-8, .price-table-row .col-md-9, .price-table-row .col-sm-1, .price-table-row .col-sm-10, .price-table-row .col-sm-11, .price-table-row .col-sm-12, .price-table-row .col-sm-2, .price-table-row .col-sm-3, .price-table-row .col-sm-4, .price-table-row .col-sm-5, .price-table-row .col-sm-6, .price-table-row .col-sm-7, .price-table-row .col-sm-8, .price-table-row .col-sm-9, .price-table-row .col-xs-1, .price-table-row .col-xs-10, .price-table-row .col-xs-11, .price-table-row .col-xs-12, .price-table-row .col-xs-2, .price-table-row .col-xs-3, .price-table-row .col-xs-4, .price-table-row .col-xs-5, .price-table-row .col-xs-6, .price-table-row .col-xs-7, .price-table-row .col-xs-8, .price-table-row .col-xs-9 {
+	position: relative;
+	min-height: 1px;
+	padding-right: 15px;
+	padding-left: 15px;
+}

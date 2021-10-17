@@ -25,6 +25,8 @@ namespace eShopSolution.AdminApp.Controllers
             };
 
             var data = await _couponApiClient.GetAllPaging(request);
+            ViewBag.Keyword = keyword;
+
             if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];
@@ -47,7 +49,19 @@ namespace eShopSolution.AdminApp.Controllers
                 return View(request);
             }
 
+            var couponsList = await _couponApiClient.GetAll();
+
+            foreach (var coupon in couponsList)
+            {
+                if (coupon.Code == request.Code)
+                {
+                    ModelState.AddModelError("", "Mã code này đã có trong hệ thống");
+                    return View(request);
+                }
+            }
+
             var result = await _couponApiClient.CreateCoupon(request);
+
             if (result)
             {
                 TempData["CreateCouponSuccessful"] = "Tạo coupon thành công";

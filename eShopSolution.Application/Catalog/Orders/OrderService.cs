@@ -36,6 +36,7 @@ namespace eShopSolution.Application.Catalog.Orders
                 {
                     Product = product,
                     Quantity = item.Quantity,
+                    Price = product.Price * item.Quantity
                 });
 
                 product.Stock -= item.Quantity;
@@ -117,8 +118,9 @@ namespace eShopSolution.Application.Catalog.Orders
 
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.c.Name.Contains(request.Keyword)
-                 || x.o.ShipPhoneNumber.Contains(request.Keyword));
+                query = query.Where(x => x.o.Id.ToString().Contains(request.Keyword)
+                || x.c.Name.Contains(request.Keyword) || x.c.UserName.Contains(request.Keyword)
+                || x.c.PhoneNumber.Contains(request.Keyword));
             }
 
             //3. Paging
@@ -157,6 +159,29 @@ namespace eShopSolution.Application.Catalog.Orders
                 Items = data
             };
             return pagedResult;
+        }
+
+        public async Task<List<OrderViewModel>> GetAll()
+        {
+            var query = from o in _context.Orders
+                        join c in _userManager.Users on o.UserId equals c.Id
+                        select new { o, c };
+
+            return await query.Select(x => new OrderViewModel()
+            {
+                Id = x.o.Id,
+                UserID = x.o.UserId,
+                Name = x.c.Name,
+                Address = x.c.Address,
+                PhoneNumber = x.c.PhoneNumber,
+                Email = x.c.Email,
+                OrderDate = x.o.OrderDate,
+                Status = (OrderStatus)x.o.Status,
+                ShipName = x.o.ShipName,
+                ShipAddress = x.o.ShipAddress,
+                ShipPhoneNumber = x.o.ShipPhoneNumber,
+                Price = x.o.Total
+            }).ToListAsync();
         }
 
         public async Task<OrderByUserViewModel> GetOrderByUser(string userId)
@@ -254,6 +279,7 @@ namespace eShopSolution.Application.Catalog.Orders
                 {
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
+                    Price = item.Price
                 });
             }
 

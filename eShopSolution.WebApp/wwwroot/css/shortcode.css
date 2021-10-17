@@ -1,0 +1,110 @@
+/*  ====================================================
+shortcode & typography
+
+======================================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    color: #000;
+    -webkit-font-smoothing: antialiased;
+}
+h1 { font-size: 36px; line-height: 45px; }
+h2 { font-size: 30px; line-height: 40px; }
+h3 { font-size: 24px; line-height: 35px; }
+h4 { font-size: 18px; line-height: 30px; }
+h5 { font-size: 14px; line-height: 25px; }
+h6 { font-size: 12px; line-height: 20px; }
+
+h1 small { font-size: 50%; }
+h2 small { font-size: 60%; }
+h3 small { font-size: 70%; }
+h4 small { font-size: 80%; }
+h5 small { font-size: 90%; }
+h6 small { font-size: 90%; }
+
+small { 
+    font-size: 90%; 
+    opacity: .7; 
+    font-family: 'Montserrat', sans-serif;
+}
+
+code { text-transform:none; font-family: monospace, serif;}
+
+.shortcodes_page p {
+    font-family: 'Montserrat', sans-serif !important;
+    margin: 0 0 25px 0;
+    font-size: 13px;
+    line-height: 25px;
+    color: #747474;
+}
+p strong { font-weight: 600; }
+.lead {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 25px;
+}
+.dropcap {
+    float: left;
+    width: 0.7em;
+    font-size: 400%;
+    font-family: algerian, courier;
+    line-height: 80%;
+    -webkit-border-radius: 2px;
+       -moz-border-radius: 2px;
+            border-radius: 2px;
+    padding-left: 3px;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+a {
+    color: #111;
+    outline: none;
+    -webkit-transition: all .2s ease-in-out;
+       -moz-transition: all .2s ease-in-out;
+            transition: all .2s ease-in-out;
+}
+a:hover,
+a:focus {
+    color: #111;
+    text-decoration: none;
+    outline: none;
+}
+small {
+    display: block;
+    margin-top: 5px;
+}
+.animated { visibility:hidden; }
+.visible { visibility:visible; }
+
+.font-open-sans   { font-family: 'Poppins', sans-serif !important; }
+.font-montserrat  { font-family: 'Montserrat', sans-serif !important; }
+.font-source-sans-pro  { font-family: 'Source Sans Pro', sans-serif !important; }
+
+/*  --------------------------------------------------------
+COLOR SETTING
+-------------------------------------------------------- */
+
+.color-red 		{ color: #fd3635 !important; }
+.color-pink		{ color: #fd40b3 !important; }
+.color-orange 	{ color: #ff8b34 !important; }
+.color-purple 	{ color: #a85ad4 !important; }
+.color-blue 	{ color: #3dace1 !important; }
+.color-cyan		{ color: #1abc9c !important; }
+.color-green	{ color: #b2cc71 !important; }
+.color-yellow	{ color: #ffc501 !important; }
+
+.color-light    { color: #ffffff !important; }
+.color-white    { color: #ffffff !important; }
+.color-gray 	{ color: #f5f7f9 !important; }
+.color-gray2 	{ color: #e0e0e0 !important; }
+.color-dark 	{ color: #5f6467 !important; }
+.color-dark2 	{ color: #323a45 !important; }
+.color-black    { color: #111111 !important; }
+

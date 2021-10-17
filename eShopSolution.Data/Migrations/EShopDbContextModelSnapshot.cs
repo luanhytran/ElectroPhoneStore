@@ -162,7 +162,7 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "45c68a23-cc5e-48ca-99d0-a42c4d863a21",
+                            ConcurrencyStamp = "48b0e691-9a7e-488c-88e1-2f9321a9dad5",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -235,14 +235,14 @@ namespace eShopSolution.Data.Migrations
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
                             Address = "123 An Dương Vương P.8 Q.5",
-                            ConcurrencyStamp = "c3bcf8b1-e264-4485-adf0-363f21f1b31c",
+                            ConcurrencyStamp = "d6a42109-88b0-43f5-b03a-1d54b60c62f4",
                             Email = "hytranluan@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Name = "Luan Hy",
                             NormalizedEmail = "HYTRANLUAN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKVBBlMrmMlMt0Yg0uyii07dHL4bgLL66e6yft/OspKL2nUOiOMCJSf9nGCh3Op5PQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEI5A8CfwcUC/zpTEqqQZfhcRnXBHMx2HkdSUj2mWkhFfvc8Ahcnvay6fQalBdP4L9w==",
                             PhoneNumber = "0765006381",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
@@ -417,6 +417,9 @@ namespace eShopSolution.Data.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -484,7 +487,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            DateCreated = new DateTime(2021, 6, 15, 22, 22, 25, 336, DateTimeKind.Local).AddTicks(5100),
+                            DateCreated = new DateTime(2021, 6, 23, 9, 17, 25, 199, DateTimeKind.Local).AddTicks(1669),
                             Description = "",
                             Details = "",
                             Name = "iPhone 12 Pro",
@@ -495,7 +498,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 2,
                             CategoryId = 2,
-                            DateCreated = new DateTime(2021, 6, 15, 22, 22, 25, 337, DateTimeKind.Local).AddTicks(2261),
+                            DateCreated = new DateTime(2021, 6, 23, 9, 17, 25, 199, DateTimeKind.Local).AddTicks(9070),
                             Description = "",
                             Details = "",
                             Name = "Samsung Galaxy S21+",
@@ -506,7 +509,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 3,
                             CategoryId = 3,
-                            DateCreated = new DateTime(2021, 6, 15, 22, 22, 25, 337, DateTimeKind.Local).AddTicks(2288),
+                            DateCreated = new DateTime(2021, 6, 23, 9, 17, 25, 199, DateTimeKind.Local).AddTicks(9098),
                             Description = "",
                             Details = "",
                             Name = "Oppo Reno 5",
@@ -517,7 +520,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 4,
                             CategoryId = 4,
-                            DateCreated = new DateTime(2021, 6, 15, 22, 22, 25, 337, DateTimeKind.Local).AddTicks(2291),
+                            DateCreated = new DateTime(2021, 6, 23, 9, 17, 25, 199, DateTimeKind.Local).AddTicks(9101),
                             Description = "",
                             Details = "",
                             Name = "Vivo V21 5G",
@@ -528,7 +531,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 5,
                             CategoryId = 5,
-                            DateCreated = new DateTime(2021, 6, 15, 22, 22, 25, 337, DateTimeKind.Local).AddTicks(2293),
+                            DateCreated = new DateTime(2021, 6, 23, 9, 17, 25, 199, DateTimeKind.Local).AddTicks(9103),
                             Description = "",
                             Details = "",
                             Name = "Xiaomi Redmi Note 10",
@@ -539,7 +542,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 6,
                             CategoryId = 6,
-                            DateCreated = new DateTime(2021, 6, 15, 22, 22, 25, 337, DateTimeKind.Local).AddTicks(2295),
+                            DateCreated = new DateTime(2021, 6, 23, 9, 17, 25, 199, DateTimeKind.Local).AddTicks(9105),
                             Description = "",
                             Details = "",
                             Name = "Nokia 5.4",
@@ -571,7 +574,7 @@ namespace eShopSolution.Data.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -638,7 +641,9 @@ namespace eShopSolution.Data.Migrations
 
                     b.HasOne("eShopSolution.Data.Entities.AppUser", "AppUser")
                         .WithMany("Reviews")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AppUser");
 

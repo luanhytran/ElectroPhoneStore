@@ -1,9 +1,6 @@
 ﻿using eShopSolution.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace eShopSolution.Data.Configurations
 {
@@ -16,6 +13,7 @@ namespace eShopSolution.Data.Configurations
 
             builder.ToTable("AppUsers");
             builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
+
         }
     }
 }

@@ -53,6 +53,13 @@ namespace eShopSolutionBackendApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var orders = await _orderService.GetAll();
+            return Ok(orders);
+        }
+
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetManageOrderPagingRequest request)
         {

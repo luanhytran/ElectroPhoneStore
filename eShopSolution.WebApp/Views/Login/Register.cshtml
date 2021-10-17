@@ -139,6 +139,7 @@
                                     <div class="input-text">
                                         <input type="text" asp-for="Name" class="form-control">
                                         <span asp-validation-for="Name" class="text-danger"></span>
+                                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-xs-12" style="margin-top:15px">

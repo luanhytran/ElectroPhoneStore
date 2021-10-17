@@ -23,5 +23,7 @@ namespace eShopSolution.Application.Catalog.Orders
         List<OrderDetailViewModel> GetOrderDetails(int orderId);
 
         OrderViewModel GetOrderById(int orderId);
+
+        Task<List<OrderViewModel>> GetAll();
     }
 }
