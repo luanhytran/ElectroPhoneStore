@@ -1,43 +1,40 @@
 ﻿using eShopSolution.ApiIntegration;
-using eShopSolution.Utilities.Constants;
-using eShopSolution.ViewModels.Sales;
 using eShopSolution.ViewModels.System.Users;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace eShopSolution.WebApp.Controllers
 {
-    public class AccountController : BaseController
+    public class AccountController : BaseControllerTemplateMethod
     {
         private readonly IUserApiClient _userApiClient;
         private readonly IOrderApiClient _orderApiClient;
         private readonly IProductApiClient _productApiClient;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILogger<AccountController> _logger;
 
         public AccountController(IUserApiClient userApiClient, IOrderApiClient orderApiClient, IProductApiClient productApiClient,
-            IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+            IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ILogger<AccountController> logger)
         {
             _userApiClient = userApiClient;
             _orderApiClient = orderApiClient;
             _productApiClient = productApiClient;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
+
+            // Template method log information
+            PrintInformation();
         }
 
+        // GET: Account/Index
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -48,6 +45,7 @@ namespace eShopSolution.WebApp.Controllers
             return View(orders);
         }
 
+        // GET: Account/Edit/:id
         [HttpGet]
         public async Task<IActionResult> Edit(Guid userid)
         {
@@ -69,6 +67,7 @@ namespace eShopSolution.WebApp.Controllers
             return RedirectToAction("Error", "Home");
         }
 
+        // POST: Account/Edit/:id
         [HttpPost]
         public async Task<IActionResult> Edit(UserUpdateRequest request)
         {
@@ -90,6 +89,7 @@ namespace eShopSolution.WebApp.Controllers
             return View(request);
         }
 
+        // GET: Account/OrderDetail/:name, :orderId
         [HttpGet]
         public async Task<IActionResult> OrderDetail(string name, int orderId)
         {
@@ -107,12 +107,15 @@ namespace eShopSolution.WebApp.Controllers
             return View(order);
         }
 
+
+        // GET: Account/ChangePassword
         [HttpGet]
         public IActionResult ChangePassword()
         {
             return View();
         }
 
+        // POST: Account/ChangePassword/:ChangePasswordViewModel
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
@@ -135,6 +138,7 @@ namespace eShopSolution.WebApp.Controllers
             return View(model);
         }
 
+        // GET: Account/CancelOrderStatus/:id
         [HttpGet]
         public async Task<IActionResult> CancelOrderStatus(int orderId)
         {
@@ -149,6 +153,33 @@ namespace eShopSolution.WebApp.Controllers
             //ModelState.AddModelError("", "Huỷ đơn hàng thành công");
             TempData["CancelOrderFail"] = "Huỷ đơn hàng không thành công";
             return RedirectToAction("Index", "Account");
+        }
+
+        protected override void PrintRoutes()
+        {
+            _logger.LogDebug($@"{GetType().Name}
+                Routes: 
+                GET: Account/Index
+                GET: Account/Edit/:id
+                POST: Account/Edit/:id
+                GET: Account/OrderDetail/:name, :orderId
+                GET: Account/ChangePassword
+                POST: Account/ChangePassword/:ChangePasswordViewModel
+                GET: Account/CancelOrderStatus/:id
+                ");
+        }
+
+        protected override void PrintDIs()
+        {
+            _logger.LogDebug($@"{GetType().Name}
+                Dependencies: 
+                IUserApiClient _userApiClient;
+                IOrderApiClient _orderApiClient;
+                IProductApiClient _productApiClient;
+                IConfiguration _configuration;
+                IHttpContextAccessor _httpContextAccessor;
+                ILogger<AccountController> _logger;
+                ");
         }
     }
 }

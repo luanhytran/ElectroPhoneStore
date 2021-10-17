@@ -2,15 +2,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace eShopSolution.WebApp.Controllers
 {
     [Authorize]
-    public class BaseController : Controller
+    public abstract class BaseControllerTemplateMethod : Controller
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
@@ -20,6 +16,16 @@ namespace eShopSolution.WebApp.Controllers
                 context.Result = new RedirectToActionResult("Login", "Login", null);
             }
             base.OnActionExecuting(context);
+        }
+
+        protected abstract void PrintRoutes();
+        protected abstract void PrintDIs();
+
+
+        public void PrintInformation()
+        {
+            PrintRoutes();
+            PrintDIs();
         }
     }
 }
