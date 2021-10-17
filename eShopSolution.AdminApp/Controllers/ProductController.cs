@@ -1,14 +1,10 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using eShopSolution.AdminApp.Models;
-using eShopSolution.ApiIntegration;
-using eShopSolution.Utilities.Constants;
+﻿using eShopSolution.ApiIntegration;
 using eShopSolution.ViewModels.Catalog.Products;
-using eShopSolution.ViewModels.Common;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace eShopSolution.AdminApp.Controllers
 {
@@ -137,6 +133,28 @@ namespace eShopSolution.AdminApp.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var product = await _productApiClient.GetById(id);
+
+            var category = await _categoryApiClient.GetById(product.CategoryId);
+
+            var detailVm = new ProductViewModel()
+            {
+                Price = product.Price,
+                Stock = product.Stock,
+                Name = product.Name,
+                Category = category,
+                Description = product.Description,
+                Details = product.Details,
+                ThumbnailImage = product.ThumbnailImage,
+                ProductImage = product.ProductImage
+            };
+
+            return View(detailVm);
+        }
+
+        [HttpGet]
         public IActionResult Delete(int id)
         {
             return View(new ProductDeleteRequest()
@@ -162,14 +180,18 @@ namespace eShopSolution.AdminApp.Controllers
             return View(request);
         }
 
+        // GET: Product/Duplicate/:id
         [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Duplicate(int id)
         {
             var product = await _productApiClient.GetById(id);
 
+            if (product == null)
+                return NotFound();
+
             var category = await _categoryApiClient.GetById(product.CategoryId);
 
-            var detailVm = new ProductViewModel()
+            var productVm = new ProductViewModel()
             {
                 Price = product.Price,
                 Stock = product.Stock,
@@ -181,7 +203,55 @@ namespace eShopSolution.AdminApp.Controllers
                 ProductImage = product.ProductImage
             };
 
-            return View(detailVm);
+            return View(productVm);
         }
+
+        // POST: Product/Duplicate/:id
+        [HttpPost, ActionName("Duplicate")]
+        public async Task<IActionResult> DuplicateConfirmed(int id)
+        {
+            var product = await _productApiClient.GetById(id);
+
+            var cloneProduct = (ProductViewModel)product.Clone();
+
+            var productCreateRequest = new ProductCreateRequest()
+            {
+                Name = cloneProduct.Name,
+                CategoryId = cloneProduct.CategoryId,
+                Price = cloneProduct.Price,
+                Stock = cloneProduct.Stock,
+                Description = cloneProduct.Description,
+                Details = cloneProduct.Details,
+                ThumbnailImage = null,
+                ProductImage = null
+            };
+
+            var result = await _productApiClient.CreateProduct(productCreateRequest);
+            if (result)
+            {
+                TempData["CreateProductSuccessful"] = "Thêm mới sản phẩm thành công";
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("", "Thêm sản phẩm thất bại");
+            cloneProduct.CategoryId = 0;
+            return View(cloneProduct);
+
+            // ------------------------
+            //if (!ModelState.IsValid)
+            //    return View();
+
+            //var result = await _productApiClient.DeleteProduct(request.Id);
+            //if (result)
+            //{
+            //    TempData["DeleteProductSuccessful"] = "Xóa sản phẩm thành công";
+            //    return RedirectToAction("Index");
+            //}
+
+            //ModelState.AddModelError("", "Xóa không thành công");
+            //return View(request);
+        }
+
+
     }
 }

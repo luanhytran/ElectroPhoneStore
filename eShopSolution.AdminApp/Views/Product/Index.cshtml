@@ -132,6 +132,7 @@
                                     <button class="btn btn-primary">@Html.ActionLink("Xem chi tiết", "Details", new { id = item.Id })</button>
                                     <button class="btn btn-success">@Html.ActionLink("Cập nhật", "Edit", new { id = item.Id })</button>
                                     <button class="btn btn-danger">@Html.ActionLink("Xóa", "Delete", new { id = item.Id })</button>
+                                    <button class="btn btn-warning">@Html.ActionLink("Nhân bản", "Duplicate", new { id = item.Id })</button>
                                 </td>
                             </tr>
                         }
