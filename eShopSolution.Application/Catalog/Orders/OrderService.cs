@@ -1,14 +1,14 @@
 ﻿using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
 using eShopSolution.ViewModels.Common;
-using eShopSolution.ViewModels.Utilities.Enums;
 using eShopSolution.ViewModels.Sales;
+using eShopSolution.ViewModels.Utilities.Enums;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace eShopSolution.Application.Catalog.Orders
 {
@@ -269,11 +269,14 @@ namespace eShopSolution.Application.Catalog.Orders
 
         public List<OrderDetailViewModel> GetOrderDetails(int orderId)
         {
-            var order = _context.OrderDetails.Where(x => x.OrderId == orderId);
+            var order = _context.OrderDetails.Where(x => x.OrderId == orderId).ToList();
 
             var orderDetails = new List<OrderDetailViewModel>();
 
-            foreach (var item in order)
+            // Iterator pattern
+            IIterator iterator = new OrderIterator(order);
+            var item = iterator.First();
+            while (!iterator.IsCollectionEnds)
             {
                 orderDetails.Add(new OrderDetailViewModel()
                 {
@@ -281,6 +284,8 @@ namespace eShopSolution.Application.Catalog.Orders
                     Quantity = item.Quantity,
                     Price = item.Price
                 });
+
+                item = iterator.Next();
             }
 
             return orderDetails;
