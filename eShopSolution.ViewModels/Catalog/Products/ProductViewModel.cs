@@ -1,11 +1,15 @@
 ﻿using eShopSolution.ViewModels.Catalog.Categories;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace eShopSolution.ViewModels.Catalog.Products
 {
-    public class ProductViewModel
+    public interface ProductPrototype
+    {
+        ProductPrototype Clone();
+    }
+
+    public class ProductViewModel : ProductPrototype
     {
         public int Id { set; get; }
         public decimal Price { set; get; }
@@ -21,5 +25,22 @@ namespace eShopSolution.ViewModels.Catalog.Products
         public string Review { get; set; }
         public CategoryViewModel Category { get; set; }
         public List<ReviewViewModel> Reviews { get; set; }
+
+        public ProductPrototype Clone()
+        {
+            ProductViewModel newProduct = new ProductViewModel();
+            newProduct.Price = Price;
+            newProduct.Stock = Stock;
+            newProduct.Name = Name;
+            newProduct.Category = Category;
+            newProduct.CategoryId = CategoryId;
+            newProduct.Description = Description;
+            newProduct.Details = Details;
+            newProduct.ThumbnailImage = ThumbnailImage;
+            newProduct.ProductImage = ProductImage;
+
+            return newProduct;
+
+        }
     }
 }
