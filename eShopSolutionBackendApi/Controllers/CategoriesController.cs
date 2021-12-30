@@ -20,9 +20,9 @@ namespace eShopSolutionBackendApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public IActionResult GetAll()
         {
-            var categories = await _categoryService.GetAll();
+            var categories = _categoryService.GetAll();
             return Ok(categories);
         }
 

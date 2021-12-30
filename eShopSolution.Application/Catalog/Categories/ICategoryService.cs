@@ -20,6 +20,6 @@ namespace eShopSolution.Application.Catalog.Categories
 
         Task<CategoryViewModel> GetById(int id);
 
-        Task<List<CategoryViewModel>> GetAll();
+        List<CategoryViewModel> GetAll();
     }
 }

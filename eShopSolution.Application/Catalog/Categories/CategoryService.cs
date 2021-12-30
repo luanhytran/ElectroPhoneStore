@@ -18,6 +18,8 @@ namespace eShopSolution.Application.Catalog.Categories
         public CategoryService(EShopDbContext context)
         {
             _context = context;
+
+            CategorySingleton.Instance.Init(context);
         }
 
         public async Task<int> Create(CategoryCreateRequest request)
@@ -82,16 +84,15 @@ namespace eShopSolution.Application.Catalog.Categories
             return pagedResult;
         }
 
-        public async Task<List<CategoryViewModel>> GetAll()
+        public List<CategoryViewModel> GetAll()
         {
-            var query = from c in _context.Categories
-                        select new { c };
+            var categories = CategorySingleton.Instance.ListCategory;
 
-            return await query.Select(x => new CategoryViewModel()
+            return categories.Select(x => new CategoryViewModel()
             {
-                Id = x.c.Id,
-                Name = x.c.Name,
-            }).ToListAsync();
+                Id = x.Id,
+                Name = x.Name,
+            }).ToList();
         }
 
         public async Task<CategoryViewModel> GetById(int id)
