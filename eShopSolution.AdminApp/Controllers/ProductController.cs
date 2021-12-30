@@ -1,8 +1,13 @@
-﻿using eShopSolution.ApiIntegration;
+﻿using eShopSolution.AdminApp.Controllers.ProductControllerFacade;
+using eShopSolution.ApiIntegration;
 using eShopSolution.ViewModels.Catalog.Products;
+using eShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,30 +17,47 @@ namespace eShopSolution.AdminApp.Controllers
     {
         private readonly IProductApiClient _productApiClient;
         private readonly IConfiguration _configuration;
-
         private readonly ICategoryApiClient _categoryApiClient;
+        private readonly IMemoryCache _cache;
+        private ProductFacade facade;
 
         public ProductController(IProductApiClient productApiClient,
             IConfiguration configuration,
-            ICategoryApiClient categoryApiClient)
+            ICategoryApiClient categoryApiClient,
+            ILogger<ProductController> logger,
+            IMemoryCache cache
+            )
         {
             _configuration = configuration;
             _productApiClient = productApiClient;
             _categoryApiClient = categoryApiClient;
+            _cache = cache;
+
+            facade = new ProductFacade(logger, cache);
+
+            facade.PrintRoutes();
         }
 
         public async Task<IActionResult> Index(string keyword, int? categoryId, int pageIndex = 1, int pageSize = 4)
         {
-            var request = new GetManageProductPagingRequest()
-            {
-                Keyword = keyword,
-                PageIndex = pageIndex,
-                PageSize = pageSize,
-                CategoryId = categoryId
-            };
+            PagedResult<ProductViewModel> data;
+            string keyCacheProducts = "_listProducts";
 
-            var data = await _productApiClient.GetPagings(request);
-            ViewBag.Keyword = keyword;
+            if (!facade.TryGetValue(keyCacheProducts, out data))
+            {
+                var request = new GetManageProductPagingRequest()
+                {
+                    Keyword = keyword,
+                    PageIndex = pageIndex,
+                    PageSize = pageSize,
+                    CategoryId = categoryId
+                };
+
+                data = await _productApiClient.GetPagings(request);
+                ViewBag.Keyword = keyword;
+
+                facade.SetCache(keyCacheProducts, data);
+            }
 
             var categories = await _categoryApiClient.GetAll();
             ViewBag.Categories = categories.Select(x => new SelectListItem()
@@ -251,7 +273,5 @@ namespace eShopSolution.AdminApp.Controllers
             //ModelState.AddModelError("", "Xóa không thành công");
             //return View(request);
         }
-
-
     }
 }
