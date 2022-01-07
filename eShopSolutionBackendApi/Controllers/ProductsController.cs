@@ -77,6 +77,27 @@ namespace eShopSolutionBackendApi.Controllers
             return CreatedAtAction(nameof(GetById), new { id = productId }, product);
         }
 
+        [HttpPost("duplicate")]
+        [Authorize]
+        public async Task<IActionResult> Duplicate([FromBody] int id)
+        {
+            //kiểm tra validation
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var productId = await _productService.Duplicate(id);
+            if (productId == 0)
+            {
+                return BadRequest();
+            }
+
+            var product = await _productService.GetById(productId);
+
+            return CreatedAtAction(nameof(GetById), new { id = productId }, product);
+        }
+
         // HttpPut: update toàn phần
         [HttpPut("{productId}")]
         [Consumes("multipart/form-data")]
