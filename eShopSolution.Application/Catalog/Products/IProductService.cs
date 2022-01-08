@@ -12,6 +12,8 @@ namespace eShopSolution.Application.Catalog.Products
         // tham số không phải lúc nào cũng truyền vào 1 Product view model, nhiều khi sẽ bị thừa
         Task<int> Create(ProductCreateRequest request);
 
+        Task<int> Duplicate(int productId);
+
         // Create và Update truyền 1 Dtos vào phương thức
         // Dtos là Data transfer object ( giống view model truyền cho 1 view )
         Task<int> Update(ProductUpdateRequest request);

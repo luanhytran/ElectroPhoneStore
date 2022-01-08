@@ -234,21 +234,7 @@ namespace eShopSolution.AdminApp.Controllers
         {
             var product = await _productApiClient.GetById(id);
 
-            var cloneProduct = (ProductViewModel)product.Clone();
-
-            var productCreateRequest = new ProductCreateRequest()
-            {
-                Name = cloneProduct.Name,
-                CategoryId = cloneProduct.CategoryId,
-                Price = cloneProduct.Price,
-                Stock = cloneProduct.Stock,
-                Description = cloneProduct.Description,
-                Details = cloneProduct.Details,
-                ThumbnailImage = null,
-                ProductImage = null
-            };
-
-            var result = await _productApiClient.CreateProduct(productCreateRequest);
+            var result = await _productApiClient.DuplicateProduct(id);
             if (result)
             {
                 TempData["CreateProductSuccessful"] = "Thêm mới sản phẩm thành công";
@@ -256,8 +242,8 @@ namespace eShopSolution.AdminApp.Controllers
             }
 
             ModelState.AddModelError("", "Thêm sản phẩm thất bại");
-            cloneProduct.CategoryId = 0;
-            return View(cloneProduct);
+            product.CategoryId = 0;
+            return View(product);
 
             // ------------------------
             //if (!ModelState.IsValid)

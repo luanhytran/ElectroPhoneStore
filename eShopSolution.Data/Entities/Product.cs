@@ -24,5 +24,10 @@ namespace eShopSolution.Data.Entities
         public Category Category { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
         public ICollection<Review> Reviews { get; set; }
+
+        public Product ShallowCopy()
+        {
+            return (Product)this.MemberwiseClone();
+        }
     }
 }

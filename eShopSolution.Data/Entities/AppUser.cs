@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 
 namespace eShopSolution.Data.Entities
 {
-
-    interface MVCEshop
+    internal interface IMVCEshop
     {
         Task<RegisterState> UpdateDatabase(UserManager<AppUser> userManager, string password);
     }
 
     // Guid là kiểu duy nhất cho toàn hệ thống
-    public class AppUser : IdentityUser<Guid>, MVCEshop
+    public class AppUser : IdentityUser<Guid>, IMVCEshop
     {
         public string Name { get; set; }
         public string Address { get; set; }
@@ -28,9 +27,10 @@ namespace eShopSolution.Data.Entities
         }
     }
 
-    public class ProxyAppUser : MVCEshop
+    public class ProxyAppUser : IMVCEshop
     {
-        private AppUser user;
+        private readonly AppUser user;
+
         public ProxyAppUser(AppUser user)
         {
             this.user = user;
@@ -38,8 +38,6 @@ namespace eShopSolution.Data.Entities
 
         public async Task<RegisterState> UpdateDatabase(UserManager<AppUser> userManager, string password)
         {
-            StringComparison comp = StringComparison.OrdinalIgnoreCase;
-
             List<string> notAllowName = new List<string>() {
                 "Ho Chi Minh",
                 "Vo Nguyen Giap"

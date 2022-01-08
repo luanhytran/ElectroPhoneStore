@@ -76,6 +76,20 @@ namespace eShopSolution.Application.Catalog.Products
             return product.Id;
         }
 
+        public async Task<int> Duplicate(int productId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+
+            var productDuplicate = product.ShallowCopy();
+            productDuplicate.Id = 0;
+            productDuplicate.Name = product.Name + " [DUPLICATE]";
+
+            _context.Products.Add(productDuplicate);
+
+            await _context.SaveChangesAsync();
+            return productDuplicate.Id;
+        }
+
         public async Task<int> Update(ProductUpdateRequest request)
         {
             var product = await _context.Products.FindAsync(request.Id);

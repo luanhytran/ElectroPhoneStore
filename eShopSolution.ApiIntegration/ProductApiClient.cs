@@ -188,5 +188,22 @@ namespace eShopSolution.ApiIntegration
 
             return await response.Content.ReadAsStringAsync();
         }
+
+        public async Task<bool> DuplicateProduct(int id)
+        {
+            var sessions = _httpContextAccessor
+                .HttpContext
+                .Session
+                .GetString(SystemConstants.AppSettings.Token);
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+            var json = JsonConvert.SerializeObject(id);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"/api/products/duplicate", httpContent);
+            return response.IsSuccessStatusCode;
+        }
     }
 }
