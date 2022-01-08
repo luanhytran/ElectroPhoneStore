@@ -21,12 +21,12 @@ namespace eShopSolution.AdminApp.Controllers.ProductControllerFacade
             pscLogger.PrintRoutes();
         }
 
-        public bool TryGetValue(object key, out PagedResult<ProductViewModel> data)
+        public object GetValue(object key)
         {
-            return pscCache.TryGetValue(key, out data);
+            return pscCache.GetValue(key);
         }
 
-        public void SetCache(object key, PagedResult<ProductViewModel> data)
+        public void SetCache(string key, PagedResult<ProductViewModel> data)
         {
             pscCache.SetCache(key, data);
         }

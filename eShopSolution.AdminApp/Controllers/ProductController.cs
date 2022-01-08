@@ -41,9 +41,9 @@ namespace eShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Index(string keyword, int? categoryId, int pageIndex = 1, int pageSize = 4)
         {
             PagedResult<ProductViewModel> data;
-            string keyCacheProducts = "_listProducts";
+            string keyCacheProducts = "_listProducts" + "_" + keyword + "_" + pageIndex + "_" + pageSize + "_" + categoryId;
 
-            if (!facade.TryGetValue(keyCacheProducts, out data))
+            if (facade.GetValue(keyCacheProducts) == null)
             {
                 var request = new GetManageProductPagingRequest()
                 {
@@ -54,11 +54,15 @@ namespace eShopSolution.AdminApp.Controllers
                 };
 
                 data = await _productApiClient.GetPagings(request);
-                ViewBag.Keyword = keyword;
 
                 facade.SetCache(keyCacheProducts, data);
             }
+            else
+            {
+                data = (PagedResult<ProductViewModel>)facade.GetValue(keyCacheProducts);
+            }
 
+            ViewBag.Keyword = keyword;
             var categories = await _categoryApiClient.GetAll();
             ViewBag.Categories = categories.Select(x => new SelectListItem()
             {

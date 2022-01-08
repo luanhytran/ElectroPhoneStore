@@ -14,15 +14,15 @@ namespace eShopSolution.AdminApp.Controllers.ProductControllerFacade
             _cache = cache;
         }
 
-        public bool TryGetValue(object key, out PagedResult<ProductViewModel> data)
+        public object GetValue(object key)
         {
-            return _cache.TryGetValue(key, out data);
+            return _cache.Get(key);
         }
 
-        public void SetCache(object key, PagedResult<ProductViewModel> data)
+        public void SetCache(string key, PagedResult<ProductViewModel> data)
         {
             var cacheEntryOptions = new MemoryCacheEntryOptions()
-                        .SetSlidingExpiration(TimeSpan.FromMinutes(300));
+                        .SetSlidingExpiration(TimeSpan.FromMinutes(1));
             _cache.Set(key, data, cacheEntryOptions);
         }
     }
