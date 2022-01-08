@@ -140,14 +140,16 @@
                         <div id="tab1" class="tab-pane fade in active">
                             <div class="row">
                                 <div class="col-md-12">
-                                    @{
-                                        string html = @Model.Product.Description;
-                                        string removeFirstFigure = html.Remove(0, 22);
-                                        string removeLastFigure = removeFirstFigure.Remove(removeFirstFigure.Length - 9);
-                                        string addedTableFormat = removeLastFigure.Insert(6, " class=\"table table-bordered table-striped\"");
-                                    }
-                                    @Html.Raw(addedTableFormat)
-                                    @*@Html.Raw(Model.Product.Description)*@
+                                     <div class="table-responsive">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        @Html.Raw(Model.Product.Description)
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>

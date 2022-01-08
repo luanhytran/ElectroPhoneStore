@@ -64,13 +64,14 @@
                                 Thông số kỹ thuật
                             </td>
                             <td>
-                                @{
+@*                                @{
                                     string html = @Model.Description;
                                     string removeFirstFigure = html.Remove(0, 22);
                                     string removeLastFigure = removeFirstFigure.Remove(removeFirstFigure.Length - 9);
                                     string addedTableFormat = removeLastFigure.Insert(6, " class=\"table table-bordered table-striped\"");
                                 }
-                                @Html.Raw(addedTableFormat)
+                                @Html.Raw(addedTableFormat)*@
+                                @Html.Raw(@Model.Description)
                             </td>
                         </tr>
                         <tr>
