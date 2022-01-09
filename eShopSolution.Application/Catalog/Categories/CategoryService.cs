@@ -31,6 +31,10 @@ namespace eShopSolution.Application.Catalog.Categories
 
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
+
+            CategorySingleton.Instance.ListCategory.Clear();
+            CategorySingleton.Instance.Init(_context);
+
             return category.Id;
         }
 
@@ -41,7 +45,12 @@ namespace eShopSolution.Application.Catalog.Categories
 
             category.Name = request.Name;
 
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+
+            CategorySingleton.Instance.ListCategory.Clear();
+            CategorySingleton.Instance.Init(_context);
+
+            return category.Id;
         }
 
         public async Task<int> Delete(int categoryId)
@@ -50,8 +59,10 @@ namespace eShopSolution.Application.Catalog.Categories
             if (category == null) throw new EShopException($"Không thể tìm danh mục có ID: {categoryId} ");
 
             _context.Categories.Remove(category);
+            CategorySingleton.Instance.ListCategory.Clear();
+            CategorySingleton.Instance.Init(_context);
 
-            return await _context.SaveChangesAsync();
+            return category.Id;
         }
 
         public async Task<PagedResult<CategoryViewModel>> GetAllPaging(GetManageProductPagingRequest request)
