@@ -59,6 +59,8 @@ namespace eShopSolution.Application.Catalog.Categories
             if (category == null) throw new EShopException($"Không thể tìm danh mục có ID: {categoryId} ");
 
             _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+
             CategorySingleton.Instance.ListCategory.Clear();
             CategorySingleton.Instance.Init(_context);
 
