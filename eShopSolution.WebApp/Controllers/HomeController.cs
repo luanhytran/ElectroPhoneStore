@@ -88,13 +88,13 @@ namespace eShopSolution.WebApp.Controllers
 
             foreach (var item in viewModel.LatestProducts)
             {
-                var category = await _categoryApiClient.GetById(item.Id);
+                var category = await _categoryApiClient.GetById(item.CategoryId);
                 item.Category = category;
             }
 
             foreach (var item in viewModel.FeaturedProducts)
             {
-                var category = await _categoryApiClient.GetById(item.Id);
+                var category = await _categoryApiClient.GetById(item.CategoryId);
                 item.Category = category;
             }
 
