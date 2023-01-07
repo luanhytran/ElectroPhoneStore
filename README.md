@@ -1,6 +1,6 @@
 # Electro Phone Store 
 ## Demo: 
-- Video: https://youtu.be/NY3cEaOQ_3o
+- Video: https://youtu.be/4J0rz99bUKU
 - Front End: https://electroshop.azurewebsites.net/
 - Admin area: https://electroadmin.azurewebsites.net/
 
