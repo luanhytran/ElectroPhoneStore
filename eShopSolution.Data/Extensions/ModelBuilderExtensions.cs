@@ -153,13 +153,13 @@ namespace eShopSolution.Data.Extentions
                 UserName = "admin",
                 NormalizedUserName = "ADMIN",
                 Email = "hytranluan@gmail.com",
-                PhoneNumber = "0765006381",
-                Address = "123 An Dương Vương P.8 Q.5",
+                PhoneNumber = "0123456789",
+                Address = "ABCDXYZ",
                 NormalizedEmail = "HYTRANLUAN@GMAIL.COM",
                 EmailConfirmed = true,
                 PasswordHash = hasher.HashPassword(null, "Abcd1234$"),
                 SecurityStamp = string.Empty,
-                Name = "Luan Hy",
+                Name = "Luan Hy Dev",
             }); 
             // gán role admin và admin user
             modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
