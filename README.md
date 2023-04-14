@@ -37,6 +37,3 @@
 
 ## Reference
 https://github.com/teduinternational/eShopSolution
-
-
-
