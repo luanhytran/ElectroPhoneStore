@@ -1,4 +1,6 @@
-﻿@{
+﻿@model int
+
+@{
     ViewData["Title"] = "Index";
 }
 
@@ -12,13 +14,114 @@
 
 @{
     var culture = CultureInfo.CurrentCulture.Name;
+
 }
 
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a href="/">Trang chủ</a></li>
+                    <li>Giỏ hàng</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<section class="main-container col1-layout">
+    <div class="main container">
+        <div class="cart">
+
+            <div class="page-content page-order">
+                <div class="page-title">
+                    <h2>Giỏ hàng</h2>
+                </div>
+
+                <div class="order-detail-content">
+                    <div class="table-responsive">
+                        <table class="table table-bordered cart_summary" id="tbl_cart">
+                            <thead>
+                                <tr>
+                                    <th class="cart_product">Hình ảnh</th>
+                                    <th>Tên</th>
+                                    <th class="text-center">Số lượng trong kho</th>
+                                    <th>Đơn giá</th>
+                                    <th>Số lượng mua</th>
+                                    <th>Tổng cộng</th>
+                                    <th class="action"><i class="fa fa-trash"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody id="cart_body">
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2"></td>
+                                    <td colspan="4"><strong>Tổng giá đơn hàng</strong></td>
+                                    <td colspan="2"><strong><span id="lbl_total"></span> <span>&#8363;</span> </strong></td>
+                                </tr>
+                                <tr id="discount_amount_row">
+                                    <td colspan="2" ></td>
+                                    <td colspan="4"><strong>Số tiền giảm</strong></td>
+                                    <td colspan="2"><strong><span id="lbl_discount_amount"></span> <span>&#8363;</span> </strong></td>
+                                </tr>
+                                <tr id="total_discounted_row">
+                                    <td colspan="2" ></td>
+                                    <td colspan="4"><strong>Tổng giá đơn hàng đã giảm</strong></td>
+                                    <td colspan="2"><strong><span id="lbl_total_discounted"></span> <span>&#8363;</span> </strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                            <div class="form-group" id="coupon-input" style="width:300px">
+                                <label>Bạn có coupon giảm giá?</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="coupon-input-control" placeholder="Nhập mã Coupon">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary" id="btn-apply-coupon">Áp dụng</button>
+                                    </span>
+                                </div>
+                            </div>
+                        <div class="cart_navigation">
+                            <a class="continue-btn" href="/"><i class="fa fa-arrow-left"> </i>&nbsp; Tiếp tục mua hàng</a>
+                            <a class="checkout-btn" href="/@culture/Cart/Checkout"><i class="fa fa-check"></i> Tiến hành thanh toán</a>
+                        </div>
+                    }
+                    else
+                    {
+                            <div class="form-group" id="coupon-input" style="width:300px">
+                                <label>Bạn có coupon giảm giá?</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="coupon-input-control" placeholder="Nhập mã Coupon">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary" id="btn-apply-coupon" >Áp dụng</button>
+                                    </span>
+                                </div>
+                            </div>
+                        <div class="cart_navigation">
+                            <a class="continue-btn" href="/"><i class="fa fa-arrow-left"> </i>&nbsp; Tiếp tục mua hàng</a>
+                            <a class="checkout-btn" asp-action="Login" asp-controller="Login"><i class="fa fa-check"></i> Tiến hành thanh toán</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <style>
     /******************************************
-29. shopping cart
-******************************************/
+    29. shopping cart
+    ******************************************/
 
     .page-order ul.step {
         width: 100%;
@@ -210,103 +313,3 @@
         font-weight: 600
     }
 </style>
-
-<!-- BREADCRUMB -->
-<div id="breadcrumb" class="section">
-    <!-- container -->
-    <div class="container">
-        <!-- row -->
-        <div class="row">
-            <div class="col-md-12">
-                <ul class="breadcrumb-tree">
-                    <li><a href="/">Home</a></li>
-                    <li>Cart</li>
-                </ul>
-            </div>
-        </div>
-        <!-- /row -->
-    </div>
-    <!-- /container -->
-</div>
-<!-- /BREADCRUMB -->
-
-<section class="main-container col1-layout">
-    <div class="main container">
-        <div class="cart">
-
-            <div class="page-content page-order">
-                <div class="page-title">
-                    <h2>Shopping Cart</h2>
-                </div>
-
-
-                <div class="order-detail-content">
-                    <div class="table-responsive">
-                        <table class="table table-bordered cart_summary" id="tbl_cart">
-                            <thead >
-                                <tr>
-                                    <th class="cart_product">Product</th>
-                                    <th>Name</th>
-                                    <th class="text-center">Avail.</th>
-                                    <th>Unit price</th>
-                                    <th>Qty</th>
-                                    <th>Total</th>
-                                    <th class="action"><i class="fa fa-trash"></i></th>
-                                </tr>
-                            </thead>
-                            <tbody id="cart_body">
-                                @*<tr>
-                                        <td class="cart_product"><a href="#"><img src="images/products/product-1.jpg" alt="Product"></a></td>
-                                        <td class="cart_description">
-                                            <p class="product-name"><a href="#">Ipsums Dolors Untra </a></p>
-                                            <small><a href="#">Color : Red</a></small>
-                                            <small><a href="#">Size : M</a></small>
-                                        </td>
-                                        <td class="availability in-stock"><span class="label">In stock</span></td>
-                                        <td class="price"><span>$49.88</span></td>
-                                        <td class="qty"><input class="form-control input-sm" type="text" value="1"></td>
-                                        <td class="price"><span>$49.88</span></td>
-                                        <td class="action"><a href="#"><i class="icon-close"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_product"><a href="#"><img src="images/products/product-1.jpg" alt="Product"></a></td>
-                                        <td class="cart_description">
-                                            <p class="product-name"><a href="#">Ipsums Dolors Untra </a></p>
-                                            <small><a href="#">Color : Green</a></small>
-                                            <small><a href="#">Size : XL</a></small>
-                                        </td>
-                                        <td class="availability out-of-stock"><span class="label">No stock</span></td>
-                                        <td class="price"><span>$00.00</span></td>
-                                        <td class="qty"><input class="form-control input-sm" type="text" value="0"></td>
-                                        <td class="price"><span>00.00</span></td>
-                                        <td class="action"><a href="#"><i class="icon-close"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_product"><a href="#"><img src="images/products/product-1.jpg" alt="Product"></a></td>
-                                        <td class="cart_description">
-                                            <p class="product-name"><a href="#">Ipsums Dolors Untra </a></p>
-                                            <small><a href="#">Color : Blue</a></small>
-                                            <small><a href="#">Size : S</a></small>
-                                        </td>
-                                        <td class="availability in-stock"><span class="label">In stock</span></td>
-                                        <td class="price"><span>$99.00</span></td>
-                                        <td class="qty"><input class="form-control input-sm" type="text" value="2"></td>
-                                        <td class="price"><span>$188.00</span></td>
-                                        <td class="action"><a href="#"><i class="icon-close"></i></a></td>
-                                    </tr>*@
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="2" rowspan="2"></td>
-                                    <td colspan="3"><strong>Total</strong></td>
-                                    <td colspan="2"><strong><span id="lbl_total"></span> <span>&#8363;</span> </strong></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <div class="cart_navigation"> <a class="continue-btn" href="/"><i class="fa fa-arrow-left"> </i>&nbsp; Continue shopping</a> <a class="checkout-btn" href="/@culture/Cart/Checkout"><i class="fa fa-check"></i> Proceed to checkout</a> </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>

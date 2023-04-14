@@ -7,24 +7,22 @@ namespace eShopSolution.Data.Entities
     public class Product
     {
         public int Id { get; set; }
-
+        public string Name { set; get; }
+        public int CategoryId { get; set; }
         public decimal Price { get; set; }
-
         public int Stock { get; set; }
-
-        public int ViewCount { get; set; }
-
         public DateTime DateCreated { get; set; }
+        public string Description { set; get; }
+        public string Details { set; get; }
 
-        public bool? IsFeature { get; set; }
-        public List<ProductInCategory> ProductInCategories { get; set; }
+        // thumbnail path
+        public string Thumbnail { get; set; }
 
+        // product image path
+        public string ProductImage { get; set; }
+
+        public Category Category { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
-
-        public List<Cart> Carts { get; set; }
-
-        public List<ProductTranslation> ProductTranslations { get; set; }
-
-        public List<ProductImage> ProductImage { get; set; }
+        public ICollection<Review> Reviews { get; set; }
     }
 }

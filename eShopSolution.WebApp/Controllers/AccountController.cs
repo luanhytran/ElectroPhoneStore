@@ -1,8 +1,10 @@
 ﻿using eShopSolution.ApiIntegration;
 using eShopSolution.Utilities.Constants;
+using eShopSolution.ViewModels.Sales;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -18,114 +20,135 @@ using System.Threading.Tasks;
 
 namespace eShopSolution.WebApp.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly IUserApiClient _userApiClient;
+        private readonly IOrderApiClient _orderApiClient;
+        private readonly IProductApiClient _productApiClient;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountController(IUserApiClient userApiClient,
-            IConfiguration configuration)
+        public AccountController(IUserApiClient userApiClient, IOrderApiClient orderApiClient, IProductApiClient productApiClient,
+            IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _userApiClient = userApiClient;
+            _orderApiClient = orderApiClient;
+            _productApiClient = productApiClient;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> Index()
+        {
+            var claims = User.Claims.ToList();
+            Guid id = new Guid(claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var orders = await _orderApiClient.GetOrderByUser(id.ToString());
+
+            return View(orders);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid userid)
+        {
+            var result = await _userApiClient.GetById(userid);
+            if (result.IsSuccessed)
+            {
+                var user = result.ResultObj;
+                var updateRequest = new UserUpdateRequest()
+                {
+                    Email = user.Email,
+                    Address = user.Address,
+                    UserName = user.UserName,
+                    Name = user.Name,
+                    PhoneNumber = user.PhoneNumber,
+                    Id = userid
+                };
+                return View(updateRequest);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            var result = await _userApiClient.UpdateUser(request.Id, request);
+            if (result.IsSuccessed)
+            {
+                var claims = User.Claims.ToList();
+                Guid id = new Guid(claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+                var orders = await _orderApiClient.GetOrderByUser(id.ToString());
+
+                TempData["UpdateAccountSuccess"] = "Cập nhật thông tin cá nhân thành công";
+                return View("Index", orders);
+            }
+
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> OrderDetail(string name, int orderId)
+        {
+            var order = await _orderApiClient.GetOrderById(orderId);
+            order.Name = name;
+
+            foreach (var item in order.OrderDetails)
+            {
+                var product = await _productApiClient.GetById(item.ProductId);
+                item.Name = product.Name;
+                item.Price = product.Price;
+                item.ThumbnailImage = product.ThumbnailImage;
+            }
+
+            return View(order);
+        }
+
+        [HttpGet]
+        public IActionResult ChangePassword()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
-                return View(request);
-
-            var result = await _userApiClient.Authenticate(request);
-            if (result.ResultObj == null)
-            {
-                ModelState.AddModelError("", "Login failure");
                 return View();
-            }
-            var userPrincipal = this.ValidateToken(result.ResultObj);
-            var authProperties = new AuthenticationProperties
+
+            var result = await _userApiClient.ChangePassword(model);
+
+            if (result.IsSuccessed)
             {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                IsPersistent = false
-            };
-            HttpContext.Session.SetString(SystemConstants.AppSettings.Token, result.ResultObj);
-            await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        userPrincipal,
-                        authProperties);
+                var claims = User.Claims.ToList();
+                Guid id = new Guid(claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+                var orders = await _orderApiClient.GetOrderByUser(id.ToString());
 
-            return RedirectToAction("Index", "Home");
-        }
+                TempData["ChangePasswordSuccess"] = "Cập nhật mật khẩu thành công";
+                return View("Index", orders);
+            }
 
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            ModelState.AddModelError("", result.Message);
+            return View(model);
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public async Task<IActionResult> CancelOrderStatus(int orderId)
         {
-            return View();
-        }
+            var result = await _orderApiClient.CancelOrderStatus(orderId);
 
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterRequest registerRequest)
-        {
-            if (!ModelState.IsValid)
-                return View(registerRequest);
-
-            var result = await _userApiClient.RegisterUser(registerRequest);
-            if (!result.IsSuccessed)
+            if (result)
             {
-                ModelState.AddModelError("", "Login failure");
-                return View();
+                TempData["CancelOrderSuccess"] = "Huỷ đơn hàng thành công";
+                return RedirectToAction("Index", "Account");
             }
-            var loginResult = await _userApiClient.Authenticate(new LoginRequest()
-            {
-                UserName = registerRequest.UserName,
-                Password = registerRequest.Password,
-                RememberMe = true
-            });
-            var userPrincipal = this.ValidateToken(loginResult.ResultObj);
-            var authProperties = new AuthenticationProperties
-            {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                IsPersistent = false
-            };
-            HttpContext.Session.SetString(SystemConstants.AppSettings.Token, loginResult.ResultObj);
-            await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        userPrincipal,
-                        authProperties);
 
-            return RedirectToAction("Index", "Home");
-        }
-
-        private ClaimsPrincipal ValidateToken(string jwtToken)
-        {
-            IdentityModelEventSource.ShowPII = true;
-
-            SecurityToken validatedToken;
-            TokenValidationParameters validationParameters = new TokenValidationParameters();
-
-            validationParameters.ValidateLifetime = true;
-
-            validationParameters.ValidAudience = _configuration["Tokens:Issuer"];
-            validationParameters.ValidIssuer = _configuration["Tokens:Issuer"];
-            validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
-
-            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
-
-            return principal;
+            //ModelState.AddModelError("", "Huỷ đơn hàng thành công");
+            TempData["CancelOrderFail"] = "Huỷ đơn hàng không thành công";
+            return RedirectToAction("Index", "Account");
         }
     }
 }

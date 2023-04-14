@@ -1,9 +1,8 @@
 ﻿using eShopSolution.Application.Catalog.Categories;
-using Microsoft.AspNetCore.Http;
+using eShopSolution.ViewModels.Catalog.Categories;
+using eShopSolution.ViewModels.Catalog.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace eShopSolutionBackendApi.Controllers
@@ -21,18 +20,72 @@ namespace eShopSolutionBackendApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(string languageId)
+        public async Task<IActionResult> GetAll()
         {
-            var products = await _categoryService.GetAll(languageId);
-            return Ok(products);
+            var categories = await _categoryService.GetAll();
+            return Ok(categories);
         }
 
-
-        [HttpGet("{id}/{languageId}")]
-        public async Task<IActionResult> GetById(string languageId, int id)
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductPagingRequest request)
         {
-            var category = await _categoryService.GetById(languageId, id);
+            var categories = await _categoryService.GetAllPaging(request);
+            return Ok(categories);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var category = await _categoryService.GetById(id);
             return Ok(category);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Create([FromBody] CategoryCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var categoryId = await _categoryService.Create(request);
+
+            if (categoryId == 0)
+                return BadRequest();
+
+            var category = await _categoryService.GetById(categoryId);
+
+            return CreatedAtAction(nameof(GetById), new { id = categoryId }, category);
+        }
+
+        // HttpPut: update toàn phần
+        [HttpPut("updateCategory")]
+        [Authorize]
+        public async Task<IActionResult> Update([FromBody] CategoryUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var affectedResult = await _categoryService.Update(request);
+            if (affectedResult == 0)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var affectedResult = await _categoryService.Delete(id);
+            if (affectedResult == 0)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }

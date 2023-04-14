@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace eShopSolution.WebApp.Models
 {
-    public class ProductCategoryViewModel
+    public class ProductCategoryViewModel : PagingRequestBase
     {
         public CategoryViewModel Category { get; set; }
 

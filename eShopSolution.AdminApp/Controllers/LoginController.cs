@@ -4,7 +4,9 @@ using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -35,6 +37,33 @@ namespace eShopSolution.AdminApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            string cookie = Request.Cookies["userToken"];
+            if(cookie != null)
+            {
+                var userPrincipal = this.ValidateToken(cookie);
+
+                // tập properties của cookie
+                var authProperties = new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMonths(1),
+                    IsPersistent = true,
+                    IssuedUtc = DateTimeOffset.UtcNow.AddMonths(1),
+                };
+
+                // Set key defaultlanguageId trong session lấy value trong appsettings.json
+                HttpContext.Session.SetString(SystemConstants.AppSettings.DefaultLanguageId, _configuration[SystemConstants.AppSettings.DefaultLanguageId]);
+
+                // Set key token trong session bằng token nhận được khi authenticate
+                HttpContext.Session.SetString(SystemConstants.AppSettings.Token, cookie);
+
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    userPrincipal,
+                    authProperties);
+
+                return RedirectToAction("Index", "Home");
+            }
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
@@ -44,7 +73,15 @@ namespace eShopSolution.AdminApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(ModelState);
+                return View(request);
+            }
+
+            var user = await _userApiClient.GetByUserName(request.UserName);
+            
+            if(user.ResultObj.Roles.ToString() != "admin")
+            {
+                ModelState.AddModelError(nameof(request.UserName), "Tài khoản không có quyền truy cập vào trang này");
+                return View(request);
             }
 
             /* Khi đăng nhập thành công thì chúng ta sẽ giả mã token này ra có những claim gì */
@@ -59,6 +96,13 @@ namespace eShopSolution.AdminApp.Controllers
                 return View();
             }
 
+            if(request.RememberMe == true)
+            {
+                CookieOptions option = new CookieOptions();
+                option.Expires = DateTime.Now.AddMonths(1);
+                Response.Cookies.Append("userToken", result.ResultObj, option);
+            }
+
             // Giải mã token đã mã hóa và lấy token, lấy cả các claim đã định nghĩa trong UserService
             // khi debug sẽ thấy nhận được gì  ( có nhận được cả issuer )
             var userPrincipal = this.ValidateToken(result.ResultObj);
@@ -66,8 +110,9 @@ namespace eShopSolution.AdminApp.Controllers
             // tập properties của cookie
             var authProperties = new AuthenticationProperties
             {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                IsPersistent = false
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMonths(1),
+                IsPersistent = request.RememberMe,
+                IssuedUtc = DateTimeOffset.UtcNow.AddMonths(1),
             };
 
             // Set key defaultlanguageId trong session lấy value trong appsettings.json
@@ -75,6 +120,7 @@ namespace eShopSolution.AdminApp.Controllers
             
             // Set key token trong session bằng token nhận được khi authenticate
             HttpContext.Session.SetString(SystemConstants.AppSettings.Token, result.ResultObj);
+
 
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,

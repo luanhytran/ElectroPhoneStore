@@ -1,0 +1,127 @@
+﻿@using eShopSolution.ViewModels.Common;
+@using eShopSolution.ViewModels.Sales;
+@model PagedResult<CouponViewModel>
+
+@{
+    ViewData["Title"] = "Danh sách khuyến mãi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Danh sách khuyến mãi</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Danh sách khuyến mãi</li>
+    </ol>
+    <div class="card mb-12">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-7 col-xs-12">
+                    <a class="btn btn-success" asp-action="Create" asp-controller="Coupon">Tạo mới</a>
+                </div>
+                <div class="col-md-5 col-xs-12">
+                    <form asp-action="Index" asp-controller="Coupon" method="get">
+                        <div class="row">
+                            <div class="col-md-9">
+                                @*name: là tên tham số*@
+                                <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-info"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                <button type="button" onclick="window.location.href='/Coupon/Index'" class="btn btn-secondary">Đặt lại</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            @if (TempData["CreateCouponSuccessful"] != null)
+            {
+                <script>
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Thêm coupon thành công',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                </script>
+            }
+            else if (TempData["UpdateCouponSuccessful"] != null)
+            {
+                <script>
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Cập nhật coupon thành công',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                </script>
+            }
+            else if (TempData["DeleteCouponSuccessful"] != null)
+            {
+                <script>
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Xóa coupon thành công',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                </script>
+            }
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                ID
+                            </th>
+                            <th>
+                                Mã
+                            </th>
+                            <th class="text-center">
+                                Số lượng
+                            </th>
+                            <th class="text-center">
+                                Phần trăm giảm
+                            </th>
+                            <th>
+                                Thao tác
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Count)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Promotion)
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-primary">@Html.ActionLink("Xem chi tiết", "Details", new { id = item.Id })</button>
+                                    <button class="btn btn-success">@Html.ActionLink("Cập nhật", "Edit", new { id = item.Id })</button>
+                                    <button class="btn btn-danger">@Html.ActionLink("Xóa", "Delete", new { id = item.Id })</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @*truyền Model vào hàm InvokeAsync của class PagerViewComponent để phân trang *@
+            @*await Component.InvokeAsync("Pager", Model)*@
+        </div>
+    </div>
+</div>

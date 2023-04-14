@@ -1,10 +1,6 @@
-﻿using eShopSolution.ViewModels.Catalog.ProductImages;
-using eShopSolution.ViewModels.Catalog.Products;
+﻿using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
-using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace eShopSolution.Application.Catalog.Products
@@ -23,37 +19,20 @@ namespace eShopSolution.Application.Catalog.Products
         // để xóa thì ta chỉ cần truyền vào 1 product id
         Task<int> Delete(int productId);
 
-        Task<ProductViewModel> GetById(int productId, string languageId);
-
-        Task<bool> UpdatePrice(int productId, decimal newPrice);
-
-        Task<bool> UpdateStock(int productId, int addedQuantity);
-
-        Task AddViewCount(int productId);
+        Task<ProductViewModel> GetById(int productId);
 
         // dùng để tìm kiếm
         // return một List ProductViewModel
         Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request);
 
-        // Lấy product id để thêm hình cho một product cụ thể
-        Task<int> AddImage(int productId, ProductImageCreateRequest request);
+        Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request);
 
-        // Có product id vì cần biết id product để xóa hình của product đó
-        Task<int> RemoveImage(int imageId);
+        Task<List<ProductViewModel>> GetFeaturedProducts(int take);
 
-        // Có product id tương tự lý do của phương thức remove image
-        Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request);
+        Task<List<ProductViewModel>> GetLatestProducts(int take);
 
-        Task<ProductImageViewModel> GetImageById(int imageId);
+        Task<bool> DecreaseStock(int productId, int quantity);
 
-        Task<List<ProductImageViewModel>> GetListImages(int productId);
-
-        Task<PagedResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
-
-        Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
-
-        Task<List<ProductViewModel>> GetFeaturedProducts(string languageId, int take);
-
-        Task<List<ProductViewModel>> GetLatestProducts(string languageId, int take);
+        Task<int> AddReview(ProductDetailViewModel model);
     }
 }

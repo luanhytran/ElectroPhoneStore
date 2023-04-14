@@ -1,0 +1,162 @@
+﻿@model ProductDetailViewModel
+@using eShopSolution.ViewModels.Catalog.Products
+
+<style>
+    body {
+        padding-top: 50px;
+        padding-bottom: 20px;
+    }
+
+    /* Set padding to keep content from hitting the edges */
+    .body-content {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    /* Override the default bootstrap behavior where horizontal description lists
+       will truncate terms that are too long to fit in the left column
+    */
+    .dl-horizontal dt {
+        white-space: normal;
+    }
+
+    /* Set width on the form input elements since they're 100% wide by default */
+    input,
+    select,
+    textarea {
+        max-width: 280px;
+    }
+
+    .commentBox {
+        background-color: #efefef;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .starFade {
+        background-image: url('/img/StarFade.gif');
+        min-width: 30px;
+        min-height: 30px;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .starFadeN {
+        background-image: url('/img/StarFade.gif');
+        min-width: 30px;
+        min-height: 30px;
+        display: inline-block;
+    }
+
+    .starGlow {
+        background-image: url('/img/starglow.gif');
+        min-width: 30px;
+        min-height: 30px;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .starGlowN {
+        background-image: url('/img/starglow.gif');
+        min-width: 30px;
+        min-height: 30px;
+        display: inline-block;
+    }
+</style>
+
+<dl class="dl-horizontal">
+    <dt>
+        Comment
+    </dt>
+
+    <dd>
+        <div class="commentBox">
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <div class="form-horizontal">
+                    <a asp-action="Login" asp-controller="Login">Đăng nhập để đánh giá sản phẩm</a>
+                </div>
+            }
+            else
+            {
+                @using (Html.BeginForm("AddReview", "Product", FormMethod.Post, new { onsubmit = "return SubmitComment()" }))
+                {
+                    var claims = User.Claims.ToList();
+                    var userId = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">
+                                Your rating <span style="font-weight:normal;">(1 start is bad, 5 star is good)</span>
+                            </label>
+                            <div class="col-md-7">
+                                <div onmouseout="CRateSelected()">
+                                    <span class="starFade" id="Rate1" onclick="CRate(1)" onmouseover="CRateOver(1)" onmouseout="CRateOut(1)"></span>
+                                    <span class="starFade" id="Rate2" onclick="CRate(2)" onmouseover="CRateOver(2)" onmouseout="CRateOut(2)"></span>
+                                    <span class="starFade" id="Rate3" onclick="CRate(3)" onmouseover="CRateOver(3)" onmouseout="CRateOut(3)"></span>
+                                    <span class="starFade" id="Rate4" onclick="CRate(4)" onmouseover="CRateOver(4)" onmouseout="CRateOut(4)"></span>
+                                    <span class="starFade" id="Rate5" onclick="CRate(5)" onmouseover="CRateOver(5)" onmouseout="CRateOut(5)"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <textarea asp-for="Review" required rows="5" style="width:100%;" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input type="hidden" asp-for="ProductId" value="@Model.Product.Id" />
+                                <input type="hidden" asp-for="UserCommentId" value="@userId" />
+                                <input type="hidden" name="Rating" id="Rating" value="0" />
+                                <input type="submit" id="btnRegister" name="btnRegister" value="Submit Comment" class="btn btn-warning" />
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            }
+        </div>
+    </dd>
+</dl>
+<script>
+    function SubmitComment() {
+        if ($("#Rating").val() == "0") {
+            alert("Please rate this service provider.");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    function CRate(r) {
+        $("#Rating").val(r);
+        for (var i = 1; i <= r; i++) {
+            $("#Rate" + i).attr('class', 'starGlow');
+        }
+        // unselect remaining
+        for (var i = r + 1; i <= 5; i++) {
+            $("#Rate" + i).attr('class', 'starFade');
+        }
+    }
+
+    function CRateOver(r) {
+        for (var i = 1; i <= r; i++) {
+            $("#Rate" + i).attr('class', 'starGlow');
+        }
+    }
+
+    function CRateOut(r) {
+        for (var i = 1; i <= r; i++) {
+            $("#Rate" + i).attr('class', 'starFade');
+        }
+    }
+
+    function CRateSelected() {
+        var setRating = $("#Rating").val();
+        for (var i = 1; i <= setRating; i++) {
+            $("#Rate" + i).attr('class', 'starGlow');
+        }
+    }
+</script>

@@ -1,4 +1,6 @@
 ﻿using eShopSolution.ViewModels.Catalog.Categories;
+using eShopSolution.ViewModels.Catalog.Products;
+using eShopSolution.ViewModels.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,8 +10,16 @@ namespace eShopSolution.Application.Catalog.Categories
 {
     public interface ICategoryService
     {
-        Task<List<CategoryViewModel>> GetAll(string languageId);
+        Task<int> Create(CategoryCreateRequest request);
 
-        Task<CategoryViewModel> GetById(string languageId, int id);
+        Task<int> Update(CategoryUpdateRequest request);
+
+        Task<int> Delete(int categoryId);
+
+        Task<PagedResult<CategoryViewModel>> GetAllPaging(GetManageProductPagingRequest request);
+
+        Task<CategoryViewModel> GetById(int id);
+
+        Task<List<CategoryViewModel>> GetAll();
     }
 }

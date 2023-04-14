@@ -14,6 +14,7 @@ namespace eShopSolution.AdminApp.Controllers
 {
     // Authorize: Sẽ chuyển sang trang User/Login ( định nghĩa trong startup bằng serivces.AddAuthorization )
     // Sau đó phải đăng nhập rồi mới được dùng mấy trang này
+    [Authorize]
     public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
@@ -27,6 +28,7 @@ namespace eShopSolution.AdminApp.Controllers
         {
             // lấy user name đăng nhập
             var user = User.Identity.Name;
+            var expireTime = HttpContext.Items["ExpiresUTC"];
             return View();
         }
 

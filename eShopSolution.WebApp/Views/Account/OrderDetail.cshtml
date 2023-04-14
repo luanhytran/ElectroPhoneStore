@@ -1,0 +1,158 @@
+﻿@model OrderViewModel
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a href="/">Trang chủ</a></li>
+                    <li><a asp-action="Index" asp-controller="Account">Tài khoản</a></li>
+                    <li class="active">Chi tiết đơn hàng</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<div class="main container">
+    <div class="row">
+        <div class="col-main col-sm-12 col-xs-12">
+            <div class="my-account">
+              
+                <div class="row">
+                    <div class="col-xs-12 col-md-6 col-sm-6">
+                        <div class="page-title">
+                            <h2>Thông tin đơn hàng</h2>
+                        </div>
+                        <table class="table table-bordered cart_summary table-striped">
+                            <tr>
+                                <td class="order-number">ID</td>
+                                <td data-title="Order Number">@Model.Id</td>
+                            </tr>
+                            <tr>
+                                <td class="order-number">Ngày đặt hàng</td>
+                                <td data-title="Order Date">@Model.OrderDate</td>
+                            </tr>
+                            <tr>
+                                <td class="order-number">Trạng thái đơn hàng</td>
+                                <td data-title="Order Status">
+                                    @{
+                                        var status = "";
+                                        var statusEnum = (int)Model.Status;
+                                        switch (statusEnum)
+                                        {
+                                            case 1:
+                                                status = "Đang chờ duyệt";
+                                                break;
+                                            case 2:
+                                                status = "Đã duyệt";
+                                                break;
+                                            case 3:
+                                                status = "Đang giao";
+                                                break;
+                                            case 4:
+                                                status = "Đã giao";
+                                                break;
+                                            case 5:
+                                                status = "Đã huỷ";
+                                                break;
+                                            default:
+                                                status = "...";
+                                                break;
+                                        }
+                                    }
+                                    <i>@status</i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="order-number">Giá trị đơn hàng</td>
+                                <td>@Model.Price.ToString("N0") <span>&#8363;</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-xs-12 col-md-6 col-sm-6">
+                        <div class="page-title">
+                            <h2>Thông tin giao hàng</h2>
+                        </div>
+
+                        <table class="table table-bordered cart_summary">
+                            <tr>
+                                <td>Tên người nhận</td>
+                                <td>@Model.ShipName</td>
+                            </tr>
+                            <tr>
+                                <td>Số điện thoại nhận hàng</td>
+                                <td>@Model.ShipPhoneNumber</td>
+                            </tr>
+                            <tr>
+                                <td>Địa chỉ nhận hàng</td>
+                                <td>@Model.ShipAddress</td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+                    <div class="row">
+                       
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-sm-12">
+                            <div class="page-title">
+                                <h2>Sản phẩm đã mua</h2>
+                            </div>
+                            <table class="table table-bordered cart_summary">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">
+                                            ID
+                                        </th>
+                                        <th class="text-center">
+                                            Ảnh đại diện
+                                        </th>
+                                        <th class="text-center">
+                                            Tên
+                                        </th>
+                                        <th class="text-center">
+                                            Giá bán
+                                        </th>
+                                        <th class="text-center">
+                                            Số lượng mua
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.OrderDetails)
+                                    {
+                                        <tr>
+                                            <td class="text-center">
+                                                @Html.DisplayFor(item => item.Id)
+                                            </td>
+                                            <td class="text-center">
+                                                <img style="width:100px;height:100px" src="@(Configuration["BaseAddress"] + item.ThumbnailImage)" alt="Alternate Text" />
+                                            </td>
+                                            <td class="text-center">
+                                                @item.Name
+                                            </td>
+
+                                            <td class="text-center">
+                                                @item.Price.ToString("N0") <span>&#8363;</span>
+                                            </td>
+                                            <td class="text-center">
+                                                @item.Quantity
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>

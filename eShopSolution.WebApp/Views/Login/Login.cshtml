@@ -1,0 +1,169 @@
+﻿@model eShopSolution.ViewModels.System.Users.LoginRequest
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var culture = CultureInfo.CurrentCulture.Name;
+}
+
+<style>
+
+    /******************************************
+35. Login page
+******************************************/
+    .account-login {
+        display: inline-block;
+        width: 100%;
+    }
+
+        .account-login h4 {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+    .register-benefits h5 {
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    .box-authentication {
+        display: inline-block;
+        width: 48%;
+        float: left;
+    }
+
+        .box-authentication > h3 {
+            margin-bottom: 15px;
+        }
+
+        .box-authentication label {
+            margin-top: 10px;
+            margin-bottom: 2px;
+        }
+
+        .box-authentication .forgot-pass {
+            margin-top: 15px;
+        }
+
+        .box-authentication input, .box-authentication textarea {
+            border-radius: 3px;
+            border: 1px solid #e8e6e2;
+            -webkit-box-shadow: inherit;
+            box-shadow: inherit;
+            width: 50%;
+        }
+
+        .box-authentication .button {
+            margin-top: 15px;
+        }
+
+    button.button {
+        display: inline-block;
+        border: 0;
+        background: #444;
+        padding: 6px 16px;
+        font-size: 12px;
+        border: 1px solid #444;
+        font-weight: 500;
+        text-align: center;
+        white-space: nowrap;
+        color: #fff;
+        font-weight: normal;
+        transition: all 0.3s linear;
+        -moz-transition: all 0.3s linear;
+        -webkit-transition: all 0.3s linear;
+        border-radius: 3px;
+    }
+
+        button.button:hover {
+            background: #e83f33;
+            border: 1px solid #e83f33;
+            transition: all 0.3s linear;
+            -moz-transition: all 0.3s linear;
+            -webkit-transition: all 0.3s linear;
+            color: #fff
+        }
+
+    button span {
+        text-transform: uppercase;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
+    .box-authentication .required {
+        color: #ff0000;
+        padding-left: 3px;
+    }
+
+    .box-authentication .inline input {
+        width: auto;
+    }
+
+    .register-benefits {
+        margin-top: 12px;
+    }
+</style>
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a href="/">Trang chủ</a></li>
+                    <li class="active">Đăng nhập</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<!-- Main Container -->
+<section class="main-container col1-layout">
+    <div class="main container">
+        <div class="page-content">
+            <div class="account-login">
+                <form action="/@culture/Login/Login" method="post" class="box-authentication">
+                    <h4>Đăng nhập</h4>
+                    <p class="before-login-text">Chào mừng quay trở lại! Hãy đăng nhập vào tài khoản của bạn</p>
+                    <div>
+                        <label for="emmail_login">Tài khoản<span class="required">*</span></label>
+                        <input asp-for="UserName" type="text" class="form-control">
+                    </div>
+                    <div>
+                        <label for="password_login">Mật khẩu<span class="required">*</span></label>
+                        <input asp-for="Password" type="password" class="form-control">
+                    </div>
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                    <span class="text-danger">@Html.ValidationSummary(true)</span>
+                    <p class="forgot-pass"><a asp-action="ForgotPassword">Bạn quên mật khẩu?</a></p>
+                    <button class="button" style="margin-right:10px"><i class="fa fa-lock"></i>&nbsp; <span>Đăng nhập</span></button>
+                    <label class="inline" for="rememberme">
+                        <input asp-for="RememberMe" type="checkbox">
+                        Ghi nhớ đăng nhập
+                    </label>
+                </form>
+                <div class="box-authentication">
+                    <h4>Đăng ký</h4>
+                    <p>Tạo tài khoản của riêng bạn</p>
+                    <form action="/@culture/Login/Register" method="get">
+                        <button class="button"><i class="fa fa-user-o"></i>&nbsp; Đăng ký</button>
+                    </form>
+                    <div class="register-benefits">
+                        <h5>Đăng ký ngay hôm nay để có thể :</h5>
+                        <ul>
+                            <li><i class="fa fa-check-circle text-primary"></i>Thủ tục thanh toán nhanh hơn</li>
+                            <li><i class="fa fa-check-circle text-primary"></i>Tra cứu đơn hàng của bạn dễ dàng</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Main Container End --> 

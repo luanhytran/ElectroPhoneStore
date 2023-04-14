@@ -1,0 +1,778 @@
+﻿@using eShopSolution.ViewModels.Common;
+@model PagedResult<eShopSolution.ViewModels.Catalog.Products.ProductViewModel>
+@inject LazZiya.ExpressLocalization.ISharedCultureLocalizer _loc;
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+@{
+    var culture = CultureInfo.CurrentCulture.Name;
+}
+
+
+<style>
+    .page-title h1, .page-title h2 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 0px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .page-content {
+        margin-bottom: 30px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+        .page-content .page-title,
+        .page-title {
+            margin: 0 0 5px;
+            padding: 0 0 8px;
+            border-bottom: 1px solid #e5e5e5;
+            position: relative;
+        }
+
+            .page-content .page-title:before,
+            .page-title:before {
+                position: absolute;
+                left: 0;
+                height: 3px;
+                bottom: -2px;
+                content: "";
+                background: #e83f33;
+                width: 130px;
+            }
+
+    .shop-inner {
+        padding: 0px 0px 20px 0px;
+        margin-bottom: 0px;
+    }
+
+    .products-grid {
+        margin: 0;
+        list-style: none
+    }
+
+    ul.products-grid {
+        padding: 0;
+        margin: 0
+    }
+
+    .products-grid .item {
+        margin-top: 20px;
+    }
+
+    .col-main .product-grid-area .products-grid {
+        margin-left: -15px;
+        margin-right: -15px
+    }
+
+    .product-item .pr-img-area {
+        overflow: hidden;
+        position: relative;
+        border: 1px #e5e5e5 solid;
+    }
+
+        .product-item .pr-img-area a {
+            display: block
+        }
+
+        .product-item .pr-img-area > a::before {
+            background: #444 none repeat scroll 0 0;
+            content: "";
+            height: 100%;
+            opacity: 0;
+            position: absolute;
+            transition: all 0.9s ease 0s;
+            width: 100%;
+            z-index: 9
+        }
+
+    .product-item:hover .pr-img-area a::before {
+        opacity: .1
+    }
+
+    .product-item .item-inner img.hover-img {
+        left: 0;
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        transition: all 0.9s ease 0s;
+    }
+
+    .product-item .item-inner:hover img.hover-img {
+        opacity: 1;
+    }
+
+    .pr-img-area {
+        overflow: hidden;
+        position: relative
+    }
+
+    .add-to-cart-mt {
+        background: #e83f33;
+        border: 0 none;
+        bottom: 0;
+        font-size: 12px;
+        left: -100%;
+        line-height: 10px;
+        position: absolute;
+        text-align: center;
+        text-transform: uppercase;
+        transition: all .5s ease-out 0s;
+        width: 100%;
+        padding: 12px 0;
+        color: #fff;
+    }
+
+        .add-to-cart-mt:hover {
+            background: #e83f33;
+            color: #fff;
+        }
+
+        .add-to-cart-mt span {
+            margin-left: 5px
+        }
+
+    .product-item .item-inner:hover .product-thumbnail .add-to-cart-mt {
+        left: 0
+    }
+
+    .product-item .item-inner:hover .product-thumbnail .pr-button {
+        background: #F2F2F2
+    }
+
+    .pr-button .mt-button {
+        width: 33.3%;
+        float: left;
+        text-align: center;
+        border-right: 1px solid
+    }
+
+    .pr-button {
+        border-top: 1px solid #e5e5e5;
+        overflow: hidden;
+        transition: all .5s ease-out 0s
+    }
+
+        .pr-info-area .product-name a:hover, .pr-button .mt-button a:hover {
+            color: #F47E1E
+        }
+
+        .pr-button .mt-button {
+            border-right: 1px solid #e5e5e5;
+            float: left;
+            text-align: center;
+            width: 33.3%
+        }
+
+            .pr-button .mt-button a {
+                color: #fff;
+                display: block;
+                font-size: 16px;
+                padding: 10px 3px 8px;
+                font-weight: normal;
+                background-color: #444;
+                border-radius: 2px;
+            }
+
+    .pr-info-area .pr-button .s-button a:hover {
+        background: #e83f33;
+        color: #fff;
+    }
+
+    .pr-button .s-button a {
+        color: #fff
+    }
+
+    .pr-img-area img {
+        width: 100%
+    }
+
+    .product-item .pr-button {
+        border: 0 none;
+        position: absolute;
+        top: 3%;
+        opacity: 0;
+        z-index: 12;
+        padding-left: 4%;
+    }
+
+    .product-item .item-inner:hover .product-thumbnail .pr-button {
+        background: none;
+        opacity: 1;
+    }
+
+    .pr-button .mt-button a:hover {
+        background: #e83f33;
+        color: #fff;
+        border: 0px #e83f33 solid;
+    }
+
+    .pr-button .mt-button {
+        border-right: 0 none;
+        float: none;
+        margin-bottom: 8px;
+        text-align: center;
+        transform: scale(0);
+        transition: all 0.4s ease 0s;
+        width: 40px;
+        line-height: 20px
+    }
+
+    .product-item .item-inner:hover .product-thumbnail .mt-button, .on-sale-product .item-inner:hover .product-thumbnail .mt-button {
+        transform: scale(1)
+    }
+
+    .product-item .item-inner .item-info {
+        text-align: center;
+        padding-top: 12px;
+    }
+
+        .product-item .item-inner .item-info .item-title {
+            font-size: 14px;
+            margin-bottom: 6px;
+            font-weight: 400;
+        }
+
+            .product-item .item-inner .item-info .item-title a {
+                display: inherit;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                padding: 0 10px;
+                font-size: 15px;
+                font-weight: 500;
+            }
+
+    .product-item .item-inner {
+        position: relative;
+        overflow: hidden;
+        padding-bottom: 15px;
+    }
+
+        .product-item .item-inner:hover {
+            box-shadow: 0 0 2px #dedede;
+        }
+
+    .product-item {
+        margin: 0 12px
+    }
+
+    .products-grid .item .product-item {
+        margin: 0px
+    }
+
+    .owl-carousel .owl-wrapper-outer {
+        padding: 5px 0px;
+    }
+
+    .product-item .item-inner .item-info .item-title a:hover {
+        color: #e83f33;
+    }
+
+    .product-item .item-inner .item-info .pro-action {
+        position: absolute;
+        bottom: -50px;
+        width: 100%;
+        -moz-transition: all 300ms ease-out;
+        -o-transition: all 300ms ease-out;
+        -webkit-transition: all 300ms ease-out;
+        transition: all 300ms ease-out;
+        -ms-transition: all 300ms ease-out;
+    }
+
+    .product-item:hover .item-inner .item-info .pro-action {
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+    }
+
+    .product-item .item-inner .item-info .add-to-cart {
+        padding: 9px 12px;
+        font-size: 12px;
+        width: 100%;
+    }
+
+        .product-item .item-inner .item-info .add-to-cart i {
+            font-size: 16px;
+            vertical-align: -1px;
+        }
+
+    .product-item .item-inner:hover .item-info .add-to-cart {
+        color: #fff;
+        background-color: #e83f33;
+        border: 1px #e83f33 solid;
+        width: 100%;
+        transition: 0.5s all ease;
+    }
+
+    .product-item .item-inner .item-info .add-to-cart:hover {
+        background-color: #444;
+        border: 1px #444 solid;
+        transition: 0.5s all ease;
+    }
+
+    .product-item .item-inner .item-info .add-to-cart span {
+        margin-left: 5px;
+    }
+
+    #best-sale-slider.product-flexslider {
+        margin: 20px -12px
+    }
+
+    .best-sale-pro .slider-items-products .owl-buttons .owl-prev {
+        top: 15%
+    }
+
+    .best-sale-pro .slider-items-products .owl-buttons .owl-next {
+        top: 15%
+    }
+
+    .icon-new-label {
+        font-size: 10px;
+        color: #333;
+        text-align: center;
+        display: block;
+        position: absolute;
+        z-index: 1;
+        font-weight: normal;
+        letter-spacing: 0.5px;
+        line-height: normal;
+        margin-top: 0px;
+        margin-left: 0px;
+        background: #fff764;
+        line-height: 10px;
+        border-radius: 2px;
+    }
+
+    .new-right {
+        right: 6px;
+        top: 6px;
+        padding: 4px 8px;
+    }
+
+    .new-left {
+        left: 6px;
+        top: 6px;
+        padding: 4px 8px;
+    }
+
+    .icon-sale-label {
+        font-size: 10px;
+        color: #fff;
+        text-align: center;
+        display: block;
+        position: absolute;
+        z-index: 1;
+        font-weight: normal;
+        line-height: normal;
+        margin-top: 0px;
+        margin-left: 0px;
+        background: #e53939;
+        line-height: 10px;
+        border-radius: 2px;
+    }
+
+    .sale-right {
+        right: 6px;
+        top: 6px;
+        padding: 4px 8px;
+    }
+
+    .sale-left {
+        left: 6px;
+        top: 6px;
+        padding: 4px 8px;
+    }
+
+    .icon-hot-label {
+        font-size: 10px;
+        color: #fff;
+        text-align: center;
+        display: block;
+        position: absolute;
+        z-index: 1;
+        font-weight: normal;
+        letter-spacing: 0.5px;
+        line-height: normal;
+        margin-top: 0px;
+        margin-left: 0px;
+        background: #f81c31;
+        border: 1px solid #ec1226;
+        line-height: 10px;
+        border-radius: 3px;
+        padding: 3px 8px 5px 8px;
+    }
+
+    .hot-right {
+        top: 4px;
+        right: 6px;
+    }
+
+    .hot-left {
+        left: 4px;
+        top: 6px;
+    }
+
+    .toolbar {
+        margin: 10px 0px 0px;
+        overflow: hidden;
+        border-top: 1px #e8e8e8 solid
+    }
+
+        .toolbar .sorter {
+            margin-top: 10px
+        }
+
+    .sorter .short-by {
+        float: right;
+        margin: 0;
+        padding-left: 12px
+    }
+
+    .toolbar.column .sorter .short-by.page {
+        float: left;
+        margin: 0;
+        padding-left: 0;
+        margin-bottom: 10px;
+    }
+
+    .toolbar label {
+        color: #777;
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 30px;
+        text-transform: capitalize;
+        margin-bottom: 0px;
+    }
+
+    .sorter .short-by select {
+        border: 0 none;
+        display: inline-block;
+        font-size: 14px;
+        height: 30px;
+        margin: 0;
+        padding: 0 14px;
+        vertical-align: middle;
+        width: 110px;
+        border: 1px #e8e8e8 solid;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-position: right center;
+        background-image: url(../images/arrow-d.png);
+        background-repeat: no-repeat;
+        position: right 10px center;
+        padding-right: 28px;
+        text-indent: 0.01px;
+        text-overflow: '';
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    .sorter .short-by.page select {
+        width: 65px
+    }
+
+    .view-mode {
+        float: left;
+    }
+
+        .view-mode ul {
+            padding: 0px;
+            margin: 0
+        }
+
+            .view-mode ul li {
+                float: left;
+                padding: 4px 10px 4px 0;
+                list-style: none
+            }
+
+                .view-mode ul li a {
+                    color: #959595;
+                    font-size: 18px;
+                    line-height: 35px;
+                    font-weight: normal;
+                    padding-right: 5px
+                }
+
+                .view-mode ul li:last-child {
+                    border: none;
+                    margin-left: 5px;
+                    padding-right: 0px
+                }
+
+        .view-mode li.active a {
+            color: #e83f33
+        }
+
+    .shop .product-des .color ul li {
+        border: 0 none;
+        display: inline-block;
+        float: none;
+        margin-right: 5px;
+        margin-top: 10px
+    }
+
+    .shop .product-des h2 {
+        line-height: 18px;
+        margin: 0 0 5px
+    }
+
+    .pagination-area {
+        background: rgba(0,0,0,0) none repeat scroll 0 0;
+        border-top: 1px solid #e5e5e5;
+        margin: 22px 0 0;
+        padding-top: 20px;
+        text-align: center;
+        display: inline-block;
+        width: 100%
+    }
+
+        .pagination-area ul {
+            margin-bottom: 0px
+        }
+
+            .pagination-area ul li {
+                background: #f5f5f5;
+                color: #393939;
+                display: inline-block;
+                font-size: 12px;
+                font-weight: 700;
+                height: 30px;
+                line-height: 30px;
+                margin: 0 0 0 5px;
+                width: 30px;
+            }
+
+                .pagination-area ul li a {
+                    border: 1px solid #e5e5e5;
+                    color: #363636;
+                    display: block;
+                    font-size: 12px;
+                    font-weight: 700;
+                    height: 30px;
+                    width: 30px;
+                    text-decoration: none;
+                    transition: all .4s ease-out .2s;
+                    border-radius: 3px;
+                }
+
+                    .pagination-area ul li a:hover {
+                        background: #e83f33;
+                        border: 1px solid #e83f33;
+                        color: #fff;
+                    }
+
+                    .pagination-area ul li a.active {
+                        background: #e83f33;
+                        border: 1px solid #e83f33;
+                        color: #fff;
+                        transition: all .4s ease-out .2s;
+                    }
+
+    .price {
+        font-size: 14px;
+        color: #000;
+        white-space: nowrap !important;
+    }
+
+    .price-box {
+        margin: 6px 0 2px;
+        min-height: 22px;
+    }
+
+    .regular-price {
+        display: inline
+    }
+
+        .regular-price .price {
+            font-weight: 600;
+            font-size: 14px;
+            color: #e83f33;
+        }
+
+    .block .regular-price, .block .regular-price .price {
+        color: #333333
+    }
+
+    .price-box .price-from .price {
+        font-weight: 600;
+        font-size: 14px;
+        color: #e83f33
+    }
+
+    .price-box .price-to .price {
+        font-weight: 600;
+        font-size: 14px;
+        color: #e83f33
+    }
+
+    .price-box .minimal-price .price {
+        font-weight: 600;
+        font-size: 14px;
+        color: #e83f33
+    }
+
+    .old-price .price-label {
+        white-space: nowrap;
+        color: #999;
+        display: none
+    }
+
+    .old-price {
+        display: inline;
+        margin-right: 15px
+    }
+
+        .old-price .price-label {
+            color: #ccc;
+            display: none;
+            white-space: nowrap
+        }
+
+        .old-price .price {
+            color: #ccc !important;
+            font-size: 12px;
+            font-weight: normal;
+            text-decoration: line-through;
+            margin-left: 6px
+        }
+
+    .special-price {
+        margin: 0;
+        padding: 3px 0;
+        display: inline
+    }
+
+        .special-price .price-label {
+            color: #666;
+            display: none;
+            font-size: 12px;
+            font-weight: 400;
+            white-space: nowrap
+        }
+
+        .special-price .price {
+            font-size: 14px;
+            color: #e83f33;
+            font-weight: 600
+        }
+
+        .special-price .price-label {
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            color: #666;
+            display: none
+        }
+
+    .minimal-price {
+        margin: 0
+    }
+
+        .minimal-price .price-label {
+            white-space: nowrap
+        }
+
+    .minimal-price-link {
+        display: inline
+    }
+</style>
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a href="/">Trang chủ</a></li>
+                    <li>Tìm kiếm</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<div class="main-container col1-layout">
+    <div class="container">
+        <div class="row">
+            <div class="col-main col-sm-12 col-xs-12">
+                <div class="shop-inner">
+                    <div class="toolbar column">
+                        <div class="sorter">
+                            <div class="short-by">
+                                <label>Sort By:</label>
+                                <select>
+                                    <option selected="selected">Position</option>
+                                    <option>Name</option>
+                                    <option>Price</option>
+                                    <option>Size</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    @foreach (var product in Model.Items)
+                    {
+                        var url = $"/{culture}/{_loc["productUrl"]}/{product.Id}";
+                        <div class="product-grid-area">
+                            <ul class="products-grid">
+                                <li class="item col-lg-3 col-md-4 col-sm-6 col-xs-6 ">
+                                    <div class="product-item">
+                                        <div class="item-inner">
+                                            <div class="product-thumbnail">
+                                                @if (product.Stock <= 0)
+                                                {
+                                                    <div class="icon-new-label new-right">Hết hàng</div>
+
+                                                }
+                                                else
+                                                {
+                                                    <div class="icon-hot-label new-right">Mới</div>
+                                                }
+                                                <div class="pr-img-area">
+                                                    <a title="@product.Name" href="@url">
+                                                        <figure> <img class="first-img" src="@(Configuration["BaseAddress"] + product.ThumbnailImage)" alt="HTML template"> <img class="hover-img" src="@(Configuration["BaseAddress"] + product.ProductImage)" alt="HTML template"></figure>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="item-info">
+                                                <div class="info-inner">
+                                                    <div class="item-title"> <a title="@product.Name" href="@url">@product.Name </a> </div>
+                                                    <div class="item-content">
+                                                        <div class="item-price">
+                                                            <div class="price-box"> <span class="regular-price"> <span class="price">@product.Price.ToString("N0") <span>&#8363;</span></span> </span> </div>
+                                                        </div>
+                                                        @if (product.Stock <= 0)
+                                                        {
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="pro-action">
+                                                                <button type="button" class="add-to-cart add-to-cart-btn" data-id="@product.Id"><span> Thêm vào giỏ hàng</span> </button>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                    }
+                <div class="pagination-area">
+                    @await Component.InvokeAsync("Pager", Model)
+                </div>
+                </div>
+                </div>
+                    </div>
+                </div>
+</div>
+<!-- Main Container End --> 

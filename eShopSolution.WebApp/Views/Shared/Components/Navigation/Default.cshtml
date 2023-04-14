@@ -1,0 +1,29 @@
+﻿@using eShopSolution.ViewModels.Catalog.Categories
+@model List<CategoryViewModel>
+<!-- NAVIGATION -->
+<nav id="navigation">
+    <!-- container -->
+    <div class="container">
+        <!-- responsive-nav -->
+        <div id="responsive-nav">
+            <!-- NAV -->
+            <ul class="main-nav nav navbar-nav">
+                <li class="active"><a href="/">Trang chủ</a></li>
+                @foreach (var category in Model)
+                {
+                    <li>
+                            @*@Html.ActionLink(category.Name, "ViewByCategory", "Home", new { cateId = category.Id })*@
+                        <a asp-action="ViewByCategory" asp-controller="Home" asp-route-cateId="@category.Id" >@category.Name</a>
+                    </li>
+                }
+                <li><a asp-action="Index" asp-controller="Coupon">Khuyến mãi</a></li>
+            </ul>
+            <!-- /NAV -->
+        </div>
+        <!-- /responsive-nav -->
+    </div>
+    <!-- /container -->
+</nav>
+<!-- /NAVIGATION -->
+
+

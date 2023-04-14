@@ -1,0 +1,249 @@
+﻿@model OrderByUserViewModel
+@using eShopSolution.ViewModels.Common;
+@using eShopSolution.ViewModels.Utilities.Enums;
+
+@section Scripts{
+    <script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 2000);
+    </script>
+}
+
+<style>
+    .page-title h1, .page-title h2 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 0px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .page-content {
+        margin-bottom: 30px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+        .page-content .page-title,
+        .page-title {
+            margin: 0 0 5px;
+            padding: 0 0 8px;
+            border-bottom: 1px solid #e5e5e5;
+            position: relative;
+        }
+
+            .page-content .page-title:before,
+            .page-title:before {
+                position: absolute;
+                left: 0;
+                height: 3px;
+                bottom: -2px;
+                content: "";
+                background: #e83f33;
+                width: 130px;
+            }
+</style>
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a href="/">Trang chủ</a></li>
+                    <li>Tài khoản</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+<!-- Main Container -->
+<section class="main-container col2-right-layout">
+    <div class="main container">
+        <div class="row">
+
+            <div class="my-account">
+                <div class="page-title">
+                    <h2>Tài khoản của bạn</h2>
+                </div>
+                <div class="col-main col-sm-12 col-xs-12">
+                    <div class="welcome-msg">
+                        @{
+                            var claims = User.Claims.ToList();
+                            var name = claims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName).Value;
+                        }
+                        <strong>Xin chào, @name!</strong>
+                        <p>Từ Trang tổng quan tài khoản của bạn, bạn có thể xem về các đơn hàng gần đây và cập nhật thông tin tài khoản của mình.</p>
+                    </div>
+                    <div class="recent-orders">
+
+                        @if (TempData["CancelOrderSuccess"] != null)
+                        {
+                            <script>
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Hủy đơn thành công',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            </script>
+                        }
+                        else if (TempData["UpdateAccountSuccess"] != null)
+                        {
+                            <script>
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Cập nhật thông tin cá nhân thành công',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            </script>
+                        }
+                        else if (TempData["ChangePasswordSuccess"] != null)
+                        {
+                            <script>
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Cập nhật mật khẩu thành công',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            </script>
+                        }
+
+                        <div class="title-buttons"><strong>Đơn hàng gần đây</strong> <a href="#">View All </a> </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered cart_summary table-striped" style="margin-top:10px">
+                                <colgroup>
+                                    <col>
+                                    <col>
+                                    <col>
+                                    <col width="1">
+                                    <col width="1">
+                                    <col width="1">
+                                </colgroup>
+                                <thead>
+                                    <tr class="first last">
+                                        <th class="text-center">
+                                            ID
+                                        </th>
+                                        <th>
+                                            Khách hàng
+                                        </th>
+                                        <th class="text-center">
+                                            Ngày đặt
+                                        </th>
+                                        <th class="text-center">
+                                            Trạng thái
+                                        </th>
+                                        <th class="text-center">
+                                            Giá trị đơn hàng
+                                        </th>
+                                        <th class="text-center">
+                                            Xử lý đơn
+                                        </th>
+                                        <th class="text-center">
+                                            Thao tác
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Orders)
+                                    {
+                                        <tr class="first odd">
+                                            <td>@item.Id</td>
+                                            <td>@item.Name</td>
+                                            <td class="text-center">@item.OrderDate</td>
+                                            <td class="text-center">
+                                                @{
+                                                    var status = "";
+                                                    var statusEnum = (int)item.Status;
+                                                    switch (statusEnum)
+                                                    {
+                                                        case 1:
+                                                            status = "Đang chờ duyệt";
+                                                            break;
+                                                        case 2:
+                                                            status = "Đã duyệt";
+                                                            break;
+                                                        case 3:
+                                                            status = "Đang giao";
+                                                            break;
+                                                        case 4:
+                                                            status = "Đã giao";
+                                                            break;
+                                                        case 5:
+                                                            status = "Đã huỷ";
+                                                            break;
+                                                        default:
+                                                            status = "...";
+                                                            break;
+                                                    }
+                                                }
+                                                <i>@status</i>
+                                            </td>
+                                            <td class="text-center">
+
+                                                <strong>
+                                                    @item.Price.ToString("N0")
+                                                    <span>&#8363;</span>
+                                                </strong>
+                                            </td>
+                                            <td class="text-center">
+
+                                                @if (item.Status == (OrderStatus)1)
+                                                {
+                                                    @*@Html.ActionLink("Huỷ đơn", "CancelOrderStatus", new { orderId = item.Id })*@
+                                                    <a asp-action="CancelOrderStatus" asp-route-orderId="@item.Id">Hủy đơn</a>
+                                                }
+                                                else if (item.Status == (OrderStatus)2)
+                                                {
+                                                    @*@Html.ActionLink("Huỷ đơn", "CancelOrderStatus", new { orderId = item.Id })*@
+                                                    <a asp-action="CancelOrderStatus" asp-route-orderId="@item.Id">Hủy đơn</a>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                @Html.ActionLink("Xem chi tiết", "OrderDetail", new { orderId = item.Id, name = item.Name })
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box-account">
+                        <div class="page-title">
+                            <h2>Thông tin tài khoản</h2>
+                        </div>
+                        <div class="col2-set">
+                            <div class="col-1">
+                                <h6>Thông tin liên lạc</h6>
+                                <span style="text-decoration:underline">
+                                    @Html.ActionLink("Cập nhật thông tin", "Edit", new { userid = Model.UserID })
+                                </span>
+                                <p>
+                                    @Model.Name<br>
+                                    @Model.Email<br>
+                                    @Model.PhoneNumber<br>
+                                    @Model.Address<br>
+                                </p>
+                                <span style="text-decoration: underline">
+                                    @Html.ActionLink("Đổi mật khẩu", "ChangePassword", new { userid = Model.UserID })
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

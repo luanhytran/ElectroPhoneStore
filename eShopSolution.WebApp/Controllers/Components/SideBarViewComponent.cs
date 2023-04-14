@@ -1,4 +1,5 @@
 ﻿using eShopSolution.ApiIntegration;
+using eShopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace eShopSolution.WebApp.Controllers.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var items = await _categoryApiClient.GetAll(CultureInfo.CurrentCulture.Name);
+            var items = await _categoryApiClient.GetAll();
             return View(items);
         }
     }

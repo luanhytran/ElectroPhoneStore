@@ -1,0 +1,114 @@
+﻿@model eShopSolution.ViewModels.System.Users.UserUpdateRequest
+
+@{
+    ViewData["Title"] = "Cập nhật người dùng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .page-title h1, .page-title h2 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 0px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .page-content {
+        margin-bottom: 30px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+        .page-content .page-title,
+        .page-title {
+            margin: 0 0 5px;
+            padding: 0 0 8px;
+            border-bottom: 1px solid #e5e5e5;
+            position: relative;
+        }
+
+            .page-content .page-title:before,
+            .page-title:before {
+                position: absolute;
+                left: 0;
+                height: 3px;
+                bottom: -2px;
+                content: "";
+                background: #e83f33;
+                width: 130px;
+            }
+</style>
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a href="/">Trang chủ</a></li>
+                    <li><a asp-action="Index" asp-controller="Account">Tài khoản</a></li>
+                    <li>Cập nhật người dùng</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<section class="main-container col2-right-layout">
+    <div class="main container">
+        <div class="row">
+            <div class="col-main col-sm-12 col-xs-12">
+                <div class="page-title">
+                    <h2>Cập nhật thông tin</h2>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-body">
+                       
+                        <div class="col-md-4">
+                            <form asp-action="Edit" asp-controller="Account" method="post" style="margin-top: 10px">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input class="form-control" type="hidden" asp-for="Id"/>
+                                <div class="form-group">
+                                    <label asp-for="Name" class="control-label"></label>
+                                    <input asp-for="Name" class="form-control" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="UserName" class="control-label"></label>
+                                    <input asp-for="UserName" class="form-control" readonly/>
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Email" class="control-label"></label>
+                                    <input asp-for="Email" class="form-control" readonly/>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="PhoneNumber" class="control-label"></label>
+                                    <input asp-for="PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Address" class="control-label"></label>
+                                    <input asp-for="Address" class="form-control" />
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Lưu" class="btn btn-primary" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+
+
+                    

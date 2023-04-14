@@ -89,12 +89,12 @@ namespace eShopSolution.AdminApp.Controllers
                 var user = result.ResultObj;
                 var updateRequest = new UserUpdateRequest()
                 {
-                    Dob = user.Dob,
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
+                    Id = id,
+                    Name = user.Name,
+                    UserName = user.UserName,
                     PhoneNumber = user.PhoneNumber,
-                    Id = id
+                    Email = user.Email,
+                    Address = user.Address
                 };
                 return View(updateRequest);
             }
@@ -123,6 +123,7 @@ namespace eShopSolution.AdminApp.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Remove("Token");
+            Response.Cookies.Delete("userToken");
             return RedirectToAction("Index", "Login");
         }
 

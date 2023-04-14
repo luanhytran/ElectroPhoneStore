@@ -1,196 +1,39 @@
-# Web bán hàng điện thoại online (Electro Phone Store)
-Demo clip: https://youtu.be/NY3cEaOQ_3o
+# Electro Phone Store 
+## Demo: 
+- Video: https://youtu.be/4J0rz99bUKU
+- Front End: https://electroshop.azurewebsites.net/
+- Admin area: https://electroadmin.azurewebsites.net/
 
-## Thành viên
-- Trần Luân Hy: 18DH110413
-- Hoàng Trần An Thiên: 18DH110447
-- Lê Quốc Anh: 18DH110446
 
-## I. Mô tả đề tài
-
-<p> Ngày nay, công nghệ thông tin đã có những bước phát triển mạnh mẽ trong mọi phương diện nói chung ví dụ như : đời sống, công việc, giải trí, truyền thông, ... Và riêng với bán hàng, so với cách bán truyền thống thì nay doanh nghiệp, cửa hàng nhỏ lẻ nào cũng có một website để quáng bá, bán hàng trực tuyến sản phẩm và tương tác với người dùng. Nắm bắt được nhu cầu đó, nhóm em quyết định thực hiện đề tài: Xây dựng Website bán điện thoại online dùng công nghệ ASP.NET Core. Khi sử dụng trang web khách hàng sẽ cảm nhận được sự mới mẻ và thuận tiện của Website mang lại . Và website cũng dễ dàng cung cấp thông tin chi tiết sản phẩm giúp khách hàng có thể thanh toán trực tiếp qua thẻ tín dụng hoặc nhận hàng rồi thanh toán.</p>
-
-## 🖋️ERD - Phân tích hệ thống - Thiết kế cơ sở dữ liêu
-### ✏️ERD
-<img src="https://github.com/luanhytran/electro-phone-store/blob/master/image/ERD%20Electro%20Phone%20Store%20CNPM_NC%20(3).jpg" raw="true" />
-
-### ✏️Phân tích hệ thống và Thiết kế cơ sở dữ liệu
-
-#### 🛠️Thiết kế cơ sở dữ liệu
-
-- **USERS**  bao gồm: ID, Name, Email, PhoneNumber, Address, UserName, Password
-  - Đây là bảng lưu các tài khoản người dùng trong hệ thống khi thuộc về mỗi một khách hàng khi khách hàng đăng ký tài khoản
-  - **Name** là tên user
-  - **Email** là email user
-  - **PhoneNumber** là số điện thoại user
-  - **Address** là địa chỉ user
-  - **UserName** là tên tài khoản user
-  - **Password** là mật khẩu user
-  - Một user là một tài khoản do khách hàng đăng ký và trong hệ thống chỉ có 1 user là admin được code sẵn
-  - Một user có một hoặc nhiều Order và một Order chỉ thuộc về một Customer
-  - User có ID nằm trong quyền Admin của bảng APP_ROLES mới truy cập trang admin được
-  - Phân tích quản lý khách hàng phía admin ở #132 
-
-- **PRODUCTS** bao gồm: ID, CategoryID, Name, Description, Details, Price, Stock, Thumbnail, Image
-  - Đây là bảng lưu các sản phẩm có trong hệ thống
-  - **CategoryID** là id của danh mục sản phẩm được gán cho sản phẩm này
-  - **Name** là tên sản phẩm
-  - **Description** là thông số kỹ thuật sản phẩm
-  - **Details** là mô tả chi tiết sản phẩm
-  - **Price** là giá sản phẩm
-  - **Stock** là số lượng sản phẩm
-  - **Thumbnail** là ảnh đại diện của sản phẩm
-  - **Image** là ảnh đầy đủ của sản phẩm
-  - Một Product có một Category và một Category thuộc về một hoặc nhiều Product
-    - Mỗi Category được định danh bằng CategoryID
-    - Description là mô tả thông số kĩ thuật điện thoại, mô tả ngắn gọn hơn
-    - Details là mô tả sản phẩm chi tiết hơn, giới thiệu sâu hơn các tính năng của điện thoại đó
-  - Một Product thuộc về một hoặc nhiều Order_Detail và một Order_Detail chỉ có một Product
-  - Thumbnail là ảnh đại diện để khách hàng xem trong danh sách sản phẩm phía client
-  - ProductImage là ảnh có độ phân giải lớn hơn dùng ở trang chi tiết sản phẩm
-  - Phân tích quản lý sản phẩm ở #131 
-
-- **CATEGORIES** bao gồm: ID, Name
-  - Đây là bảng lưu danh mục của sản phẩm
-  - **Name** là tên một danh mục sản phẩm
-  - Một category (danh mục) sẽ chỉ định danh mục sản phẩm của một sản phẩm
-  - Một Category thuộc về một hoặc nhiều Product và một Product có một Category
-  - Phân tích quản lý danh mục phía admin ở #138
-
-- **ORDERS** bao gồm: ID, UserID, OrderDate, Status, ShipAddress, ShipName, ShipPhoneNumber, PaymentMethod, CouponId và Total
-  - Đây là bảng lưu các đơn đặt hàng của user được phát sinh khi user đặt hàng
-  - **UserID** là ID của user đặt hàng
-  - **OrderDate** là ngày đặt hàng
-  - **Status** là trạng thái đơn hàng
-  - **ShipAddress** là địa chỉ nhận hàng
-  - **ShipName** là tên người nhận hàng
-  - **ShipPhoneNumber** là số điện thoại người nhận hàng
-  - PaymentMethod là phương thức thanh toán
-  - CouponId là mã khuyến mãi được áp dụng
-  - Total là giá trị đơn hàng
-  - ShipAddress, ShipName, ShipPhoneNumber là thông tin giao hàng và có thể được thay đổi bởi người đặt hàng khi muốn giao đến cho địa chỉ cụ thể nào đó hoặc người nào đó 
-  - Một Order thuộc về một Customer và một Customer có một hoặc nhiều Order
-    - Mỗi Customer được định danh bằng UserID
-  - Một Order có một hoặc nhiều Order detail và một Order detail chỉ thuộc về một Order
-  - Đơn hàng có các trạng thái: Đang chờ duyệt, Đã duyệt, Đang giao, Đã giao và Đã hủy
-  - Cần có cột total để lưu giá trị đơn hàng khi không áp dụng mã khuyến mãi và khi có áp dụng mã khuyến mãi
-  - Một đơn hàng nếu không dùng mã khuyến mãi thì couponId là null
-  - Phương thức thanh toán mặc định là tiền mặt
-  - Phân tích quá trình đặt hàng ở #137 
-  - Phân tích quản lý đơn hàng phía admin ở #130 
-
-- **ORDER_DETAILS** bao gồm: OrderID, ProductID, Quantity
-  - Đây là bảng lưu chi tiết cụ thể của một Order (đơn hàng) trong  hệ thống
-  - **OrderID** là id của đơn hàng mà chi tiết đơn hàng này thuộc về
-  - **ProductID** là id của sản phẩm được đặt mua
-  - **Quantity** là số lượng sản phẩm được đặt mua
-  - Cột tổng tiền của một chi tiết đơn hàng không lưu vào CSDL mà hiển thị lên web bằng cách code giá sản phẩm nhân số lượng
-  - Một Order_Detail chỉ thuộc về một Order và một Order có một hoặc hoặc nhiều Order_Detail
-    - Mỗi Order được định danh bằng OrderID
-  - Một Order_Detail chỉ có một Product và một Product thuộc về một hoặc nhiều Order_Detail
-    - Mỗi Product được định danh bằng ProductID 
-
-- **APP_ROLES** bao gồm: ID, UserID, Name
-  - Đây là bảng lưu quyền của một tài khoản user
-  - **UserID** là id định danh một user có quyền tương ứng
-  - **Name** là tên quyền
-  - Một user chỉ có một quyền và một quyền có thể thuộc về một hoặc nhiều user
-  - Bảng tồn tại chỉ để phục việc ai có thể truy cập trang admin và hệ thống không có chức năng phân quyền
-  - Quyền admin mặc định chỉ thuộc về một user là admin và trong hệ thống cũng chỉ có một user admin
-
-- **REVIEWS** bao gồm: ID, ProductID, UserID, Rating, Comment, PublishDate
-  - Đây là bảng lưu các đánh giá sản phẩm của khách hàng
-  - **ProductID** là id của sản phẩm được đánh giá 
-  - **UserID** là id của người dùng đánh giá
-  - **Rating** là sao của một đánh giá
-  - **Comment** là nội dung của một đánh giá
-  - **PublishDate** là ngày đánh giá
-  - Một User có một hoặc nhiều Review nhưng một Review chỉ thuộc về một và chỉ một User 
-  - Một Product có một hoặc nhiều Review nhưng một Review chỉ thuộc về một và chỉ một Product 
-
-- **COUPONS** bao gồm: ID, Code, Count, Promotion, Describe
-  - Đây là bảng lưu tất cả các mã giảm giá trong hệ thống 
-  - **Code** là mã coupon
-  - **Count** là số lần sử dụng
-  - **Promotion** là phần trăm giảm
-  - **Describe** là mô tả khuyến mãi
-  - Một Order chỉ có một Coupon nhưng một Coupon có thể thuộc về một hoặc nhiều Order
-
-#### 🛠️Phân tích hệ thống
- - Authentication
-    - Cho phép bất cứ khách hàng nào cũng có thể đăng ký trở thành thành viên.
-    - Cho phép các thành viên khôi phục mật khẩu khi quên mật khẩu.
-    - Hệ thống sẽ gửi mail cho thành viên khi đăng ký thành công, đặt hàng thành công và yêu cầu khôi phục mật khẩu.
-    - Khi khách hàng và admin đã đăng nhập nhưng không hoạt động 30p thì sẽ bị đăng xuất.
- 
-- Thông tin cá nhân của thành viên
-  - Cho phép thành viên cập nhật thông tin cá nhân.
-  - Cho phép các thành viên thay đổi mật khẩu.
-
-  
-- Sản phẩm
-  - Hiển thị các sản phẩm hiện có trong hệ thống.
-  - Cho phép khách hàng có thể xem chi tiết sản phẩm, thêm sản phẩm vào giỏ hàng.
-  - Cho phép khách hàng xem sản phẩm theo danh mục.
-  - Cho phép khách hàng sắp xếp sản phẩm theo tên, giá để dễ dàng tìm kiếm hơn.
-  - Cho phép khách hàng tìm kiếm theo tên sản phẩm.
-  - Cho phép khách hàng đã đăng nhập đánh giá sản phẩm.
-  - Xem chi tiết sản phẩm sẽ hiển thị các thông tin: tên sản phẩm, giá, hình ảnh, mô tả, các đánh giá ...
-  
-- Giỏ hàng
-  - Bất cứ ai cũng có thể thêm một hoặc nhiều sản phẩm vào giỏ hàng.
-  - Khách hàng có thể tăng / giảm số lượng sản phẩm trong giỏ hàng.
-  - Khách hàng có thể áp dụng mã khuyến mãi vào đơn hàng.
-  - Một đơn hàng chỉ có thể áp dụng một mã khuyến mãi.
-  - Giá trị khuyến mãi là số phần trăm được giảm áp dụng lên một đơn hàng.
-  - Các giá trị khuyến mãi do admin tạo.
-  
-- Đặt hàng
-  - Chỉ khách hàng đã đăng nhập mới có thể thanh toán.
-  - Khách hàng khi đặt hàng có thể thay đổi thông tin nhận hàng.
-
-- Thanh toán
-  - Người dùng có thể chọn 2 phương thức thanh toán là: thẻ tín dụng và nhận hàng rồi thanh toán (tiền mặt).
-  
-- Theo dõi đơn hàng
-  - Cho phép các thành viên xem lịch sử các đơn hàng đã và đang đặt cũng như trạng thái của chúng.
-  - Cho phép các thành viên hủy đơn hàng khi đơn hàng chưa giao.
-  - Cho phép khách hàng xem chi tiết đơn hàng, gồm các thông tin: tên người đặt, tên người nhận, địa chỉ, số điện thoại, ngày đặt, sản phẩm đã mua ...
-
-## II. Công nghệ sử dụng
+## Technologies
 - ASP.NET Core 3.1
 - Entity Framework Core 3.1
-## III. Phần mềm cần thiết
-- .NET Core SDK 3.1.409
-- Git bash
+
+## Install Tools
+- .NET Core SDK 3.1
+- Git client
 - Visual Studio 2019
 - SQL Server 2019
 
-### Các NuGet Package cần thiết
-```
-dotnet add package Microsoft.EntityFrameworkCore --version 3.1.15
-```
-```
-dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 3.1.15
-```
-```
-dotnet add package Microsoft.EntityFrameworkCore.Tools --version 3.1.15
-```
+## How to configure and run
+- Clone code from Github: git clone https://github.com/luanhytran/asp-electro-phone-store.git
+- Open solution eShopSolution.sln in Visual Studio 2019
+- Set startup project is eShopSolution.Data
+- Change connection string in Appsetting.json in eShopSolution.Data project
+- Open Tools --> Nuget Package Manager -->  Package Manager Console in Visual Studio
+- Run Update-database and Enter.
+- After migrate database successful, set Startup Project is eShopSolution.WebApp
+- Change database connection in appsettings.Development.json in eShopSolution.WebApp project.
+- You need to change 3 projects to self-host profile.
 
-## IV. Hướng dẫn chạy project
-### 1. Set lauch setting for each project
-<img src="https://github.com/luanhytran/web-ban-dien-thoai-cnpmnc/blob/master/image/1.set%20launch%20setting%20for%20each%20project.gif">
+  <img src="https://github.com/luanhytran/web-ban-dien-thoai-cnpmnc/blob/master/image/1.set%20launch%20setting%20for%20each%20project.gif">
+  
+- Set multiple run project: Right click to Solution and choose Properties and set Multiple Project, choose Start for 3 Projects: BackendApi, WebApp and AdminApp.
+- Choose profile to run or press F5
 
-### 2. Start multiple project
-<img src="https://github.com/luanhytran/web-ban-dien-thoai-cnpmnc/blob/master/image/2.%20start%20multiple%20project.gif"> 
+## How to contribute
+- Fork and create your branch
+- Create Pull request to us.
 
-### 3. Run Entity Framework Core command
-- After this step, SQL Server will appear your database
-<img src="https://github.com/luanhytran/web-ban-dien-thoai-cnpmnc/blob/master/image/3.%20setup%20database.gif" >
-
-### 4. Add user-content folder
-- Add this folder to store your product image
-<img src="https://github.com/luanhytran/electro-phone-store/blob/master/image/4.png">
-
-
-
+## Reference
+https://github.com/teduinternational/eShopSolution

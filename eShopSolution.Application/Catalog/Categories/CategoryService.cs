@@ -1,12 +1,13 @@
 ﻿using eShopSolution.Data.EF;
 using eShopSolution.ViewModels.Catalog.Categories;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using eShopSolution.ViewModels.Utilities.Enums;
+using eShopSolution.Data.Entities;
+using eShopSolution.Utilities.Exceptions;
+using eShopSolution.ViewModels.Catalog.Products;
+using eShopSolution.ViewModels.Common;
 
 namespace eShopSolution.Application.Catalog.Categories
 {
@@ -19,34 +20,90 @@ namespace eShopSolution.Application.Catalog.Categories
             _context = context;
         }
 
-        public async Task<List<CategoryViewModel>> GetAll(string languageId)
+        public async Task<int> Create(CategoryCreateRequest request)
+        {
+            var category = new Category()
+            {
+                Name = request.Name
+            };
+
+            _context.Categories.Add(category);
+            await _context.SaveChangesAsync();
+            return category.Id;
+        }
+
+        public async Task<int> Update(CategoryUpdateRequest request)
+        {
+            var category = await _context.Categories.FindAsync(request.Id);
+            if (category == null) throw new EShopException($"Không thể tìm danh mục có ID: {request.Id} ");
+
+            category.Name = request.Name;
+
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> Delete(int categoryId)
+        {
+            var category = await _context.Categories.FindAsync(categoryId);
+            if (category == null) throw new EShopException($"Không thể tìm danh mục có ID: {categoryId} ");
+
+            _context.Categories.Remove(category);
+
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<PagedResult<CategoryViewModel>> GetAllPaging(GetManageProductPagingRequest request)
         {
             var query = from c in _context.Categories
-                        join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
-                        where ct.LanguageId == languageId
-                        select new { c, ct };
+                        select new { c };
+
+            if (!string.IsNullOrEmpty(request.Keyword))
+                query = query.Where(x => x.c.Name.Contains(request.Keyword));
+
+            //3. Paging
+            int totalRow = await query.CountAsync();
+
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new CategoryViewModel()
+                {
+                    Id = x.c.Id,
+                    Name = x.c.Name,
+                }).ToListAsync();
+
+            //4. Select and projection
+            var pagedResult = new PagedResult<CategoryViewModel>()
+            {
+                TotalRecords = totalRow,
+                PageSize = request.PageSize,
+                PageIndex = request.PageIndex,
+                Items = data
+            };
+            return pagedResult;
+        }
+
+        public async Task<List<CategoryViewModel>> GetAll()
+        {
+            var query = from c in _context.Categories
+                        select new { c };
+
             return await query.Select(x => new CategoryViewModel()
             {
                 Id = x.c.Id,
-                Name = x.ct.Name,
-                ParentId=x.c.ParentId,
-                SortOrder = x.c.SortOrder,
-                Status = (Status) x.c.Status
-
+                Name = x.c.Name,
             }).ToListAsync();
         }
 
-        public async Task<CategoryViewModel> GetById(string languageId, int id)
+        public async Task<CategoryViewModel> GetById(int id)
         {
             var query = from c in _context.Categories
-                        join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
-                        where ct.LanguageId == languageId && c.Id == id
-                        select new { c, ct };
+                        where c.Id == id
+                        select new { c };
+
             return await query.Select(x => new CategoryViewModel()
             {
                 Id = x.c.Id,
-                Name = x.ct.Name,
-                ParentId = x.c.ParentId
+                Name = x.c.Name,
             }).FirstOrDefaultAsync();
         }
     }

@@ -9,16 +9,8 @@ namespace eShopSolution.Data.Entities
     {
         public int Id { get; set; }
 
-        public int SortOrder { get; set; }
+        public string Name { get; set; }
 
-        public bool IsShowOnHome { get; set; }
-
-        public int? ParentId { get; set; }
-
-        public Status Status { get; set; }
-
-        public List<ProductInCategory> ProductInCategories { get; set; }
-
-        public List<CategoryTranslation> CategoryTranslations { get; set; }
+        public List<Product> Products { get; set; }
     }
 }

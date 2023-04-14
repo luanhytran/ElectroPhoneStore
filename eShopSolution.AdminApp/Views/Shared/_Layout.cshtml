@@ -1,8 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -13,6 +11,8 @@
     <link href="~/css/mystyle.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+    <!--sweet aler 2-->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="sb-nav-fixed">
     @await Component.InvokeAsync("Navigation")
@@ -39,13 +39,13 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-address-book"></i></div>
                             Khách hàng
                         </a>
-                        <a class="nav-link" asp-controller="Image" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-image"></i></div>
-                            Hình ảnh 
+                        <a class="nav-link" asp-controller="Order" asp-action="Index">
+                            <div class="sb-nav-link-icon"><i class="fa fa-shopping-cart"></i></div>
+                            Đơn hàng
                         </a>
-                        <a class="nav-link" asp-controller="Slide" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-file-image"></i></div>
-                            Slide
+                        <a class="nav-link" asp-controller="Coupon" asp-action="Index">
+                            <div class="sb-nav-link-icon"><i class="fa fa-credit-card"></i></div>
+                            Khuyến mãi
                         </a>
                     </div>
                 </div>
@@ -58,13 +58,13 @@
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Bản quyền thuộc &copy; H.A.T Shop 2021</div>
+                        <div class="text-muted">Bản quyền thuộc &copy; Electro Store 2021</div>
                     </div>
                 </div>
             </footer>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <script src="/js/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="/js/scripts.js"></script>
     @RenderSection("Scripts", required: false)
