@@ -24,7 +24,7 @@ https://youtu.be/S7mxYxmmoi8?si=WNN-m_Zse2L96kD5
 - Clone code from Github: git clone https://github.com/luanhytran/asp-electro-phone-store.git
 - Open solution eShopSolution.sln
 - Set startup project is eShopSolution.Data
-- Change connection string in Appsetting.json in eShopSolution.Data project
+- Change connection string in `eShopSolution.Data\appsettings.json` and `eShopSolutionBackendApi\appsettings.Development.json`
 - Open Tools --> Nuget Package Manager -->  Package Manager Console in Visual Studio
 - Set Default project in the console to eShopSolution.Data
 
