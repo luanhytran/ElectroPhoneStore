@@ -18,7 +18,6 @@ namespace eShopSolution.WebApp.MailUtils
         /// <returns>Task</returns>
         public static async Task<bool> SendGmail(string _from, string _to, string _subject, string _body, string _gmail, string _password)
         {
-            // Tạo nội dung Email
             MailMessage message = new MailMessage(
                 from: _from,
                 to: _to,

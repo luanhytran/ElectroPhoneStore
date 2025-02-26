@@ -57,7 +57,6 @@ namespace eShopSolution.BackendApi.Controllers
             return CreatedAtAction(nameof(GetById), new { id = categoryId }, category);
         }
 
-        // HttpPut: update toàn phần
         [HttpPut("updateCategory")]
         [Authorize]
         public async Task<IActionResult> Update([FromBody] CategoryUpdateRequest request)

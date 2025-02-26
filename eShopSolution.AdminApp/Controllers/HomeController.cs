@@ -8,8 +8,6 @@ using Microsoft.Extensions.Logging;
 
 namespace eShopSolution.AdminApp.Controllers
 {
-    // Authorize: Sẽ chuyển sang trang User/Login ( định nghĩa trong startup bằng serivces.AddAuthorization )
-    // Sau đó phải đăng nhập rồi mới được dùng mấy trang này
     [Authorize]
     public class HomeController : BaseController
     {
@@ -22,7 +20,6 @@ namespace eShopSolution.AdminApp.Controllers
 
         public IActionResult Index()
         {
-            // lấy user name đăng nhập
             var user = User.Identity.Name;
             var expireTime = HttpContext.Items["ExpiresUTC"];
             return View();
@@ -33,7 +30,6 @@ namespace eShopSolution.AdminApp.Controllers
             return View();
         }
 
-        // Trang error
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

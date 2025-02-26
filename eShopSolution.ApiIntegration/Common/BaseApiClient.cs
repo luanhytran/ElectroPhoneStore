@@ -74,10 +74,8 @@ namespace eShopSolution.ApiIntegration.Common
             throw new Exception(body);
         }
 
-        // Cần đăng nhập mới dùng được nên bỏ tham số bool requiredLogin = false
         public async Task<bool> Delete(string url)
         {
-            // Lấy ra token
             var sessions = _httpContextAccessor
                .HttpContext
                .Session

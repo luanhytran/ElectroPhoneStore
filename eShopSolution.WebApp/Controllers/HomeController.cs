@@ -25,7 +25,6 @@ namespace eShopSolution.WebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IProductApiClient _productApiClient;
         private readonly ICategoryApiClient _categoryApiClient;
         private readonly IConfiguration _configuration;
@@ -33,11 +32,9 @@ namespace eShopSolution.WebApp.Controllers
         public HomeController(ILogger<HomeController> logger, 
             IProductApiClient productApiClient, ICategoryApiClient categoryApiClient, IConfiguration configuration)
         {
-            _logger = logger;
             _productApiClient = productApiClient;
             _categoryApiClient = categoryApiClient;
             _configuration = configuration;
-
         }
 
         public async Task<IActionResult> Index()
@@ -49,7 +46,6 @@ namespace eShopSolution.WebApp.Controllers
                 {
                     var userPrincipal = this.ValidateToken(cookie);
 
-                    // tập properties của cookie
                     var authProperties = new AuthenticationProperties
                     {
                         ExpiresUtc = DateTimeOffset.UtcNow.AddMonths(1),
@@ -57,12 +53,9 @@ namespace eShopSolution.WebApp.Controllers
                         IssuedUtc = DateTimeOffset.UtcNow.AddMonths(1),
                     };
 
-                    // Set key defaultlanguageId trong session lấy value trong appsettings.json
                     HttpContext.Session.SetString(SystemConstants.AppSettings.DefaultLanguageId, _configuration[SystemConstants.AppSettings.DefaultLanguageId]);
 
-                    // Set key token trong session bằng token nhận được khi authenticate
                     HttpContext.Session.SetString(SystemConstants.AppSettings.Token, cookie);
-
 
                     await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
@@ -178,7 +171,6 @@ namespace eShopSolution.WebApp.Controllers
             return LocalRedirect(returnUrl);
         }
 
-        // Hàm giải mã token ( chứa thông tin về đăng nhập )
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {
             IdentityModelEventSource.ShowPII = true;
@@ -192,11 +184,8 @@ namespace eShopSolution.WebApp.Controllers
             validationParameters.ValidIssuer = _configuration["Tokens:Issuer"];
             validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
 
-
-            // Giải mã thông tin claim mà ta đã gắn cho token ấy ( định nghĩa claim trong UserService.cs )
             ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
 
-            // trả về một principal có token đã giải mã
             return principal;
         }
     }

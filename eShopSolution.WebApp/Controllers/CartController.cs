@@ -74,13 +74,11 @@ namespace eShopSolution.WebApp.Controllers
                 price = (long)currentCart.CartItems.Sum(x => x.Price * x.Quantity);
             }
 
-            // Tìm Guid của người mua để gán vào order
             var claims = User.Claims.ToList();
             var userId = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
             var users = await _userApiClient.GetAll();
             var x = users.FirstOrDefault(x => x.Id.ToString() == userId);
 
-            // Order detail là lấy từ session chứ không lấy qua CheckoutViewModel, vì model binding không có bind cái danh sách sản phẩm
             var model = GetCheckoutViewModel();
             var orderDetails = new List<OrderDetailViewModel>();
 
@@ -115,7 +113,6 @@ namespace eShopSolution.WebApp.Controllers
 
             if (result != "Failed")
             {
-                // mail admin when have new email
                 var email1 = new EmailService.Email.EmailService();
                 email1.Send("hytranluan@gmail.com", "hytranluan@gmail.com",
                     "ĐƠN HÀNG MỚI", $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://localhost:5002/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
@@ -228,7 +225,6 @@ namespace eShopSolution.WebApp.Controllers
             return View();
         }
 
-        // Thanh toán online
         [HttpPost]
         public async Task<IActionResult> Processing(string stripeToken, string stripeEmail, CheckoutViewModel request)
         {
@@ -306,11 +302,9 @@ namespace eShopSolution.WebApp.Controllers
                 //return View();
             }
 
-            // Tìm Guid của người mua để gán vào order
             var users = await _userApiClient.GetAll();
             var x = users.FirstOrDefault(x => x.Email == userEmail);
 
-            // Order detail là lấy từ session chứ không lấy qua CheckoutViewModel, vì model binding không có bind cái danh sách sản phẩm
             var model = GetCheckoutViewModel();
             var orderDetails = new List<OrderDetailViewModel>();
 
@@ -345,7 +339,6 @@ namespace eShopSolution.WebApp.Controllers
 
             if (result != "Failed")
             {
-                // mail admin when have new email
                 var email1 = new EmailService.Email.EmailService();
                 email1.Send("hytranluan@gmail.com", "hytranluan@gmail.com",
                     "ĐƠN HÀNG MỚI", $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://localhost:5002/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
@@ -362,7 +355,7 @@ namespace eShopSolution.WebApp.Controllers
                         + "<tbody>";
                 decimal total = 0;
                 decimal amount = 0;
-                // mail client when placed order successfully
+
                 foreach (var product in currentCart.CartItems)
                 {
                     amount = product.Price * product.Quantity;

@@ -36,13 +36,11 @@ namespace eShopSolution.BackendApi
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<EShopDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
 
-            // Cần thêm service này khi viết API đăng ký đăng nhập
             services.AddIdentity<AppUser, AppRole>(options =>
                 {
                     options.Password.RequiredLength = 8;
@@ -56,7 +54,6 @@ namespace eShopSolution.BackendApi
                 .AddEntityFrameworkStores<EShopDbContext>()
                 .AddDefaultTokenProviders();
 
-            //Declare DI
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
@@ -96,8 +93,6 @@ namespace eShopSolution.BackendApi
                     Scheme = "Bearer"
                 });
 
-                // Định nghĩa bảo mật để khi chạy swagger ta phải đăng nhập để lấy token
-                //Token đó dùng để Authorize mở khóa các chức năg HTTP
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
                     {
@@ -127,8 +122,6 @@ namespace eShopSolution.BackendApi
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
 
-            // Mỗi khi nhận được token thì sẽ giải mã validate những thuộc tính dưới đây
-            // Nó sẽ tự giải mã và validate, nếu không đúng thì sẽ trả về lỗi 401
             .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
@@ -154,7 +147,6 @@ namespace eShopSolution.BackendApi
             throw new NotImplementedException();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

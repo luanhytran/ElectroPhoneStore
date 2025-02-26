@@ -4,9 +4,6 @@ namespace eShopSolution.ViewModels.Catalog.ProductImages
 {
     public class ProductImageCreateRequest
     {
-        //không cần product id  vì bên ngoài api productcontroller đã có tham số product id 
-        //public int ProductId { get; set; }
-
         public string Caption { get; set; }
 
         public bool IsDefault { get; set; }

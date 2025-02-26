@@ -6,7 +6,6 @@ namespace eShopSolution.ViewModels.System.Users
     {
         public RegisterRequestValidator()
         {
-            // Đây là một phương thức của abstract validator
             RuleFor(x => x.Name).NotEmpty().WithMessage("Tên khách hàng không được để trống")
                 .MaximumLength(200).WithMessage("Tên không được quá 200 ký tự");
 
@@ -27,7 +26,6 @@ namespace eShopSolution.ViewModels.System.Users
                 .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$")
                 .WithMessage("Mật khẩu phải bao gồm chữ cái viết hoa, thường và một con số");
 
-            // Khi ta viết => {} thì sẽ tự động hiểu request là của Register và context là của CustomContext
             RuleFor(x => x).Custom((request, context) =>
               {
                   if (request.Password != request.ConfirmPassword)

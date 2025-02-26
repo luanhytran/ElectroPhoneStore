@@ -25,7 +25,6 @@ namespace eShopSolution.Application.Catalog.Products
         private readonly IConfiguration _configuration;
         private const string USER_CONTENT_FOLDER_NAME = "user-content";
 
-        // dependency injection, truyền context vào để thao tác CRUD
         public ProductService(EShopDbContext context, IStorageService storageService, IConfiguration configuration,
             UserManager<AppUser> userManager)
         {
@@ -39,7 +38,6 @@ namespace eShopSolution.Application.Catalog.Products
         {
             var product = new Product()
             {
-                // id tự tăng
                 Name = request.Name,
                 CategoryId = request.CategoryId,
                 Price = request.Price,
@@ -70,7 +68,6 @@ namespace eShopSolution.Application.Catalog.Products
 
             _context.Products.Add(product);
 
-            //trả về số lượng bản ghi maybe
             await _context.SaveChangesAsync();
             return product.Id;
         }
@@ -215,14 +212,12 @@ namespace eShopSolution.Application.Catalog.Products
 
         public async Task<ProductViewModel> GetById(int productId)
         {
-            // Lấy danh mục của sản phẩm
             var categories = await (from c in _context.Categories
                                     join p in _context.Products on c.Id equals p.CategoryId
                                     select p.Name).ToListAsync();
 
             var product = await _context.Products.FindAsync(productId);
 
-            // Lấy danh sách review
             var reviews = _context.Reviews.Where(x => x.ProductId.Equals(productId)).ToList();
 
             // Lấy danh sách star rating
@@ -261,7 +256,6 @@ namespace eShopSolution.Application.Catalog.Products
             return productViewModel;
         }
 
-        // giảm số lượng sản phẩm trong kho khi khách hàng tăng sl sp
         public async Task<bool> DecreaseStock(int productId, int quantity)
         {
             var product = await _context.Products.FindAsync(productId);

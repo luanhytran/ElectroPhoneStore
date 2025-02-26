@@ -25,7 +25,6 @@ namespace eShopSolution.AdminApp.Controllers.Components
                 .GetString(SystemConstants.AppSettings.DefaultLanguageId),
                 Languages = languages.ResultObj
             };
-            // Tất cả những thằng nào mà muốn phân trang thì chỉ cần truyền vào đây thôi
             return View("Default", navigationVm);
         }
     }

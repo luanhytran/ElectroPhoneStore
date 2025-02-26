@@ -33,7 +33,6 @@ namespace eShopSolution.WebApp
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
@@ -98,9 +97,7 @@ namespace eShopSolution.WebApp
 
             services.AddMarkdown();
 
-            // We need to use MVC so we can use a Razor Configuration Template
             services.AddMvc()
-                // have to let MVC know we have a controller
                 .AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly);
 
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
@@ -116,7 +113,6 @@ namespace eShopSolution.WebApp
 #endif
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             StripeConfiguration.ApiKey = "sk_test_51J1AvDHFAMiU1Xo0pTiqpCoiiJUR2BkaM3gXq8HhT2n8Kxw85pn9SmoIPFwt1xrbAMZyCq1d8JSw9oTE0vsW6tC900QHnZYNz5";
@@ -130,7 +126,7 @@ namespace eShopSolution.WebApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            // This is your real test secret API key.
+
             app.UseHttpsRedirection();
             app.UseMarkdown();
             app.UseStaticFiles();

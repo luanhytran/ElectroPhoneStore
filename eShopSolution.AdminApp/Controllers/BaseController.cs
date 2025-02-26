@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace eShopSolution.AdminApp.Controllers
 {
-    // Controller này kiểm tra xem Token có tồn tại hay không
     [Authorize]
     public class BaseController : Controller
     {

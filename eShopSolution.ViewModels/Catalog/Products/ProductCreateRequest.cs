@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 
 namespace eShopSolution.ViewModels.Catalog.Products
 {
-    // create thì không cần id, vì khi create sql sẽ tự động generate id tăng dần
     public class ProductCreateRequest
     {
         [Display(Name = "Tên sản phẩm")]

@@ -5,7 +5,6 @@
         public const string MainConnectionString = "eShopSolutionDb";
         public const string CartSession = "CartSession";
 
-        // Để những cái key chuẩn cần thiết để set string key-value trong session
         public class AppSettings
         {
             public const string DefaultLanguageId = "DefaultLanguageId";

@@ -56,7 +56,6 @@ namespace eShopSolution.AdminApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            // Lấy ra danh sách các category
             var categories = await _categoryApiClient.GetAll();
             var productVM = new ProductCreateRequest()
             {

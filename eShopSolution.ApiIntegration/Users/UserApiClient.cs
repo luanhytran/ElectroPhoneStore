@@ -32,9 +32,6 @@ namespace eShopSolution.ApiIntegration.Users
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            /* Tạo một client có base address là backend api và truyền vào hàm authenticate 
-             của backend api một httpcontent vừa tạo ở trên sau đó sẽ trả về response một
-            */
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
 
@@ -161,7 +158,6 @@ namespace eShopSolution.ApiIntegration.Users
         public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)
         {
             var client = _httpClientFactory.CreateClient();
-            // BaseAddress lấy trong appsettings.Development.json bằng Configuratrion
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
 
@@ -184,7 +180,6 @@ namespace eShopSolution.ApiIntegration.Users
         public async Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
-            // BaseAddress lấy trong appsettings.Development.json bằng Configuratrion
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
 
@@ -200,9 +195,7 @@ namespace eShopSolution.ApiIntegration.Users
 
             if (response.IsSuccessStatusCode)
             {
-                // Deserialize thành 1 object cùng type với return type BackendApi trả về ở đây là ApiSuccessResult
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
-
             }
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
@@ -210,7 +203,6 @@ namespace eShopSolution.ApiIntegration.Users
         public async Task<ApiResult<bool>> ChangePassword(ChangePasswordViewModel model)
         {
             var client = _httpClientFactory.CreateClient();
-            // BaseAddress lấy trong appsettings.Development.json bằng Configuratrion
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
 
@@ -226,9 +218,7 @@ namespace eShopSolution.ApiIntegration.Users
 
             if (response.IsSuccessStatusCode)
             {
-                // Deserialize thành 1 object cùng type với return type BackendApi trả về ở đây là ApiSuccessResult
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
-
             }
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
@@ -236,7 +226,6 @@ namespace eShopSolution.ApiIntegration.Users
         public async Task<ApiResult<bool>> ConfirmEmail(ConfirmEmailViewModel model)
         {
             var client = _httpClientFactory.CreateClient();
-            // BaseAddress lấy trong appsettings.Development.json bằng Configuratrion
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
 
@@ -252,9 +241,7 @@ namespace eShopSolution.ApiIntegration.Users
 
             if (response.IsSuccessStatusCode)
             {
-                // Deserialize thành 1 object cùng type với return type BackendApi trả về ở đây là ApiSuccessResult
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
-
             }
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
@@ -262,7 +249,6 @@ namespace eShopSolution.ApiIntegration.Users
         public async Task<ApiResult<string>> ForgotPassword(ForgotPasswordViewModel model)
         {
             var client = _httpClientFactory.CreateClient();
-            // BaseAddress lấy trong appsettings.Development.json bằng Configuratrion
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
 
@@ -278,9 +264,7 @@ namespace eShopSolution.ApiIntegration.Users
 
             if (response.IsSuccessStatusCode)
             {
-                // Deserialize thành 1 object cùng type với return type BackendApi trả về ở đây là ApiSuccessResult
                 return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(result);
-
             }
             return JsonConvert.DeserializeObject<ApiErrorResult<string>>(result);
         }
@@ -288,7 +272,6 @@ namespace eShopSolution.ApiIntegration.Users
         public async Task<ApiResult<bool>> ResetPassword(ResetPasswordViewModel model)
         {
             var client = _httpClientFactory.CreateClient();
-            // BaseAddress lấy trong appsettings.Development.json bằng Configuratrion
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
 
@@ -304,9 +287,7 @@ namespace eShopSolution.ApiIntegration.Users
 
             if (response.IsSuccessStatusCode)
             {
-                // Deserialize thành 1 object cùng type với return type BackendApi trả về ở đây là ApiSuccessResult
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
-
             }
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }

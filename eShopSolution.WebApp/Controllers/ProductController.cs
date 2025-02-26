@@ -54,7 +54,6 @@ namespace eShopSolution.WebApp.Controllers
                 ListOfReviews = reviews
             };
 
-            // get user review name
             foreach (var review in productDetailViewModel.ListOfReviews)
             {
                 Guid userId = new Guid(review.UserId.ToString());

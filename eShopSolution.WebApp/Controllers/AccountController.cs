@@ -6,9 +6,7 @@ using eShopSolution.ApiIntegration.Orders;
 using eShopSolution.ApiIntegration.Products;
 using eShopSolution.ApiIntegration.Users;
 using eShopSolution.ViewModels.System.Users;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace eShopSolution.WebApp.Controllers
 {
@@ -17,17 +15,12 @@ namespace eShopSolution.WebApp.Controllers
         private readonly IUserApiClient _userApiClient;
         private readonly IOrderApiClient _orderApiClient;
         private readonly IProductApiClient _productApiClient;
-        private readonly IConfiguration _configuration;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountController(IUserApiClient userApiClient, IOrderApiClient orderApiClient, IProductApiClient productApiClient,
-            IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public AccountController(IUserApiClient userApiClient, IOrderApiClient orderApiClient, IProductApiClient productApiClient)
         {
             _userApiClient = userApiClient;
             _orderApiClient = orderApiClient;
             _productApiClient = productApiClient;
-            _configuration = configuration;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]

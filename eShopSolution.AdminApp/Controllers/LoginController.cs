@@ -16,12 +16,10 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace eShopSolution.AdminApp.Controllers
 {
-    // Không kế thừa BaseController vì khi log in thì không cần kiểm tra có token hay không
     public class LoginController : Controller
     {
         private readonly IUserApiClient _userApiClient;
 
-        // Dùng config để lấy key và issuer trong appsettings.json
         private readonly IConfiguration _configuration;
 
         public LoginController(IUserApiClient userApiClient, IConfiguration configuration)
@@ -38,7 +36,6 @@ namespace eShopSolution.AdminApp.Controllers
             {
                 var userPrincipal = this.ValidateToken(cookie);
 
-                // tập properties của cookie
                 var authProperties = new AuthenticationProperties
                 {
                     ExpiresUtc = DateTimeOffset.UtcNow.AddMonths(1),
@@ -46,10 +43,8 @@ namespace eShopSolution.AdminApp.Controllers
                     IssuedUtc = DateTimeOffset.UtcNow.AddMonths(1),
                 };
 
-                // Set key defaultlanguageId trong session lấy value trong appsettings.json
                 HttpContext.Session.SetString(SystemConstants.AppSettings.DefaultLanguageId, _configuration[SystemConstants.AppSettings.DefaultLanguageId]);
 
-                // Set key token trong session bằng token nhận được khi authenticate
                 HttpContext.Session.SetString(SystemConstants.AppSettings.Token, cookie);
 
 
@@ -80,14 +75,10 @@ namespace eShopSolution.AdminApp.Controllers
                 return View(request);
             }
 
-            /* Khi đăng nhập thành công thì chúng ta sẽ giả mã token này ra có những claim gì */
-
-            // Nhận 1 token được mã hóa
             var result = await _userApiClient.Authenticate(request);
 
             if(result.ResultObj == null)
             {
-                // Hiển thị thông báo Tài khoản không tồn tại
                 ModelState.AddModelError("", result.Message);
                 return View();
             }
@@ -99,11 +90,8 @@ namespace eShopSolution.AdminApp.Controllers
                 Response.Cookies.Append("userToken", result.ResultObj, option);
             }
 
-            // Giải mã token đã mã hóa và lấy token, lấy cả các claim đã định nghĩa trong UserService
-            // khi debug sẽ thấy nhận được gì  ( có nhận được cả issuer )
             var userPrincipal = this.ValidateToken(result.ResultObj);
 
-            // tập properties của cookie
             var authProperties = new AuthenticationProperties
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMonths(1),
@@ -111,12 +99,9 @@ namespace eShopSolution.AdminApp.Controllers
                 IssuedUtc = DateTimeOffset.UtcNow.AddMonths(1),
             };
 
-            // Set key defaultlanguageId trong session lấy value trong appsettings.json
             HttpContext.Session.SetString(SystemConstants.AppSettings.DefaultLanguageId, _configuration[SystemConstants.AppSettings.DefaultLanguageId]);
             
-            // Set key token trong session bằng token nhận được khi authenticate
             HttpContext.Session.SetString(SystemConstants.AppSettings.Token, result.ResultObj);
-
 
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
@@ -126,7 +111,6 @@ namespace eShopSolution.AdminApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // Hàm giải mã token ( chứa thông tin về đăng nhập )
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {
             IdentityModelEventSource.ShowPII = true;
@@ -140,11 +124,8 @@ namespace eShopSolution.AdminApp.Controllers
             validationParameters.ValidIssuer = _configuration["Tokens:Issuer"];
             validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
 
-
-            // Giải mã thông tin claim mà ta đã gắn cho token ấy ( định nghĩa claim trong UserService.cs )
             ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
 
-            // trả về một principal có token đã giải mã
             return principal;
         }
     }

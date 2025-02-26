@@ -57,7 +57,6 @@ namespace eShopSolution.BackendApi.Controllers
             return CreatedAtAction(nameof(GetById), new { id = couponId }, coupon);
         }
 
-        // HttpPut: update toàn phần
         [HttpPut("updateCoupon")]
         [Authorize]
         public async Task<IActionResult> Update([FromBody] CouponUpdateRequest request)

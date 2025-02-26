@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 
 namespace eShopSolution.ViewModels.Catalog.Products
 {
-    // thường ta chỉ update các property trong translation
     public class ProductUpdateRequest
     {
         public int Id { set; get; }

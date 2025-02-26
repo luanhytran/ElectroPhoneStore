@@ -14,15 +14,11 @@ namespace eShopSolution.AdminApp.Controllers
     public class UserController : BaseController
     {
         private readonly IUserApiClient _userApiClient;
-        private readonly IConfiguration _configuration;
         private readonly IRoleApiClient _roleApiClient;
 
-        public UserController(IUserApiClient userApiClient, 
-            IRoleApiClient roleApiClient,
-            IConfiguration configuration)
+        public UserController(IUserApiClient userApiClient, IRoleApiClient roleApiClient)
         {
             _userApiClient = userApiClient;
-            _configuration = configuration;
             _roleApiClient = roleApiClient;
         }
 
@@ -173,7 +169,6 @@ namespace eShopSolution.AdminApp.Controllers
             return View(roleAssignRequest);
         }
 
-        // Dùng cho Http Get trang gán quyền Hiện ra tẩt cả role + role user đã chọn
         private async Task<RoleAssignRequest> GetRoleAssignRequest(Guid id)
         {
             var userObj = await _userApiClient.GetById(id);

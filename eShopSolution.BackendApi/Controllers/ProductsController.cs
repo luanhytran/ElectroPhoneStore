@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eShopSolution.BackendApi.Controllers
 {
-    //api/productsDD
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
@@ -18,7 +17,6 @@ namespace eShopSolution.BackendApi.Controllers
             _productService = productService;
         }
 
-        // Lấy ra tất cả sản phẩm hoặc lấy ra theo keyword,số trang... trong query string
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductPagingRequest request)
         {
@@ -48,7 +46,6 @@ namespace eShopSolution.BackendApi.Controllers
         [Authorize]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
-            //kiểm tra validation
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -65,7 +62,6 @@ namespace eShopSolution.BackendApi.Controllers
             return CreatedAtAction(nameof(GetById), new { id = productId }, product);
         }
 
-        // HttpPut: update toàn phần
         [HttpPut("{productId}")]
         [Consumes("multipart/form-data")]
         [Authorize]
