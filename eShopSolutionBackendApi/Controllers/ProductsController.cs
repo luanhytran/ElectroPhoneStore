@@ -1,13 +1,8 @@
-﻿using eShopSolution.Application.Catalog.Products;
-using eShopSolution.ViewModels.Catalog.ProductImages;
+﻿using System.Threading.Tasks;
+using eShopSolution.Application.Catalog.Products;
 using eShopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace eShopSolutionBackendApi.Controllers
 {

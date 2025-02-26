@@ -1,4 +1,9 @@
-﻿using eShopSolution.ApiIntegration;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using eShopSolution.ApiIntegration;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.Sales;
 using eShopSolution.WebApp.Models;
@@ -6,17 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using MailKit.Net.Smtp;
-using MimeKit;
 using Stripe;
-using System.Net.Http;
-using System.Text;
-using Stripe.Checkout;
 using PaymentMethod = eShopSolution.ViewModels.Utilities.Enums.PaymentMethod;
 
 namespace eShopSolution.WebApp.Controllers

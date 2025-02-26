@@ -1,4 +1,8 @@
-﻿using eShopSolution.Application.Catalog.Categories;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using eShopSolution.Application.Catalog.Categories;
+using eShopSolution.Application.Catalog.Coupons;
 using eShopSolution.Application.Catalog.Orders;
 using eShopSolution.Application.Catalog.Products;
 using eShopSolution.Application.Common;
@@ -9,12 +13,10 @@ using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.System.Users;
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,16 +24,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Stripe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Mvc;
-using Stripe.Checkout;
-using Newtonsoft.Json.Serialization;
-using eShopSolution.Application.Catalog.Coupons;
 
 namespace eShopSolutionBackendApi
 {
@@ -66,7 +58,7 @@ namespace eShopSolutionBackendApi
 
             //Declare DI
             services.AddTransient<IStorageService, FileStorageService>();
-            services.AddTransient<IProductService, eShopSolution.Application.Catalog.Products.ProductService>();
+            services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
@@ -74,8 +66,8 @@ namespace eShopSolutionBackendApi
             services.AddTransient<ILanguageService, LanguageService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IOrderService, eShopSolution.Application.Catalog.Orders.OrderService>();
-            services.AddTransient<ICouponService, eShopSolution.Application.Catalog.Coupons.CouponService>();
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<ICouponService, CouponService>();
 
             //fluent validator
             // ta có hai cách register validator
@@ -127,7 +119,7 @@ namespace eShopSolutionBackendApi
 
             string issuer = Configuration.GetValue<string>("Tokens:Issuer");
             string signingKey = Configuration.GetValue<string>("Tokens:Key");
-            byte[] signingKeyBytes = System.Text.Encoding.UTF8.GetBytes(signingKey);
+            byte[] signingKeyBytes = Encoding.UTF8.GetBytes(signingKey);
 
             services.AddAuthentication(opt =>
             {
@@ -149,7 +141,7 @@ namespace eShopSolutionBackendApi
                     ValidAudience = issuer,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ClockSkew = System.TimeSpan.Zero,
+                    ClockSkew = TimeSpan.Zero,
                     IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
                 };
             });

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace eShopSolution.WebApp.Data
+﻿namespace eShopSolution.WebApp.Data
 {
     public class StripeSettings
     {
