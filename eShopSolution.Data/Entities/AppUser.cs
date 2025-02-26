@@ -1,8 +1,6 @@
-﻿using eShopSolution.Data.Enums;
-using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using Microsoft.AspNetCore.Identity;
 
 namespace eShopSolution.Data.Entities
 {
