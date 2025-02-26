@@ -1,24 +1,20 @@
-﻿using EmailService;
-using eShopSolution.ApiIntegration;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using eShopSolution.ApiIntegration.Orders;
+using eShopSolution.ApiIntegration.Users;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eShopSolution.WebApp.Controllers
 {
@@ -119,7 +115,7 @@ namespace eShopSolution.WebApp.Controllers
             //                                                  "Link xác nhận email", confirmationLink,
             //                                                  "your_email_here", "your_password_here");
 
-            var email = new EmailService.EmailService();
+            var email = new EmailService.Email.EmailService();
             email.Send("hytranluan@gmail.com", user.ResultObj.Email, "XÁC NHẬN TÀI KHOẢN", confirmationLink);
             return RedirectToAction(nameof(SuccessRegistration));
         }
@@ -183,7 +179,7 @@ namespace eShopSolution.WebApp.Controllers
             //                                            "Link khôi phục mật khẩu", passwordResetLink,
             //                                            "your_email_here", "your_password_here");
 
-            var email = new EmailService.EmailService();
+            var email = new EmailService.Email.EmailService();
             email.Send("hytranluan@gmail.com", request.Email, "Link khôi phục mật khẩu", passwordResetLink);
 
             return View("ForgotPasswordConfirmation");

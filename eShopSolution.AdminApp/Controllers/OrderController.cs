@@ -1,10 +1,8 @@
-﻿using eShopSolution.ApiIntegration;
+﻿using System.Threading.Tasks;
+using eShopSolution.ApiIntegration.Orders;
+using eShopSolution.ApiIntegration.Products;
 using eShopSolution.ViewModels.Sales;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace eShopSolution.AdminApp.Controllers
 {

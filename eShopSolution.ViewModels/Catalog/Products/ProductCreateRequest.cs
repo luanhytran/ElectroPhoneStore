@@ -1,10 +1,7 @@
-﻿using eShopSolution.Utilities.Constants;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using eShopSolution.ViewModels.Catalog.Categories;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace eShopSolution.ViewModels.Catalog.Products
 {

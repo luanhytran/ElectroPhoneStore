@@ -1,13 +1,13 @@
-﻿using eShopSolution.Data.EF;
-using eShopSolution.ViewModels.Catalog.Categories;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
 using eShopSolution.Utilities.Exceptions;
+using eShopSolution.ViewModels.Catalog.Categories;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace eShopSolution.Application.Catalog.Categories
 {

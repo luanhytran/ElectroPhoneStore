@@ -1,10 +1,10 @@
 ﻿using eShopSolution.Data.Configurations;
 using eShopSolution.Data.Entities;
-using eShopSolution.Data.Extentions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using eShopSolution.Data.Extensions;
 
 namespace eShopSolution.Data.EF
 {

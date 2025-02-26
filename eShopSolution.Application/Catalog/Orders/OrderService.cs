@@ -1,13 +1,13 @@
-﻿using eShopSolution.Data.EF;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
 using eShopSolution.ViewModels.Common;
-using eShopSolution.ViewModels.Utilities.Enums;
 using eShopSolution.ViewModels.Sales;
+using eShopSolution.ViewModels.Utilities.Enums;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace eShopSolution.Application.Catalog.Orders

@@ -1,11 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using eShopSolution.AdminApp.Models;
-using eShopSolution.ApiIntegration;
-using eShopSolution.Utilities.Constants;
+using eShopSolution.ApiIntegration.Categories;
+using eShopSolution.ApiIntegration.Products;
 using eShopSolution.ViewModels.Catalog.Products;
-using eShopSolution.ViewModels.Common;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;

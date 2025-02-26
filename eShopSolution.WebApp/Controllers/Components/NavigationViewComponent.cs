@@ -1,10 +1,6 @@
-﻿using eShopSolution.ApiIntegration;
-using eShopSolution.ViewModels.Catalog.Products;
+﻿using System.Threading.Tasks;
+using eShopSolution.ApiIntegration.Categories;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace eShopSolution.WebApp.Controllers.Components
 {

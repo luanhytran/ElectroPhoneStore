@@ -1,13 +1,13 @@
-﻿using eShopSolution.Data.EF;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
 using eShopSolution.Utilities.Exceptions;
-using eShopSolution.ViewModels.Sales;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.Catalog.Products;
+using eShopSolution.ViewModels.Common;
+using eShopSolution.ViewModels.Sales;
+using Microsoft.EntityFrameworkCore;
 
 namespace eShopSolution.Application.Catalog.Coupons
 {

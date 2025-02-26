@@ -1,10 +1,8 @@
-﻿using eShopSolution.ViewModels.Catalog.Categories;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using eShopSolution.ViewModels.Catalog.Categories;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eShopSolution.Application.Catalog.Categories
 {

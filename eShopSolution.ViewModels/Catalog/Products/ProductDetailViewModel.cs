@@ -1,8 +1,6 @@
-﻿using eShopSolution.ViewModels.Catalog.Categories;
+﻿using System.Collections.Generic;
+using eShopSolution.ViewModels.Catalog.Categories;
 using eShopSolution.ViewModels.Catalog.ProductImages;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace eShopSolution.ViewModels.Catalog.Products
 {

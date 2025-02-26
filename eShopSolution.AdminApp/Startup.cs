@@ -1,20 +1,20 @@
-using eShopSolution.ApiIntegration;
+using System;
+using eShopSolution.ApiIntegration.Categories;
+using eShopSolution.ApiIntegration.Coupons;
+using eShopSolution.ApiIntegration.Languages;
+using eShopSolution.ApiIntegration.Orders;
+using eShopSolution.ApiIntegration.Products;
+using eShopSolution.ApiIntegration.Roles;
+using eShopSolution.ApiIntegration.Users;
 using eShopSolution.ViewModels.System.Users;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace eShopSolution.AdminApp
 {

@@ -1,15 +1,12 @@
-﻿using eShopSolution.ApiIntegration;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using eShopSolution.ApiIntegration.Coupons;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.Catalog.Products;
-using eShopSolution.ViewModels.Sales;
 using eShopSolution.WebApp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace eShopSolution.WebApp.Controllers
 {

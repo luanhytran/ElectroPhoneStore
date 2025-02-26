@@ -1,9 +1,4 @@
-﻿using eShopSolution.ViewModels.Utilities.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace eShopSolution.ViewModels.Catalog.Categories
+﻿namespace eShopSolution.ViewModels.Catalog.Categories
 {
     public class CategoryViewModel
     {

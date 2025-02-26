@@ -1,4 +1,12 @@
-﻿using eShopSolution.ApiIntegration;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using eShopSolution.ApiIntegration.Coupons;
+using eShopSolution.ApiIntegration.Orders;
+using eShopSolution.ApiIntegration.Products;
+using eShopSolution.ApiIntegration.Users;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.Sales;
 using eShopSolution.WebApp.Models;
@@ -6,17 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using MailKit.Net.Smtp;
-using MimeKit;
 using Stripe;
-using System.Net.Http;
-using System.Text;
-using Stripe.Checkout;
 using PaymentMethod = eShopSolution.ViewModels.Utilities.Enums.PaymentMethod;
 
 namespace eShopSolution.WebApp.Controllers
@@ -118,7 +116,7 @@ namespace eShopSolution.WebApp.Controllers
             if (result != "Failed")
             {
                 // mail admin when have new email
-                var email1 = new EmailService.EmailService();
+                var email1 = new EmailService.Email.EmailService();
                 email1.Send("hytranluan@gmail.com", "hytranluan@gmail.com",
                     "ĐƠN HÀNG MỚI", $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://localhost:5002/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
 
@@ -191,7 +189,7 @@ namespace eShopSolution.WebApp.Controllers
                             + "<br>";
 
                 var userMail = claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
-                var email2 = new EmailService.EmailService();
+                var email2 = new EmailService.Email.EmailService();
                 email2.Send("hytranluan@gmail.com", userMail,
                                 "ĐẶT HÀNG THÀNH CÔNG",
                                 templateHtml
@@ -348,7 +346,7 @@ namespace eShopSolution.WebApp.Controllers
             if (result != "Failed")
             {
                 // mail admin when have new email
-                var email1 = new EmailService.EmailService();
+                var email1 = new EmailService.Email.EmailService();
                 email1.Send("hytranluan@gmail.com", "hytranluan@gmail.com",
                     "ĐƠN HÀNG MỚI", $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://localhost:5002/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
 
@@ -421,7 +419,7 @@ namespace eShopSolution.WebApp.Controllers
                             + "<br>";
 
                 var userMail = claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
-                var email2 = new EmailService.EmailService();
+                var email2 = new EmailService.Email.EmailService();
                 email2.Send("hytranluan@gmail.com", userMail,
                                 "ĐẶT HÀNG THÀNH CÔNG",
                                 templateHtml
