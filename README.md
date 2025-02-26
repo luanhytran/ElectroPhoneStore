@@ -16,11 +16,20 @@
 - SQL Server 2019
 
 ## How to configure and run
+### Watch video
+https://youtu.be/S7mxYxmmoi8?si=WNN-m_Zse2L96kD5
+
+### Or follow below steps:
+
 - Clone code from Github: git clone https://github.com/luanhytran/asp-electro-phone-store.git
-- Open solution eShopSolution.sln in Visual Studio 2019
+- Open solution eShopSolution.sln
 - Set startup project is eShopSolution.Data
 - Change connection string in Appsetting.json in eShopSolution.Data project
 - Open Tools --> Nuget Package Manager -->  Package Manager Console in Visual Studio
+- Set Default project in the console to eShopSolution.Data
+
+  <img src="https://github.com/user-attachments/assets/1d577aec-70d0-4952-bc45-1854f7e783f7" width="500" />
+
 - Run Update-database and Enter.
 - After migrate database successful, set Startup Project is eShopSolution.WebApp
 - Change database connection in appsettings.Development.json in eShopSolution.WebApp project.
