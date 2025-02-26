@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using eShopSolution.ApiIntegration.Coupon;
+using eShopSolution.ApiIntegration.Coupons;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Sales;
 using Microsoft.AspNetCore.Mvc;

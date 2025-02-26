@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
-namespace eShopSolution.ApiIntegration.Category
+namespace eShopSolution.ApiIntegration.Categories
 {
     public class CategoryApiClient : BaseApiClient, ICategoryApiClient
     {

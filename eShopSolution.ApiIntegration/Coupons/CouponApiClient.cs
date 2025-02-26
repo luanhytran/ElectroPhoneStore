@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
-namespace eShopSolution.ApiIntegration.Coupon
+namespace eShopSolution.ApiIntegration.Coupons
 {
     public class CouponApiClient : BaseApiClient, ICouponApiClient
     {

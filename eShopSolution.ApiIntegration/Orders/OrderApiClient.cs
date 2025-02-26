@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
-namespace eShopSolution.ApiIntegration.Order
+namespace eShopSolution.ApiIntegration.Orders
 {
     public class OrderApiClient : BaseApiClient, IOrderApiClient
     {

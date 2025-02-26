@@ -4,7 +4,7 @@ using eShopSolution.ViewModels.Catalog.Categories;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
 
-namespace eShopSolution.ApiIntegration.Category
+namespace eShopSolution.ApiIntegration.Categories
 {
     public interface ICategoryApiClient
     {

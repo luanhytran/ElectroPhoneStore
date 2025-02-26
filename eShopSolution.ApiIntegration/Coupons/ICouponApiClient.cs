@@ -4,7 +4,7 @@ using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.Sales;
 
-namespace eShopSolution.ApiIntegration.Coupon
+namespace eShopSolution.ApiIntegration.Coupons
 {
     public interface ICouponApiClient
     {

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
-namespace eShopSolution.ApiIntegration.User
+namespace eShopSolution.ApiIntegration.Users
 {
     public class UserApiClient : IUserApiClient
     {

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
-namespace eShopSolution.ApiIntegration.Product
+namespace eShopSolution.ApiIntegration.Products
 {
     public class ProductApiClient : BaseApiClient, IProductApiClient
     {

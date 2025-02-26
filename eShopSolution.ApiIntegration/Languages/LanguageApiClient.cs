@@ -7,7 +7,7 @@ using eShopSolution.ViewModels.System.Languages;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace eShopSolution.ApiIntegration.Language
+namespace eShopSolution.ApiIntegration.Languages
 {
     public class LanguageApiClient : BaseApiClient, ILanguageApiClient
     {

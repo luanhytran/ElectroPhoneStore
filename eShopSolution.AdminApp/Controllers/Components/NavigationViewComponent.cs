@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using eShopSolution.AdminApp.Models;
-using eShopSolution.ApiIntegration.Language;
+using eShopSolution.ApiIntegration.Languages;
 using eShopSolution.Utilities.Constants;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

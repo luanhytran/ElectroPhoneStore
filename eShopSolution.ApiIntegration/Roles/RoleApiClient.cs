@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
-namespace eShopSolution.ApiIntegration.Role
+namespace eShopSolution.ApiIntegration.Roles
 {
     public class RoleApiClient : IRoleApiClient
     {

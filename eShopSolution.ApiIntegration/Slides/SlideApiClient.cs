@@ -6,7 +6,7 @@ using eShopSolution.ViewModels.Utilities.Slides;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace eShopSolution.ApiIntegration.Slide
+namespace eShopSolution.ApiIntegration.Slides
 {
     public class SlideApiClient : BaseApiClient, ISlideApiClient
     {

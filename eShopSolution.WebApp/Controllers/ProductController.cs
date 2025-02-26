@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using eShopSolution.ApiIntegration.Category;
-using eShopSolution.ApiIntegration.Product;
-using eShopSolution.ApiIntegration.User;
+using eShopSolution.ApiIntegration.Categories;
+using eShopSolution.ApiIntegration.Products;
+using eShopSolution.ApiIntegration.Users;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;

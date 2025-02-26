@@ -1,11 +1,11 @@
 using System;
 using System.Globalization;
-using eShopSolution.ApiIntegration.Category;
-using eShopSolution.ApiIntegration.Coupon;
-using eShopSolution.ApiIntegration.Order;
-using eShopSolution.ApiIntegration.Product;
-using eShopSolution.ApiIntegration.Slide;
-using eShopSolution.ApiIntegration.User;
+using eShopSolution.ApiIntegration.Categories;
+using eShopSolution.ApiIntegration.Coupons;
+using eShopSolution.ApiIntegration.Orders;
+using eShopSolution.ApiIntegration.Products;
+using eShopSolution.ApiIntegration.Slides;
+using eShopSolution.ApiIntegration.Users;
 using eShopSolution.ViewModels.System.Users;
 using eShopSolution.WebApp.Data;
 using eShopSolution.WebApp.LocalizationResources;

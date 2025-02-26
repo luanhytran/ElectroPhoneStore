@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
 
-namespace eShopSolution.ApiIntegration.User
+namespace eShopSolution.ApiIntegration.Users
 {
     public interface IUserApiClient
     {

@@ -2,7 +2,7 @@
 using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.Sales;
 
-namespace eShopSolution.ApiIntegration.Order
+namespace eShopSolution.ApiIntegration.Orders
 {
     public interface IOrderApiClient
     {

@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using eShopSolution.ApiIntegration.User;
+using eShopSolution.ApiIntegration.Users;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;

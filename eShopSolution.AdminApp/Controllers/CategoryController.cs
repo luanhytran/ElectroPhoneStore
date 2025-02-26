@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using eShopSolution.ApiIntegration.Category;
+using eShopSolution.ApiIntegration.Categories;
 using eShopSolution.ViewModels.Catalog.Categories;
 using eShopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Mvc;
