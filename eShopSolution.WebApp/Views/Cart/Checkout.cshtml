@@ -140,7 +140,7 @@
                                     <li class="row">
                                         <div class="col-sm-6">
                                             <label for="Name" class="required">Tên</label>
-                                            <input class="input form-control" id="txt_name_cod" onchange="$(" input #txt_name_cc").setAttribute('value', $("input #txt_name_cod").val());" type="text" asp-for="CheckoutModel.Name" value="@Model.Name">
+                                            <input class="input form-control" id="txt_name_cod" onchange="document.getElementById('txt_name_cc').value = this.value;" type="text" asp-for="CheckoutModel.Name" value="@Model.Name">
                                             <span asp-validation-for="CheckoutModel.Name" class="text-danger"></span>
                                         </div>
                                         <!--/ [col] -->
