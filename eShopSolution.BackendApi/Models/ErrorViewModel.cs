@@ -1,4 +1,4 @@
-namespace eShopSolutionBackendApi.Models
+namespace eShopSolution.BackendApi.Models
 {
     public class ErrorViewModel
     {

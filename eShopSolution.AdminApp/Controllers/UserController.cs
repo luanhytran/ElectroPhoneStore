@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using eShopSolution.ApiIntegration;
+using eShopSolution.ApiIntegration.Role;
+using eShopSolution.ApiIntegration.User;
 using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;

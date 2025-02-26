@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace eShopSolutionBackendApi
+namespace eShopSolution.BackendApi
 {
     public class Program
     {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using eShopSolution.Application.System.Users;
-using eShopSolution.Data.Entities;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

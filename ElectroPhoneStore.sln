@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolution.Utilities", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolution.ViewModels", "eShopSolution.ViewModels\eShopSolution.ViewModels.csproj", "{720B55B3-4A34-45FE-9A23-28779119808F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolutionBackendApi", "eShopSolutionBackendApi\eShopSolutionBackendApi.csproj", "{A5E82F26-7852-44F8-A415-2DD9E87A38CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolution.BackendApi", "eShopSolution.BackendApi\eShopSolution.BackendApi.csproj", "{A5E82F26-7852-44F8-A415-2DD9E87A38CE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Infrastucture", "1. Infrastucture", "{2319AED6-4DD6-44CA-AE55-32FA853EF6D1}"
 EndProject

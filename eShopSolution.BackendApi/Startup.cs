@@ -25,7 +25,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-namespace eShopSolutionBackendApi
+namespace eShopSolution.BackendApi
 {
     public class Startup
     {

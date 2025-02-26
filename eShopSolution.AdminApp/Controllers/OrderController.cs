@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
-using eShopSolution.ApiIntegration;
+using eShopSolution.ApiIntegration.Order;
+using eShopSolution.ApiIntegration.Product;
 using eShopSolution.ViewModels.Sales;
 using Microsoft.AspNetCore.Mvc;
 

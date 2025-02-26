@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using eShopSolution.ApiIntegration;
+using eShopSolution.ApiIntegration.Coupon;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.WebApp.Models;

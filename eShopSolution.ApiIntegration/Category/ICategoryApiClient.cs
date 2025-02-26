@@ -1,10 +1,10 @@
-﻿using eShopSolution.ViewModels.Catalog.Categories;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using eShopSolution.ViewModels.Catalog.Categories;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace eShopSolution.ApiIntegration
+namespace eShopSolution.ApiIntegration.Category
 {
     public interface ICategoryApiClient
     {

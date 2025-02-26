@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using eShopSolution.ApiIntegration;
+using eShopSolution.ApiIntegration.Coupon;
+using eShopSolution.ApiIntegration.Order;
+using eShopSolution.ApiIntegration.Product;
+using eShopSolution.ApiIntegration.User;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.Sales;
 using eShopSolution.WebApp.Models;
@@ -113,7 +116,7 @@ namespace eShopSolution.WebApp.Controllers
             if (result != "Failed")
             {
                 // mail admin when have new email
-                var email1 = new EmailService.EmailService();
+                var email1 = new EmailService.Email.EmailService();
                 email1.Send("hytranluan@gmail.com", "hytranluan@gmail.com",
                     "ĐƠN HÀNG MỚI", $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://localhost:5002/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
 
@@ -186,7 +189,7 @@ namespace eShopSolution.WebApp.Controllers
                             + "<br>";
 
                 var userMail = claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
-                var email2 = new EmailService.EmailService();
+                var email2 = new EmailService.Email.EmailService();
                 email2.Send("hytranluan@gmail.com", userMail,
                                 "ĐẶT HÀNG THÀNH CÔNG",
                                 templateHtml
@@ -343,7 +346,7 @@ namespace eShopSolution.WebApp.Controllers
             if (result != "Failed")
             {
                 // mail admin when have new email
-                var email1 = new EmailService.EmailService();
+                var email1 = new EmailService.Email.EmailService();
                 email1.Send("hytranluan@gmail.com", "hytranluan@gmail.com",
                     "ĐƠN HÀNG MỚI", $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://localhost:5002/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
 
@@ -416,7 +419,7 @@ namespace eShopSolution.WebApp.Controllers
                             + "<br>";
 
                 var userMail = claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
-                var email2 = new EmailService.EmailService();
+                var email2 = new EmailService.Email.EmailService();
                 email2.Send("hytranluan@gmail.com", userMail,
                                 "ĐẶT HÀNG THÀNH CÔNG",
                                 templateHtml

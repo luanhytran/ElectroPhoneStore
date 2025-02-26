@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace eShopSolutionBackendApi.Controllers
+namespace eShopSolution.BackendApi.Controllers
 {
     public class HomeController : Controller
     {

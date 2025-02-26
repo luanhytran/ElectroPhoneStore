@@ -1,72 +1,72 @@
-﻿using eShopSolution.Application.Catalog.Coupons;
+﻿using eShopSolution.ViewModels.Catalog.Categories;
 using eShopSolution.ViewModels.Catalog.Products;
-using eShopSolution.ViewModels.Sales;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using eShopSolution.Application.Catalog.Categories;
 
-namespace eShopSolutionBackendApi.Controllers
+namespace eShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CouponsController : ControllerBase
+    public class CategoriesController : ControllerBase
     {
-        private readonly ICouponService _couponService;
+        private readonly ICategoryService _categoryService;
 
-        public CouponsController(
-            ICouponService couponService)
+        public CategoriesController(
+            ICategoryService categoryService)
         {
-            _couponService = couponService;
+            _categoryService = categoryService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var coupons = await _couponService.GetAll();
-            return Ok(coupons);
+            var categories = await _categoryService.GetAll();
+            return Ok(categories);
         }
 
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductPagingRequest request)
         {
-            var coupons = await _couponService.GetAllPaging(request);
-            return Ok(coupons);
+            var categories = await _categoryService.GetAllPaging(request);
+            return Ok(categories);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var coupon = await _couponService.GetById(id);
-            return Ok(coupon);
+            var category = await _categoryService.GetById(id);
+            return Ok(category);
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] CouponCreateRequest request)
+        public async Task<IActionResult> Create([FromBody] CategoryCreateRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var couponId = await _couponService.Create(request);
+            var categoryId = await _categoryService.Create(request);
 
-            if (couponId == 0)
+            if (categoryId == 0)
                 return BadRequest();
 
-            var coupon = await _couponService.GetById(couponId);
+            var category = await _categoryService.GetById(categoryId);
 
-            return CreatedAtAction(nameof(GetById), new { id = couponId }, coupon);
+            return CreatedAtAction(nameof(GetById), new { id = categoryId }, category);
         }
 
         // HttpPut: update toàn phần
-        [HttpPut("updateCoupon")]
+        [HttpPut("updateCategory")]
         [Authorize]
-        public async Task<IActionResult> Update([FromBody] CouponUpdateRequest request)
+        public async Task<IActionResult> Update([FromBody] CategoryUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var affectedResult = await _couponService.Update(request);
+            var affectedResult = await _categoryService.Update(request);
             if (affectedResult == 0)
             {
                 return BadRequest();
@@ -79,7 +79,7 @@ namespace eShopSolutionBackendApi.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
-            var affectedResult = await _couponService.Delete(id);
+            var affectedResult = await _categoryService.Delete(id);
             if (affectedResult == 0)
             {
                 return BadRequest();

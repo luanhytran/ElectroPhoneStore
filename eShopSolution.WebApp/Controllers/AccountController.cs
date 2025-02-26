@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using eShopSolution.ApiIntegration;
+using eShopSolution.ApiIntegration.Order;
+using eShopSolution.ApiIntegration.Product;
+using eShopSolution.ApiIntegration.User;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

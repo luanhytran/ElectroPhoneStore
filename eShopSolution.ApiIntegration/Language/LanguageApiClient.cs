@@ -1,17 +1,13 @@
-﻿using eShopSolution.ViewModels.Common;
+﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using eShopSolution.ApiIntegration.Common;
+using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Languages;
-using eShopSolution.ViewModels.Utilities.Slides;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 
-namespace eShopSolution.ApiIntegration
+namespace eShopSolution.ApiIntegration.Language
 {
     public class LanguageApiClient : BaseApiClient, ILanguageApiClient
     {

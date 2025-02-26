@@ -3,7 +3,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using eShopSolution.ApiIntegration;
+using eShopSolution.ApiIntegration.Order;
+using eShopSolution.ApiIntegration.User;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
@@ -114,7 +115,7 @@ namespace eShopSolution.WebApp.Controllers
             //                                                  "Link xác nhận email", confirmationLink,
             //                                                  "your_email_here", "your_password_here");
 
-            var email = new EmailService.EmailService();
+            var email = new EmailService.Email.EmailService();
             email.Send("hytranluan@gmail.com", user.ResultObj.Email, "XÁC NHẬN TÀI KHOẢN", confirmationLink);
             return RedirectToAction(nameof(SuccessRegistration));
         }
@@ -178,7 +179,7 @@ namespace eShopSolution.WebApp.Controllers
             //                                            "Link khôi phục mật khẩu", passwordResetLink,
             //                                            "your_email_here", "your_password_here");
 
-            var email = new EmailService.EmailService();
+            var email = new EmailService.Email.EmailService();
             email.Send("hytranluan@gmail.com", request.Email, "Link khôi phục mật khẩu", passwordResetLink);
 
             return View("ForgotPasswordConfirmation");

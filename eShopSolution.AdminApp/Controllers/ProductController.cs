@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using eShopSolution.ApiIntegration;
+using eShopSolution.ApiIntegration.Category;
+using eShopSolution.ApiIntegration.Product;
 using eShopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

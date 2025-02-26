@@ -1,4 +1,10 @@
-﻿using eShopSolution.Application.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using eShopSolution.Application.Common;
 using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
 using eShopSolution.Utilities.Exceptions;
@@ -8,12 +14,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 
 namespace eShopSolution.Application.Catalog.Products
 {

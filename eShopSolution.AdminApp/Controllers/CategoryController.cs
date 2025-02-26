@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using eShopSolution.ApiIntegration.Category;
 using eShopSolution.ViewModels.Catalog.Categories;
-using System.Threading.Tasks;
-using eShopSolution.ApiIntegration;
 using eShopSolution.ViewModels.Catalog.Products;
+using Microsoft.AspNetCore.Mvc;
 
 namespace eShopSolution.AdminApp.Controllers
 {

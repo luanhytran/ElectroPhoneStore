@@ -3,7 +3,7 @@ using eShopSolution.Application.System.Roles;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace eShopSolutionBackendApi.Controllers
+namespace eShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

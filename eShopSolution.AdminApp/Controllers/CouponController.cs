@@ -1,8 +1,8 @@
-﻿using eShopSolution.ApiIntegration;
+﻿using System.Threading.Tasks;
+using eShopSolution.ApiIntegration.Coupon;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Sales;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace eShopSolution.AdminApp.Controllers
 {

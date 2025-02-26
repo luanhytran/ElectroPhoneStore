@@ -4,7 +4,7 @@ using eShopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace eShopSolutionBackendApi.Controllers
+namespace eShopSolution.BackendApi.Controllers
 {
     //api/productsDD
     [Route("api/[controller]")]

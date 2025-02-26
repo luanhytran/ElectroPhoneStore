@@ -1,9 +1,5 @@
-﻿using eShopSolution.ViewModels.Sales;
+﻿using System.Collections.Generic;
 using eShopSolution.ViewModels.Utilities.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace eShopSolution.ViewModels.Sales
 {

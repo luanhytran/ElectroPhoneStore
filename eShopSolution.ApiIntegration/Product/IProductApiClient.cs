@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
 
-namespace eShopSolution.ApiIntegration
+namespace eShopSolution.ApiIntegration.Product
 {
     public interface IProductApiClient
     {

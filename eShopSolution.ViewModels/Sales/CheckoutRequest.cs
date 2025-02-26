@@ -1,7 +1,6 @@
-﻿using eShopSolution.ViewModels.Utilities.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using eShopSolution.ViewModels.Utilities.Enums;
 
 namespace eShopSolution.ViewModels.Sales
 {

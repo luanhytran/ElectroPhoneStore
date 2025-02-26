@@ -1,10 +1,10 @@
-﻿using eShopSolution.ViewModels.Catalog.Products;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.Sales;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace eShopSolution.ApiIntegration
+namespace eShopSolution.ApiIntegration.Coupon
 {
     public interface ICouponApiClient
     {

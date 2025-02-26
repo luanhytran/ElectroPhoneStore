@@ -1,4 +1,11 @@
-using eShopSolution.ApiIntegration;
+using System;
+using System.Globalization;
+using eShopSolution.ApiIntegration.Category;
+using eShopSolution.ApiIntegration.Coupon;
+using eShopSolution.ApiIntegration.Order;
+using eShopSolution.ApiIntegration.Product;
+using eShopSolution.ApiIntegration.Slide;
+using eShopSolution.ApiIntegration.User;
 using eShopSolution.ViewModels.System.Users;
 using eShopSolution.WebApp.Data;
 using eShopSolution.WebApp.LocalizationResources;
@@ -13,8 +20,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Stripe;
-using System;
-using System.Globalization;
 using Westwind.AspNetCore.Markdown;
 
 namespace eShopSolution.WebApp

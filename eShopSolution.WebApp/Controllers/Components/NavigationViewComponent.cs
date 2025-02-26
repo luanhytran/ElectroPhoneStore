@@ -1,6 +1,6 @@
-﻿using eShopSolution.ApiIntegration;
+﻿using System.Threading.Tasks;
+using eShopSolution.ApiIntegration.Category;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace eShopSolution.WebApp.Controllers.Components
 {

@@ -1,5 +1,11 @@
 using System;
-using eShopSolution.ApiIntegration;
+using eShopSolution.ApiIntegration.Category;
+using eShopSolution.ApiIntegration.Coupon;
+using eShopSolution.ApiIntegration.Language;
+using eShopSolution.ApiIntegration.Order;
+using eShopSolution.ApiIntegration.Product;
+using eShopSolution.ApiIntegration.Role;
+using eShopSolution.ApiIntegration.User;
 using eShopSolution.ViewModels.System.Users;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using eShopSolution.ViewModels.Utilities.Slides;
 
-namespace eShopSolution.ApiIntegration
+namespace eShopSolution.ApiIntegration.Slide
 {
     public interface ISlideApiClient
     {

@@ -4,7 +4,7 @@ using MailKit.Security;
 using MimeKit;
 using MimeKit.Text;
 
-namespace EmailService
+namespace EmailService.Email
 {
     public class EmailService : IEmailService
     {

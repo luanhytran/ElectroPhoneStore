@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
-namespace eShopSolution.ApiIntegration
+namespace eShopSolution.ApiIntegration.Common
 {
     public class BaseApiClient
     {

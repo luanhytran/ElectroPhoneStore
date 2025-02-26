@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Languages;
 
-namespace eShopSolution.ApiIntegration
+namespace eShopSolution.ApiIntegration.Language
 {
     public interface ILanguageApiClient
     {

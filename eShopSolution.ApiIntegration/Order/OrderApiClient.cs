@@ -1,20 +1,17 @@
-﻿using eShopSolution.Utilities.Constants;
-using eShopSolution.ViewModels.Catalog.Products;
-using eShopSolution.ViewModels.Common;
-using eShopSolution.ViewModels.Sales;
-using eShopSolution.ViewModels.Utilities.Enums;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using eShopSolution.ApiIntegration.Common;
+using eShopSolution.Utilities.Constants;
+using eShopSolution.ViewModels.Common;
+using eShopSolution.ViewModels.Sales;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
-namespace eShopSolution.ApiIntegration
+namespace eShopSolution.ApiIntegration.Order
 {
     public class OrderApiClient : BaseApiClient, IOrderApiClient
     {
