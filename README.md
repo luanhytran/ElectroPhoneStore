@@ -39,6 +39,10 @@ https://youtu.be/S7mxYxmmoi8?si=WNN-m_Zse2L96kD5
   
 - Set multiple run project: Right click to Solution and choose Properties and set Multiple Project, choose Start for 3 Projects: BackendApi, WebApp and AdminApp.
 - Choose profile to run or press F5
+### Setup Email and Stripe
+eShopSolution.WebApp/appsettings.json
+
+<img width="486" alt="Screenshot 2025-04-12 at 17 17 18" src="https://github.com/user-attachments/assets/6faf0084-ce6e-4e23-ab29-ee8fed2608b6" />
 
 ## How to contribute
 - Fork and create your branch
