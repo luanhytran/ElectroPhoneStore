@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using EmailService.Email;
 using eShopSolution.ApiIntegration.Coupons;
 using eShopSolution.ApiIntegration.Orders;
 using eShopSolution.ApiIntegration.Products;
@@ -13,6 +14,7 @@ using eShopSolution.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Stripe;
 using PaymentMethod = eShopSolution.ViewModels.Utilities.Enums.PaymentMethod;
@@ -25,8 +27,15 @@ namespace eShopSolution.WebApp.Controllers
         private readonly IOrderApiClient _orderApiClient;
         private readonly IUserApiClient _userApiClient;
         private readonly ICouponApiClient _couponApiClient;
+        private readonly IOptions<EmailSettings> _emailSettings;
 
-        public CartController(IProductApiClient productApiClient, IOrderApiClient orderApiClient, IUserApiClient userApiClient, ICouponApiClient couponApiClient)
+        public CartController(
+            IProductApiClient productApiClient, 
+            IOrderApiClient orderApiClient, 
+            IUserApiClient userApiClient, 
+            ICouponApiClient couponApiClient,
+            IOptions<EmailSettings> emailSettings
+        )
         {
             _productApiClient = productApiClient;
             _orderApiClient = orderApiClient;
@@ -77,7 +86,7 @@ namespace eShopSolution.WebApp.Controllers
             var claims = User.Claims.ToList();
             var userId = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
             var users = await _userApiClient.GetAll();
-            var x = users.FirstOrDefault(x => x.Id.ToString() == userId);
+            var user = users.FirstOrDefault(x => x.Id.ToString() == userId);
 
             var model = GetCheckoutViewModel();
             var orderDetails = new List<OrderDetailViewModel>();
@@ -93,7 +102,7 @@ namespace eShopSolution.WebApp.Controllers
 
             var checkoutRequest = new CheckoutRequest()
             {
-                UserID = x.Id,
+                UserID = user.Id,
                 Address = request.CheckoutModel.Address,
                 Name = request.CheckoutModel.Name,
                 PhoneNumber = request.CheckoutModel.PhoneNumber,
@@ -113,9 +122,10 @@ namespace eShopSolution.WebApp.Controllers
 
             if (result != "Failed")
             {
-                var email1 = new EmailService.Email.EmailService();
-                email1.Send("hytranluan@gmail.com", "hytranluan@gmail.com",
-                    "ĐƠN HÀNG MỚI", $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://localhost:5002/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
+                var email1 = new EmailService.Email.EmailService(_emailSettings);
+                email1.Send(user.Email,
+                    "ĐƠN HÀNG MỚI", 
+                    $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://localhost:5002/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
 
                 var orderSummaryHtml = "<table border='1' style='border-collapse:collapse'>"
                         + "<thead>"
@@ -185,13 +195,11 @@ namespace eShopSolution.WebApp.Controllers
                             + "<h3>Danh sách sản phẩm đã đặt</h3>"
                             + "<br>";
 
-                var userMail = claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
-                var email2 = new EmailService.Email.EmailService();
-                email2.Send("hytranluan@gmail.com", userMail,
+                var email2 = new EmailService.Email.EmailService(_emailSettings);
+                email2.Send(user.Email,
                                 "ĐẶT HÀNG THÀNH CÔNG",
                                 templateHtml
-                                + orderSummaryHtml
-                                );
+                                + orderSummaryHtml);
 
                 currentCart = JsonConvert.DeserializeObject<CartViewModel>(session);
                 currentCart.CartItems.Clear();
@@ -303,7 +311,7 @@ namespace eShopSolution.WebApp.Controllers
             }
 
             var users = await _userApiClient.GetAll();
-            var x = users.FirstOrDefault(x => x.Email == userEmail);
+            var user = users.FirstOrDefault(x => x.Email == userEmail);
 
             var model = GetCheckoutViewModel();
             var orderDetails = new List<OrderDetailViewModel>();
@@ -319,7 +327,7 @@ namespace eShopSolution.WebApp.Controllers
 
             var checkoutRequest = new CheckoutRequest()
             {
-                UserID = x.Id,
+                UserID = user.Id,
                 Address = request.CheckoutModel.Address,
                 Name = request.CheckoutModel.Name,
                 PhoneNumber = request.CheckoutModel.PhoneNumber,
@@ -339,9 +347,10 @@ namespace eShopSolution.WebApp.Controllers
 
             if (result != "Failed")
             {
-                var email1 = new EmailService.Email.EmailService();
-                email1.Send("hytranluan@gmail.com", "hytranluan@gmail.com",
-                    "ĐƠN HÀNG MỚI", $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://localhost:5002/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
+                var email1 = new EmailService.Email.EmailService(_emailSettings);
+                email1.Send(user.Email,
+                    "ĐƠN HÀNG MỚI", 
+                    $"Mã đơn hàng là <strong>{result}</strong>, nhấn vào <a href='" + "https://localhost:5002/Order/Detail?orderId=" + result + "'>đây</a> để đến trang quản lý đơn hàng này.");
 
                 var orderSummaryHtml = "<table border='1' style='border-collapse:collapse'>"
                         + "<thead>"
@@ -411,9 +420,8 @@ namespace eShopSolution.WebApp.Controllers
                             + "<h3>Danh sách sản phẩm đã đặt</h3>"
                             + "<br>";
 
-                var userMail = claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
-                var email2 = new EmailService.Email.EmailService();
-                email2.Send("hytranluan@gmail.com", userMail,
+                var email2 = new EmailService.Email.EmailService(_emailSettings);
+                email2.Send(user.Email,
                                 "ĐẶT HÀNG THÀNH CÔNG",
                                 templateHtml
                                 + orderSummaryHtml

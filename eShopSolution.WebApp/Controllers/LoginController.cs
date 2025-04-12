@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using eShopSolution.ApiIntegration.Orders;
+using EmailService.Email;
 using eShopSolution.ApiIntegration.Users;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.System.Users;
@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 
@@ -21,21 +22,22 @@ namespace eShopSolution.WebApp.Controllers
     public class LoginController : Controller
     {
         private readonly IUserApiClient _userApiClient;
-        private readonly IOrderApiClient _orderApiClient;
         private readonly IConfiguration _configuration;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IOptions<EmailSettings> _emailSettings;
 
-        public LoginController(IUserApiClient userApiClient, IOrderApiClient orderApiClient,
-            IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public LoginController(
+            IUserApiClient userApiClient,
+            IConfiguration configuration,
+            IOptions<EmailSettings> emailSettings
+        )
         {
             _userApiClient = userApiClient;
-            _orderApiClient = orderApiClient;
             _configuration = configuration;
-            _httpContextAccessor = httpContextAccessor;
+            _emailSettings = emailSettings;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Login()
+        public IActionResult Login()
         {
             return View();
         }
@@ -54,7 +56,7 @@ namespace eShopSolution.WebApp.Controllers
                 return View(request);
             }
 
-            if (request.RememberMe == true)
+            if (request.RememberMe)
             {
                 CookieOptions option = new CookieOptions();
                 option.Expires = DateTime.Now.AddMonths(1);
@@ -110,13 +112,13 @@ namespace eShopSolution.WebApp.Controllers
 
             var token = result.ResultObj;
             var user = await _userApiClient.GetByUserName(registerRequest.UserName);
-            var confirmationLink = Url.Action(nameof(ConfirmEmail), "Login", new { token, email = user.ResultObj.Email }, Request.Scheme);
-            //var message = await MailUtils.MailUtils.SendGmail("hytranluan@gmail.com", user.ResultObj.Email,
-            //                                                  "Link xác nhận email", confirmationLink,
-            //                                                  "your_email_here", "your_password_here");
+            var confirmationLink = Url.Action(nameof(ConfirmEmail), 
+                "Login", 
+                new { token, email = user.ResultObj.Email }, 
+                Request.Scheme);
 
-            var email = new EmailService.Email.EmailService();
-            email.Send("hytranluan@gmail.com", user.ResultObj.Email, "XÁC NHẬN TÀI KHOẢN", confirmationLink);
+            var email = new EmailService.Email.EmailService(_emailSettings);
+            email.Send(user.ResultObj.Email, "XÁC NHẬN TÀI KHOẢN", confirmationLink);
             return RedirectToAction(nameof(SuccessRegistration));
         }
 
@@ -144,7 +146,6 @@ namespace eShopSolution.WebApp.Controllers
         {
             IdentityModelEventSource.ShowPII = true;
 
-            SecurityToken validatedToken;
             TokenValidationParameters validationParameters = new TokenValidationParameters();
 
             validationParameters.ValidateLifetime = true;
@@ -153,7 +154,7 @@ namespace eShopSolution.WebApp.Controllers
             validationParameters.ValidIssuer = _configuration["Tokens:Issuer"];
             validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
 
-            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
+            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out _);
 
             return principal;
         }
@@ -175,12 +176,9 @@ namespace eShopSolution.WebApp.Controllers
             var token = await _userApiClient.ForgotPassword(request);
             var passwordResetLink = Url.Action(nameof(ResetPassword), "Login",
                                     new { email = request.Email, token = token.ResultObj }, Request.Scheme);
-            //var message = await MailUtils.MailUtils.SendGmail("hytranluan@gmail.com", request.Email,
-            //                                            "Link khôi phục mật khẩu", passwordResetLink,
-            //                                            "your_email_here", "your_password_here");
 
-            var email = new EmailService.Email.EmailService();
-            email.Send("hytranluan@gmail.com", request.Email, "Link khôi phục mật khẩu", passwordResetLink);
+            var email = new EmailService.Email.EmailService(_emailSettings);
+            email.Send( request.Email, "Link khôi phục mật khẩu", passwordResetLink);
 
             return View("ForgotPasswordConfirmation");
         }

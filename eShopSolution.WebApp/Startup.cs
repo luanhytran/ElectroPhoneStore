@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using EmailService.Email;
 using eShopSolution.ApiIntegration.Categories;
 using eShopSolution.ApiIntegration.Coupons;
 using eShopSolution.ApiIntegration.Orders;
@@ -94,6 +95,8 @@ namespace eShopSolution.WebApp
             services.AddTransient<IUserApiClient, UserApiClient>();
             services.AddTransient<IOrderApiClient, OrderApiClient>();
             services.AddTransient<ICouponApiClient, CouponApiClient>();
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+
 
             services.AddMarkdown();
 
