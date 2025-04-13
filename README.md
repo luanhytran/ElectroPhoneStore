@@ -44,6 +44,9 @@ eShopSolution.WebApp/appsettings.json
 
 <img width="486" alt="Screenshot 2025-04-12 at 17 17 18" src="https://github.com/user-attachments/assets/6faf0084-ce6e-4e23-ab29-ee8fed2608b6" />
 
+
+If your google account have two factor authentication then you need to insert the app password instead. Create the app password here: https://myaccount.google.com/apppasswords
+
 ## How to contribute
 - Fork and create your branch
 - Create Pull request to us.
