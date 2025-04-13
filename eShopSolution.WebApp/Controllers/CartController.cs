@@ -41,6 +41,7 @@ namespace eShopSolution.WebApp.Controllers
             _orderApiClient = orderApiClient;
             _userApiClient = userApiClient;
             _couponApiClient = couponApiClient;
+            _emailSettings = emailSettings;
         }
 
         public IActionResult Index()
